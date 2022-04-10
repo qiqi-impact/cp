@@ -42,6 +42,19 @@ void pull(int i) {
     }
 }
 
+void push_down(int i) {
+    node &c = seg[i];
+    node &lc = seg[2*i];
+    node &rc = seg[2*i+1];
+    for (int j = 0;j < 26;j++) {
+        lc.ct[j] = min(c.ct[j], lc.r - lc.l + 1);
+        rc.ct[j] = min(c.ct[j], rc.r - rc.l + 1);
+    }
+    lc.lst_op = lc.mx_op = c.mx_op;
+    rc.lst_op = rc.mx_op = c.mx_op;
+    lc.srt = rc.srt = c.srt;
+}
+
 void build(int i, int l, int r, string s) {
     node &c = seg[i];
     c.l = l;
@@ -60,12 +73,13 @@ void build(int i, int l, int r, string s) {
 void nullout(int i, int l, int r, vi &ct) {
     node &c = seg[i];
     if (c.l > r || c.r < l) return;
-    if (l <= c.l && c.r <= r) {
+    if (l <= c.l && c.r <= r && c.mx_op == c.lst_op) {
         for(int j = 0;j < 26;j++) {
             ct[j] += c.ct[j];
             c.ct[j] = 0;
         }
     } else {
+        if (c.mx_op == c.lst_op && c.mx_op != -1) push_down(i);
         nullout(2*i, l, r, ct);
         nullout(2*i+1, l, r, ct);
         pull(i);
@@ -76,7 +90,10 @@ void apply(int i, int l, int r, int chi, int opidx, int srt) {
     node &c = seg[i];
     if (c.l > r || c.r < l) return;
     if (l <= c.l && c.r <= r) {
-        c.ct[chi] = r-l+1;
+        for(int j = 0;j < 26;j++) {
+            c.ct[j] = 0;
+        }
+        c.ct[chi] = c.r-c.l+1;
         c.lst_op = c.mx_op = opidx;
         c.srt = srt;
     } else {
@@ -89,9 +106,11 @@ void apply(int i, int l, int r, int chi, int opidx, int srt) {
 void operate(int l, int r, int op, int opidx) {
     vi ct(26, 0);
     nullout(1, l, r, ct);
+    // for (auto x:ct) cout << x << " ";
+    // cout << endl;
     for (int j = 0;j < 26;j++) {
-        int chi = (op == 1 ? j : 25-j);
-        apply(1, l, l+ct[chi]-1, chi, opidx, op ? -1 : 1);
+        int chi = (op ? j : 25-j);
+        apply(1, l, l+ct[chi]-1, chi, opidx, op ? 1 : -1);
         l += ct[chi];
     }
 }
@@ -106,9 +125,11 @@ void prt(int i, string s) {
             for (int j = 0; j < 26; j++) {
                 int ci = (seg[i].srt == 1 ? j : 25-j);
                 char c = 'a' + ci;
-                for (int k = 0;k < seg[i].ct[j];k++) {
+                // cout << seg[i].l << " " << seg[i].r << " ";
+                for (int k = 0;k < seg[i].ct[ci];k++) {
                     cout << c;
                 }
+                // cout << endl;
             }
         }
     } else {
@@ -119,28 +140,26 @@ void prt(int i, string s) {
 
 int main() {
     fast_cin();
-    freopen("input.txt", "r", stdin);
-	freopen("output.txt", "w", stdout);
+    // freopen("input.txt", "r", stdin);
+	// freopen("output.txt", "w", stdout);
     
     int n, m;
     cin >> n >> m;
-    vi v;
-    int l, r, x;
+    int l, r, xx;
     string s;
 
     cin >> s;
     build(1, 0, s.length()-1, s);
+    // prt(1, s);
+    // cout << endl;
+    for (int i = 0;i < m;i++) {
+        cin >> l >> r >> xx;
+        l--; r--;
+        operate(l, r, xx, i);
+        // prt(1, s);
+        // cout << endl;
+    }
     prt(1, s);
     cout << endl;
-    for (int i = 0;i < m;i++) {
-        cin >> l >> r >> x;
-        l--; r--;
-        operate(l, r, x, i);
-        prt(1, s);
-        cout << endl;
-    }
-    
-    cout << endl;
-    
     return 0;
 }
