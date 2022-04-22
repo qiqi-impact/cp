@@ -33,16 +33,15 @@ int main() {
 		for (int i = k-1;i >= 0;i--) {
 			auto it = seen.upper_bound(pii(sm[i]+1, -1e9));
 			// cout << i << " " << (int)(it == seen.end()) << endl;
-			if (it == seen.end()) {
-				int cur = 0;
-				if (v[i] > 0) cur = 1;
-				if (v[i] < 0) cur = -1;
-				dp[i] = cur + dp[i+1];
-			} else {
+			int cur = 0;
+			if (v[i] > 0) cur = 1;
+			if (v[i] < 0) cur = -1;
+			dp[i] = cur + dp[i+1];
+			if (it != seen.end()) {
 				pii x = *it;
 				int idx = -x.second;
 				int val = x.first;
-				dp[i] = dp[idx] + (idx - i);
+				dp[i] = max(dp[i], dp[idx] + (idx - i));
 			}
 			// ret = max(ret, dp[i]);
 			seen.insert(pii(sm[i], -i));
