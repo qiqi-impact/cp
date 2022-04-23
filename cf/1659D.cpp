@@ -23,6 +23,7 @@ int main() {
         }
         for (int i = k-1;i >= 0;i--) {
             int amt = sm / (i+1);
+            cout << i << " " << amt << " " << (sm % (i+1)) << endl;
             if (!amt) break;
             acc += diff[i];
             val[i] += acc;
