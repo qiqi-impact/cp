@@ -4,4 +4,4 @@ class Solution:
         for w in words:
             if s.startswith(w):
                 ret += 1
-        return ret
+        return ret 
