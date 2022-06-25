@@ -26,5 +26,3 @@ class Solution:
                 if not dfs(i, 0):
                     return False
         return True
-                
-                    
