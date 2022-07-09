@@ -1,17 +1,25 @@
 class Solution:
-    def peopleAwareOfSecret(self, n: int, delay: int, forget: int) -> int:
-        ret = 1
-        s = {delay: 1}
-        k = {forget: 1}
-        tell = 0
-        for i in range(1, n):
-            if i in k:
-                ret -= k[i]
-                tell -= k[i]
-            if i in s:
-                tell += s[i]
-            ret += tell
-            s[i+delay] = tell
-            k[i+forget] = tell
-            ret %= (10**9+7)
-        return ret
+    def minSumSquareDiff(self, nums1: List[int], nums2: List[int], k1: int, k2: int) -> int:
+        l = [0]
+        for i in range(len(nums1)):
+            l.append(abs(nums1[i] - nums2[i]))
+        moves = k1 + k2
+        if moves >= sum(l):
+            return 0
+        l.sort()
+        lp = len(l)-1
+        while 1:
+            df = l[lp] - l[lp-1]
+            amt = len(l) - lp
+            if moves >= amt*df:
+                moves -= amt*df
+                lp -= 1
+            else:
+                x = moves%amt
+                y = amt - x
+                ret = 0
+                for i in range(lp):
+                    ret += l[i]**2
+                left = l[lp]-moves//amt
+                ret += y * (left**2) + x * ((left-1)**2)
+                return ret
