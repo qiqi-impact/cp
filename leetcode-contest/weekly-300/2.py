@@ -1,23 +1,26 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
 class Solution:
-    def latestTimeCatchTheBus(self, buses: List[int], passengers: List[int], capacity: int) -> int:
-        sp = set(passengers)
-        buses.sort()
-        passengers.sort()
-        bus_cap = [0] * len(buses)
-        bp = 0
-        last_pass = 0
-        for i, p in enumerate(passengers):
-            while bp < len(buses) and p > buses[bp]:
-                bp += 1
-            if bp == len(buses):
-                break
-            last_pass = p
-            bus_cap[bp] += 1
-            if bus_cap[bp] == capacity:
-                bp += 1
-        start = last_pass-1
-        if bus_cap[-1] != capacity:
-            start = buses[-1]
-        for i in range(start, 0, -1):
-            if i not in sp:
-                return i
+    def spiralMatrix(self, m: int, n: int, head: Optional[ListNode]) -> List[List[int]]:
+        ret = [[-1 for _ in range(n)] for _ in range(m)]
+        x, y = 0, 0
+        dx, dy = 0, 1
+        while head:
+            ret[x][y] = head.val
+            head = head.next
+            nx, ny = x+dx, y+dy
+            if nx < 0 or nx >= m or ny < 0 or ny >= n or ret[nx][ny] != -1:
+                if (dx, dy) == (0, 1):
+                    dx, dy = 1, 0
+                elif (dx, dy) == (1, 0):
+                    dx, dy = 0, -1
+                elif (dx, dy) == (0, -1):
+                    dx, dy = -1, 0
+                else:
+                    dx, dy = 0, 1
+            x += dx
+            y += dy
+        return ret
