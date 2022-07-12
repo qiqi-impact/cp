@@ -20,7 +20,7 @@ Otherwise, two cases:
 
 2. The vertex points to any other vertex. Probability (n-1)/n. This increases the size of the unclosed vertex path by 1, so this contributes (n-1)/n*P(n-1, k+1, limit). The next vertex we assign is this "other" vertex. 
 
-This becomes a simple dynamic programming problem solvable in O(N^2).
+This becomes a simple dynamic programming problem solvable in O(N^2). Probability for N=100 is about 31.18%.
 '''
 
 import functools
