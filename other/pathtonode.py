@@ -18,8 +18,6 @@ def pathtonode(root, val):
     find(root, val)
     return path
 
-l = [1,2,3,4,5,6]
-
 def fill(idx):
     n = Node(l[idx])
     if 2*idx+1 < len(l):
