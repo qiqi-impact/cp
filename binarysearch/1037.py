@@ -1,6 +1,5 @@
 class Solution:
     def solve(self, m):
-        
         R, C = len(m), len(m[0])
         cost = [[float('inf') for _ in range(C)] for _ in range(R)]
         cost[0][0] = 0
