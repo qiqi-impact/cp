@@ -9,7 +9,7 @@ class Solution:
             if parity not in first:
                 first[parity] = i
             ret = max(ret, i - first[parity])
-            for j in range(26):
+            for j in range(10):
                 pp = parity ^ (1 << j)
                 if pp in first:
                     ret = max(ret, i - first[pp])
