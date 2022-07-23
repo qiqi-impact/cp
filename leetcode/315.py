@@ -1,9 +1,11 @@
+from sortedcontainers import SortedList
+
 class Solution:
     def countSmaller(self, nums: List[int]) -> List[int]:
-        l = []
+        sl = SortedList()
         ret = [None] * len(nums)
         for i in range(len(nums)-1, -1, -1):
-            idx = bisect_left(l, nums[i])
+            idx = sl.bisect_left(nums[i])
             ret[i] = idx
-            l.insert(idx, nums[i])
+            sl.add(nums[i])
         return ret
