@@ -34,6 +34,6 @@ int main() {
             l = mi;
         }
     }
-    printf("%.10f\n", l);
+    cout << fixed << setprecision(10) << l << endl;
     return 0;
 }
