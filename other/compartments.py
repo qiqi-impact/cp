@@ -10,7 +10,7 @@ def numberOfItems(s, si, ei):
                     foundbar = True
                 else:
                     ret += cur
-                    cur = 0
+                cur = 0
             else:
                 cur += 1
         ans.append(ret)
