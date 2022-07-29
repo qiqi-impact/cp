@@ -6,19 +6,18 @@
 #         self.right = right
 class Solution:
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
-        def check(node, subnode):
-            if subnode is None:
-                return node is None
-            if node is None:
-                return False
-            if node.val != subnode.val:
-                return False
-            return check(node.left, subnode.left) and check(node.right, subnode.right)
+        h = None
+        found = None
         
         def dfs(node):
-            if check(node, subRoot):
-                return True
-            if not node: return False
-            return dfs(node.left) or dfs(node.right)
+            nonlocal found, h
+            cur = '-'
+            if node:
+                cur =  str(node.val) + '/' + dfs(node.left) + '/' + dfs(node.right)
+            if cur == h:
+                found = True
+            return cur
         
-        return dfs(root)
+        h = dfs(subRoot)
+        dfs(root)
+        return found
