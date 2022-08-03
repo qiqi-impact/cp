@@ -1,3 +1,7 @@
+class TreeNode:
+    def __init__(self):
+        self.val = 2
+
 class Solution:
     def setZeroes(self, matrix: List[List[int]]) -> None:
         """
