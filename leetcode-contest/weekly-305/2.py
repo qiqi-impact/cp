@@ -3,8 +3,8 @@ class Solution:
         s = set(restricted)
         g = defaultdict(list)
         for x, y in edges:
-            g[x].add(y)
-            g[y].add(x)
+            g[x].append(y)
+            g[y].append(x)
         def dfs(node, p):
             if node in s:
                 return 0
