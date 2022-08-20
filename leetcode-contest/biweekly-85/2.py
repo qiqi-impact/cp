@@ -1,15 +1,22 @@
 class Solution:
     def secondsToRemoveOccurrences(self, s: str) -> int:
-        sz = False
-        ret = 0
-        cur = 0
-        for i, c in enumerate(s):
-            if c == '0':
-                sz = True
-                lz = True
-                cur += 1
-            elif sz:
-                cur += int(not lz)
-                ret = max(ret, cur)
-                lz = False
-        return ret
+        n = len(s)
+        for i in range(n):
+            j = 0
+            nx = []
+            did = False
+            while j < n:
+                if s[j] == '0':
+                    if j == n-1 or s[j+1] == '0':
+                        nx.append(s[j])
+                    else:
+                        nx.append('10')
+                        j += 1
+                        did = True
+                else:
+                    nx.append(s[j])
+                j += 1
+            if not did:
+                return i
+            s = ''.join(nx)
+        return n
