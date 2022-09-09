@@ -9,3 +9,4 @@ class Solution:
         if neg:
             n = -n
         return n if -2**31 <= n < 2**31 else 0
+        
