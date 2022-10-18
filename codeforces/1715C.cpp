@@ -8,16 +8,15 @@ int main() {
     int n, m;
     cin >> n >> m;
     
-    vi ct(n), a(n);
-    ll sm = 0;
+    vi a(n);
+    ll sm = 0, cur = 0;
     for (int i = 0;i < n;i++) {
         cin >> a[i];
+        cur++;
         if (i > 0) {
-            ct[i] += ct[i-1];
-            if (a[i] != a[i-1]) ct[i] += i;
+            if (a[i] != a[i-1]) cur += i;
         }
-        ct[i]++;
-        sm += ct[i];
+        sm += cur;
     }
 
     for (int i = 0;i < m;i++) {
