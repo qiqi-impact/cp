@@ -4,34 +4,6 @@ using ll = long long;
 using vi = vector<int>;
 using vvi = vector<vector<int>>;
 
-int need(vvi &g, int limit, int idx, int depth, int k) {
-    int ret = 1e9;
-
-    if (depth <= limit) {
-        int a = 0;
-        for (auto &x : g[idx]) {
-            a += need(g, limit, x, depth+1, k);
-            if (a > k) {
-                a = 1e9;
-                break;
-            }
-        }
-        ret = min(ret, a);
-    }
-
-    int b = 1;
-    for (auto &x : g[idx]) {
-        b += need(g, limit, x, 2, k);
-        if (b > k) {
-            b = 1e9;
-            break;
-        }
-    }
-    ret = min(ret, b);
-
-    return ret;
-}
-
 int solve() {
     int n, k;
     cin >> n >> k;
@@ -40,7 +12,6 @@ int solve() {
     for (int i = 0;i < n-1;i++) {
         cin >> p[i+1];
         p[i+1]--;
-        // g[p].push_back(i);
     }
     int l = 1, r = n-1;
     while (l < r) {
@@ -49,7 +20,7 @@ int solve() {
         vi dp(n, 1);
         int ct = 0;
         for (int i = n-1;i > 0;i--) {
-            if (p[i] != 0 && dp[i] > mi) {
+            if (p[i] != 0 && dp[i] == mi) {
                 ct++;
             } else {
                 dp[p[i]] = max(dp[p[i]], 1 + dp[i]);
