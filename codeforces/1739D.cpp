@@ -46,10 +46,10 @@ int solve() {
     while (l < r) {
         int mi = (l+r)/2;
 
-        vi dp(n, 0);
+        vi dp(n, 1);
         int ct = 0;
         for (int i = n-1;i > 0;i--) {
-            if (p[i] != 0 && dp[i] >= mi - 1) {
+            if (p[i] != 0 && dp[i] > mi) {
                 ct++;
             } else {
                 dp[p[i]] = max(dp[p[i]], 1 + dp[i]);
