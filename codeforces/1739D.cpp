@@ -49,7 +49,7 @@ int solve() {
         vi dp(n, 0);
         int ct = 0;
         for (int i = n-1;i > 0;i--) {
-            if (p[i] != 0 && dp[i] > mi - 1) {
+            if (p[i] != 0 && dp[i] >= mi - 1) {
                 ct++;
             } else {
                 dp[p[i]] = max(dp[p[i]], 1 + dp[i]);
