@@ -20,6 +20,7 @@
         "xstring": "cpp",
         "xtree": "cpp",
         "xutility": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "unordered_set": "cpp"
     }
 }
