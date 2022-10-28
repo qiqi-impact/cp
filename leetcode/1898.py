@@ -1,10 +1,12 @@
 class Solution:
     def maximumRemovals(self, s: str, p: str, removable: List[int]) -> int:
         def can(x):
-            r = set(removable[:x])
+            rem = [False] * len(s)
+            for i in range(x):
+                rem[removable[i]] = True
             pi = 0
             for i, c in enumerate(s):
-                if i in r:
+                if rem[i]:
                     continue
                 if s[i] == p[pi]:
                     pi += 1
