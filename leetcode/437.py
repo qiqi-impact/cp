@@ -1,16 +1,16 @@
 class Solution:
     def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
         ans = 0
-        def dfs(node):
+        def dfs(node, cur, p):
+            if not node: return
             nonlocal ans
-            ret = defaultdict(int)
-            ret[node.val] = 1
+            cur += node.val
+            ans += p.get(cur - targetSum, 0)
+            p[cur] += 1
             for ch in node.left, node.right:
-                if ch:
-                    d = dfs(ch)
-                    for k in d:
-                        ret[node.val + k] += d[k]
-            ans += ret[targetSum]
-            return ret
-        if root: dfs(root)
+                dfs(ch, cur, p)
+            p[cur] -= 1
+        d = defaultdict(int)
+        d[0] = 1
+        dfs(root, 0, d)
         return ans
