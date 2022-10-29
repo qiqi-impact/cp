@@ -51,23 +51,33 @@ namespace output {
 
 using namespace output;
 
-void dfs(vector<unordered_map<int, int>> &g, unordered_set<int> &vis, int x) {
+vector<unordered_map<int, int>> g;
+unordered_set<int> vis;
+int be;
+unordered_set<int> bv;
+
+void dfs(int x, int p) {
     if (vis.count(x)) return;
     vis.insert(x);
-    // cout << x << endl;
-    vvi assign;
 
-    vi adj;
     for (auto &[k, v] : g[x]) {
-        adj.push_back(k);
-    }
-
-    for (auto &k : adj) {
+        if (k == p) continue;
         if (g[x][k] == 2) {
             int t = vis.count(k);
+            if (t) {
+                if (be == 2 && bv.size() == 3 && bv.count(x) && bv.count(k)) {
+                    g[x][p] = g[p][x] = 1;
+                    g[x][k] = g[k][x] = 0;
+                    continue;
+                } else {
+                    be++;
+                    bv.insert(x);
+                    bv.insert(k);
+                }
+            }
             g[x][k] = t;
             g[k][x] = t;
-            dfs(g, vis, k);
+            dfs(k, x);
         }
     }
 };
@@ -75,7 +85,10 @@ void dfs(vector<unordered_map<int, int>> &g, unordered_set<int> &vis, int x) {
 void solve() {
     int n, m;
     cin >> n >> m;
-    vector<unordered_map<int, int>> g(n);
+    g = vector<unordered_map<int, int>>(n);
+    vis.clear();
+    bv.clear();
+    be = 0;
     vvi edges;
     for (int i = 0;i < m;i++) {
         int a, b;
@@ -85,8 +98,7 @@ void solve() {
         g[b][a] = 2;
         edges.push_back({a, b});
     }
-    unordered_set<int> vis;
-    dfs(g, vis, 0);
+    dfs(0, -1);
     for (auto &y : edges) {
         cout << g[y[0]][y[1]];
     }
@@ -94,6 +106,8 @@ void solve() {
 }
 
 int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
     int t;
     cin >> t;
     while (t--) solve();
