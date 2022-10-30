@@ -4,7 +4,6 @@ using ll = long long;
 using ld = long double;
 using vi = vector<int>;
 using vvi = vector<vector<int>>;
-using pii = pair<int, int>;
 
 namespace output {
 	void pr(int x) { cout << x; }
@@ -51,70 +50,8 @@ namespace output {
 
 using namespace output;
 
-vi ans(vvi &seg) {
-	int n = seg.size();
-	int tp = 0;
-	vi ret(n, INT_MAX);
-	vi last_time(n, INT_MIN);
-	vvi best; // {val, color}
-	for (int i = 0;i < n;i++) {
-		int ctime = seg[i][0];
-		int idx = seg[i][3];
-		while (tp != seg.size() && seg[tp][0] == ctime) {
-			int c = seg[tp][2];
-			int e = seg[tp][1];
-			if (last_time[c] < e) {
-				vvi nb;
-				for (auto &x : best) {
-					if (x[1] != c) {
-						nb.push_back(x);
-					}
-				}
-				best = nb;
-				last_time[c] = e;
-				best.push_back({e, c});
-			}
-			tp++;
-		}
-		sort(best.begin(), best.end());
-		reverse(best.begin(), best.end());
-		if (best.size() > 2) {
-			best.resize(2);
-		}
-		for (auto &v : best) {
-			if (v[1] != seg[i][2]) {
-				ret[idx] = min(ret[idx], max(0, seg[i][0] - v[0]));
-				break;
-			}
-		}
-		// dbg(ret);
-	}
-	return ret;
-}
-
 void solve() {
-	int n, k;
-	cin >> n;
-	vvi seg; // time, start/end, color, index
-	vvi rseg;
-	for (int i = 0;i < n;i++) {
-		int a, b, c;
-		cin >> a >> b >> c;
-		c--;
-		seg.push_back({a, b, c, i});
-		rseg.push_back({-b, -a, c, i});
-	}
-	sort(seg.begin(), seg.end());
-	sort(rseg.begin(), rseg.end());
-	vi left = ans(seg);
-	// dbg(left);
-	vi right = ans(rseg);
-	
-	// dbg(right);
-	for (int i = 0;i < n;i++) {
-		cout << min(left[i], right[i]) << " ";
-	}
-	cout << endl;
+    
 }
 
 int main() {
