@@ -81,13 +81,15 @@ vi ans(vvi &seg) {
 		if (best.size() > 2) {
 			best.resize(2);
 		}
+		dbg(best);
 		for (auto &v : best) {
 			if (v[1] != seg[i][2]) {
+				dbg(idx, ret[idx], seg[i][0], v[0]);
 				ret[idx] = min(ret[idx], max(0, seg[i][0] - v[0]));
 				break;
 			}
 		}
-		// dbg(ret);
+		dbg(ret);
 	}
 	return ret;
 }
@@ -107,10 +109,10 @@ void solve() {
 	sort(seg.begin(), seg.end());
 	sort(rseg.begin(), rseg.end());
 	vi left = ans(seg);
-	// dbg(left);
+	dbg(left);
 	vi right = ans(rseg);
 	
-	// dbg(right);
+	dbg(right);
 	for (int i = 0;i < n;i++) {
 		cout << min(left[i], right[i]) << " ";
 	}
