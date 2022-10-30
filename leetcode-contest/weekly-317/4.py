@@ -16,8 +16,6 @@ class Solution:
             d[node.val] = ret
             return ret
         dfs(root)
-        
-        print(d)
 
         ans = {}
         def dfs2(node, mx, step):
