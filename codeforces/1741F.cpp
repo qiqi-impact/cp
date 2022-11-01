@@ -55,43 +55,41 @@ using namespace output;
 
 vi ans(vvi &seg) {
 	int n = seg.size();
-	int tp = 0;
-	vi ret(n, INT_MAX);
-	vi last_time(n, INT_MIN);
-	vvi best; // {val, color}
+
+	vvi cr;
+	vector<vvi> top2(n);
+	vi left_edge(n);
+
 	for (int i = 0;i < n;i++) {
-		int ctime = seg[i][0];
-		int idx = seg[i][3];
-		while (tp != seg.size() && seg[tp][0] == ctime) {
-			int c = seg[tp][2];
-			int e = seg[tp][1];
-			if (last_time[c] < e) {
-				vvi nb;
-				for (auto &x : best) {
-					if (x[1] != c) {
-						nb.push_back(x);
-					}
-				}
-				best = nb;
-				last_time[c] = e;
-				best.push_back({e, c});
-			}
-			tp++;
-		}
-		sort(best.begin(), best.end());
-		reverse(best.begin(), best.end());
-		if (best.size() > 2) {
-			best.resize(2);
-		}
-		dbg(best);
-		for (auto &v : best) {
-			if (v[1] != seg[i][2]) {
-				dbg(idx, ret[idx], seg[i][0], v[0]);
-				ret[idx] = min(ret[idx], max(0, seg[i][0] - v[0]));
+		left_edge[i] = seg[i][0];
+		bool repl = false;
+		for (int j = 0;j < 2;j++) {
+			if (cr.size() > j && cr[j][1] == seg[i][2]) {
+				cr[j][0] = max(cr[j][0], seg[i][1]);
+				repl = true;
 				break;
 			}
 		}
-		dbg(ret);
+		if (!repl) {
+			cr.push_back({seg[i][1], seg[i][2]});
+		}
+		sort(cr.rbegin(), cr.rend());
+		if (cr.size() == 3) cr.pop_back();
+		top2[i] = cr;
+	}
+	// dbg(top2);
+	
+	vi ret(n, INT_MAX);
+	for (int i = 0;i < n;i++) {
+		int ri = seg[i][3];
+		int idx = upper_bound(left_edge.begin(), left_edge.end(), seg[i][1]) - left_edge.begin() - 1;
+		// dbg(i, idx);
+		for (auto &x : top2[idx]) {
+			if (x[1] != seg[i][2]) {
+				ret[ri] = min(ret[ri], max(0, seg[i][0] - x[0]));
+			}
+		}
+		// dbg(ret);
 	}
 	return ret;
 }
@@ -111,10 +109,10 @@ void solve() {
 	sort(seg.begin(), seg.end());
 	sort(rseg.begin(), rseg.end());
 	vi left = ans(seg);
-	dbg(left);
+	// dbg(left);
 	vi right = ans(rseg);
 	
-	dbg(right);
+	// dbg(right);
 	for (int i = 0;i < n;i++) {
 		cout << min(left[i], right[i]) << " ";
 	}
