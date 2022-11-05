@@ -1,14 +1,16 @@
+import heapq
 class HitCounter:
 
     def __init__(self):
-        self.l = []
+        self.h = []
 
     def hit(self, timestamp: int) -> None:
-        self.l.append(timestamp)
+        heapq.heappush(self.h, timestamp)
 
     def getHits(self, timestamp: int) -> int:
-        idx = bisect.bisect_left(self.l, timestamp - 299)
-        return len(self.l)
+        while self.h and self.h[0] <= timestamp - 300:
+            heapq.heappop(self.h)
+        return len(self.h)
 
 
 # Your HitCounter object will be instantiated and called as such:
