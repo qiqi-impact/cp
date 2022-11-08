@@ -73,7 +73,7 @@ int main() {
 		dp[0][m%2] = 0;
 		for (int i = mn;i < n+1;i++) {
 			pref[i % md] += dp[i - md][1-m%2];
-			pref[i % md] %= MOD;	
+			pref[i % md] %= MOD;
 			dp[i][m%2] = pref[i % md];
 			ret[i] += dp[i][m%2];
 			ret[i] %= MOD;
