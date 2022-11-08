@@ -61,16 +61,22 @@ int main() {
 	cin >> n >> k;
 
 	vector<vector<ll>> dp(n+1, vector<ll>(MX, 0));
+	// vector<ll> ret(n+1, 0);
 
 	dp[0][0] = 1;
-	for (int i = 1;i < MX;i++) {
+	for (int i = 1;i < n+1;i++) {
+		ll ret = 0;
 		for (int m = 1;m < MX;m++) {
-			for (int idx = i - (k + m - 1)
-				dp[i][m] += dp[idx][m+1];
+			for (int idx = i - (k + m - 1); idx >= 0; idx -= (k + m - 1)) {
+				dp[i][m] += dp[idx][m-1];
+				dp[i][m] %= MOD;
 			}
-			dp[i][m] %= MOD;
+			ret += dp[i][m];
+			ret %= MOD;
 		}
+		cout << ret << " ";
 	}
+	cout << endl;
 
     return 0;
 }
