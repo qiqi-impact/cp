@@ -50,7 +50,36 @@ namespace output {
 
 using namespace output;
 
-int solve() {
+vector<int> p, cyc;
+
+int dfs(int i, int depth) {
+	if (cyc[i] == -1) {
+		cyc[i] = depth;
+		return depth;
+	} else {
+		cyc[i] = -1;
+		cyc[i] = dfs(p[i], depth+1);
+		return cyc[i];
+	}
+}
+
+void solve() {
+	int n;
+	cin >> n;
+	p = vector<int>(n);
+	cyc = vector<int>(n, 0);
+
+	for (int i = 0;i < n;i++) {
+		cin >> p[i];
+		p[i]--;
+	}
+	for (int i = 0;i < n;i++) {
+		if (cyc[i] == 0) {
+			dfs(i, 0);
+		}
+	}
+	dbg(cyc);
+
 }
 
 int main() {
@@ -59,7 +88,9 @@ int main() {
     int t;
     cin >> t;
     for (int i = 1;i <= t;i++) {
-        cout << "Case #" << i << ": " << solve() << endl;
+        cout << "Case #" << i << ": ";
+		solve();
+		cout << endl;
     }
     return 0;
 }
