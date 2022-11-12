@@ -50,7 +50,9 @@ namespace output {
 
 using namespace output;
 
-vector<int> p, cyc;
+vector<int> p, cyc, lengths;
+unordered_map<int, int> cts;
+vector<vector<int>> dp;
 
 int dfs(int i, int depth) {
 	if (cyc[i] == -1) {
@@ -63,6 +65,24 @@ int dfs(int i, int depth) {
 	}
 }
 
+int get_dp(int i, int j) {
+	// cout << i << " " << j << endl;
+	if (cyc[i] == j) return 0;
+	if (i == 0) return 1e9;
+	if (j == 1) return 0;
+	if (dp[i][j] != INT_MAX) {
+		return dp[i][j];
+	}
+	dp[i][j] = get_dp(i-1, j);
+	if (j > cyc[i]) {
+		int v = get_dp(i-1, j - cyc[i]);
+		if (v != INT_MAX) {
+			dp[i][j] = min(dp[i][j], 1 + v);
+		}
+	}
+	return dp[i][j];
+}
+
 void solve() {
 	int n;
 	cin >> n;
@@ -73,13 +93,37 @@ void solve() {
 		cin >> p[i];
 		p[i]--;
 	}
+	
+	cts.clear();
 	for (int i = 0;i < n;i++) {
 		if (cyc[i] == 0) {
-			dfs(i, 0);
+			int l = dfs(i, 0);
+			cts[l]++;
 		}
 	}
-	dbg(cyc);
+	
+	lengths.clear();
+	for (auto [k, v] : cts) {
+		lengths.push_back(k);
+	}
 
+	dp = vector<vector<int>>(n+1, vector<int>(n+1, INT_MAX));
+
+	vector<int> ret;
+
+	for (int lev = 1;lev <= n;lev++) {
+		ret.push_back(get_dp(n, lev));
+	}
+
+	int mn = 1e9;
+	for (int lev = n-1;lev >= 0;lev--) {
+		ret[lev] = min(ret[lev], mn + 1);
+		mn = min(mn, ret[lev]);
+	}
+
+	for (auto x: ret) {
+		cout << x << " ";
+	}
 }
 
 int main() {
