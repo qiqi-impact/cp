@@ -1,9 +1,11 @@
 class Solution:
     def maxPalindromes(self, s: str, k: int) -> int:
         dp = [0] * (len(s)+1)
-        for i in range(len(s)):
+        for i in range(len(s)+1):
             if i > 0:
                 dp[i] = max(dp[i], dp[i-1])
+            if i == len(s):
+                return dp[i]
             for j in range(len(s)):
                 a, b = i-j, i+j
                 if a < 0 or b >= len(s): break
@@ -22,4 +24,3 @@ class Solution:
                         break
                 else:
                     break
-        return max(dp)
