@@ -4,7 +4,7 @@ class Solution:
         for i in range(len(nums)):
             lcm = 1
             for j in range(i, len(nums)):
-                lcm = lcm * nums[j] // math.gcd(lcm, nums[j])
+                lcm = math.lcm(lcm, nums[j])
                 if lcm == k:
                     ret += 1
         return ret
