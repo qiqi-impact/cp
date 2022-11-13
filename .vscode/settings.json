@@ -94,7 +94,12 @@
         "xloctime": "cpp",
         "xmemory": "cpp",
         "xstddef": "cpp",
-        "xtr1common": "cpp"
+        "xtr1common": "cpp",
+        "ccomplex": "cpp",
+        "ciso646": "cpp",
+        "cstdalign": "cpp",
+        "cstdbool": "cpp",
+        "ctgmath": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

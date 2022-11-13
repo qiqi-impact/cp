@@ -5,6 +5,7 @@ using ll = long long;
 using ld = long double;
 using vi = vector<int>;
 using vvi = vector<vector<int>>;
+using pii = pair<int, int>;
 
 namespace output {
 	void pr(int x) { cout << x; }
@@ -122,9 +123,15 @@ vector<int> anc;
 void dfs(int i, int p, int d) {
 	depths[i] = d;
 	for (auto x : adj[i]) {
-		anc[x] = i;
-		dfs(x, i, d+1);
+		if (x != p) {
+			anc[x] = i;
+			dfs(x, i, d+1);
+		}
 	}
+}
+
+int my_lca(LCA &lca, int i, int j) {
+	return lca.lca(i, j);
 }
 
 void solve() {
@@ -157,14 +164,15 @@ void solve() {
 		sort(qv.begin(), qv.end(), [&](int i, int j) {
 			return depths[i] > depths[j];
 		});
-		unordered_set<int> rem;
-		for (auto x: qv) rem.insert(x);
+		// dbg(qv);
 		int first = qv[0];
 		int second = -1;
+		int top;
 		for (auto x: qv) {
-			int l = lca.lca(first, x);
+			int l = my_lca(lca, first, x);
 			if (l != x) {
-				second = l;
+				top = l;
+				second = x;
 				break;
 			}
 		}
@@ -172,16 +180,18 @@ void solve() {
 			cout << "YES" << endl;
 			continue;
 		}
-		int top = lca.lca(first, second);
-		while (first != top) {
-			rem.erase(first);
-			first = anc[first];
+		bool fail = false;
+		for (auto x : qv) {
+			int a = my_lca(lca, x, first);
+			int b = my_lca(lca, x, second);
+			int c = my_lca(lca, a, top);
+			int d = my_lca(lca, b, top);
+			if ((a != x || c != top) && (b != x || d != top)) {
+				fail = true;
+				break;
+			}
 		}
-		while (second != top) {
-			rem.erase(second);
-			second = anc[second];
-		}
-		cout << (rem.empty() ? "YES" : "NO") << endl;
+		cout << (!fail ? "YES" : "NO") << endl;
 	}
 }
 
