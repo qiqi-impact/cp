@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <unordered_set>
 using namespace std;
 using ll = long long;
 using ld = long double;
@@ -114,15 +115,79 @@ struct LCA {
     }
 };
 
+vector<int> depths;
+vector<vector<int>> adj;
+vector<int> anc;
+
+void dfs(int i, int p, int d) {
+	depths[i] = d;
+	for (auto x : adj[i]) {
+		anc[x] = i;
+		dfs(x, i, d+1);
+	}
+}
+
 void solve() {
-    
+    int n;
+	cin >> n;
+	adj.assign(n, vector<int>());
+	anc.assign(n, -1);
+	for (int i = 0;i < n-1;i++) {
+		int a, b;
+		cin >> a >> b;
+		a--; b--;
+		adj[a].push_back(b);
+		adj[b].push_back(a);
+	}
+	LCA lca(adj);
+
+	depths.assign(n, 0);
+	dfs(0, -1, 0);
+
+	int q;
+	cin >> q;
+	for (int qq = 0;qq < q;qq++) {
+		int qc;
+		cin >> qc;
+		vector<int> qv(qc);
+		for (int i = 0;i < qc;i++) {
+			cin >> qv[i];
+			qv[i]--;
+		}
+		sort(qv.begin(), qv.end(), [&](int i, int j) {
+			return depths[i] > depths[j];
+		});
+		unordered_set<int> rem;
+		for (auto x: qv) rem.insert(x);
+		int first = qv[0];
+		int second = -1;
+		for (auto x: qv) {
+			int l = lca.lca(first, x);
+			if (l != x) {
+				second = l;
+				break;
+			}
+		}
+		if (second == -1) {
+			cout << "YES" << endl;
+			continue;
+		}
+		int top = lca.lca(first, second);
+		while (first != top) {
+			rem.erase(first);
+			first = anc[first];
+		}
+		while (second != top) {
+			rem.erase(second);
+			second = anc[second];
+		}
+		cout << (rem.empty() ? "YES" : "NO") << endl;
+	}
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int t;
-    cin >> t;
-    while (t--) solve();
+    solve();
     return 0;
 }
