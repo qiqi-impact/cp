@@ -60,25 +60,18 @@ int dfs(int i, int depth) {
 		return depth;
 	} else {
 		cyc[i] = -1;
-		cyc[i] = dfs(p[i], depth+1);
-		return cyc[i];
+		int k = dfs(p[i], depth+1);
+		cyc[i] = -1;
+		return k;
 	}
 }
 
 int get_dp(int i, int j) {
-	// cout << i << " " << j << endl;
-	if (cyc[i] == j) return 0;
-	if (i == 0) return 1e9;
+	if (i == 0 || j <= 0) return 1e9;
+	if (cyc[i-1] == j) return 0;
 	if (j == 1) return 0;
-	if (dp[i][j] != INT_MAX) {
-		return dp[i][j];
-	}
-	dp[i][j] = get_dp(i-1, j);
-	if (j > cyc[i]) {
-		int v = get_dp(i-1, j - cyc[i]);
-		if (v != INT_MAX) {
-			dp[i][j] = min(dp[i][j], 1 + v);
-		}
+	if (dp[i][j] == INT_MAX) {
+		dp[i][j] = min(get_dp(i-1, j), get_dp(i-1, j - cyc[i-1]));
 	}
 	return dp[i][j];
 }
@@ -98,14 +91,16 @@ void solve() {
 	for (int i = 0;i < n;i++) {
 		if (cyc[i] == 0) {
 			int l = dfs(i, 0);
+			cyc[i] = l;
 			cts[l]++;
 		}
 	}
+	// dbg(cyc);
 	
-	lengths.clear();
-	for (auto [k, v] : cts) {
-		lengths.push_back(k);
-	}
+	// lengths.clear();
+	// for (auto [k, v] : cts) {
+	// 	lengths.push_back(k);
+	// }
 
 	dp = vector<vector<int>>(n+1, vector<int>(n+1, INT_MAX));
 
