@@ -71,8 +71,10 @@ int get_dp(int i, int j) {
 	if (cyc[i-1] == j) return 0;
 	if (j == 1) return 0;
 	if (dp[i][j] == INT_MAX) {
-		dp[i][j] = min(get_dp(i-1, j), get_dp(i-1, j - cyc[i-1]));
+		dp[i][j] = min(get_dp(i-1, j), 1 + get_dp(i-1, j - cyc[i-1]));
 	}
+	if (i == dp.size()-1)
+	dbg(i, j, dp[i][j]);
 	return dp[i][j];
 }
 
