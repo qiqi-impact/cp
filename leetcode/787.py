@@ -14,7 +14,6 @@ class Solution:
         h = [(0, src, 0)]
         while h:
             c, x, s = heapq.heappop(h)
-            print(c, x, s)
             if c != dist[(x, s)]:
                 continue
             if x == dst:
