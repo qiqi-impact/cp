@@ -27,23 +27,21 @@ class Solution:
         trees = [(x-mx, y-my) for (x, y) in trees]
         l = [(order(t), t) for t in trees]
         l.sort()
-        # for x in l:
-        #     print(x)
         
         ret = [0, 1]
-        add = []
         ptr = 2
         for ptr in range(2, len(l)):
             while 1:
                 p1, p2, p3 = l[ret[-2]][1], l[ret[-1]][1], l[ptr][1]
                 v = crossproduct(p1, p2, p3)
-                print(p1, p2, p3, v)
                 if v < 0:
                     ret.pop()
                 else:
                     break
-            # if v == 0 and l[ptr][0][0] == l[ret[-1]][0][0]:
-            #     add.append(ptr)
-            # else:
             ret.append(ptr)
-        return [(l[p][1][0]+mx, l[p][1][1]+my) for p in ret + add]
+        
+        for i in range(1, len(l)-1):
+            if crossproduct(l[-1][1], l[i][1], l[0][1]) == 0:
+                ret.append(i)
+            
+        return [(l[p][1][0]+mx, l[p][1][1]+my) for p in list(set(ret))]
