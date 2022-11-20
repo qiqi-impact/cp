@@ -20,7 +20,7 @@ class Solution:
             idx = bisect.bisect_left(l, q)
             mn = 1e9
             mx = -1e9
-            for x in range(idx-1, idx+2):
+            for x in range(idx-1, idx+1):
                 if 0 <= x < len(l):
                     if l[x] <= q:
                         mx = max(mx, l[x])
