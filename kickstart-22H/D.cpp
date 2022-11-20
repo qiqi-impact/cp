@@ -66,18 +66,6 @@ int dfs(int i, int depth) {
 	}
 }
 
-int get_dp(int i, int j) {
-	if (i == 0 || j <= 0) return 1e9;
-	if (lengths[i-1] == j) return 0;
-	if (j == 1) return 0;
-	if (dp[i][j] == INT_MAX) {
-		dp[i][j] = min(get_dp(i-1, j), 1 + get_dp(i-1, j - lengths[i-1]));
-	}
-	// if (i == dp.size()-1)
-	// dbg(i, j, dp[i][j]);
-	return dp[i][j];
-}
-
 void solve() {
 	int n;
 	cin >> n;
@@ -89,7 +77,6 @@ void solve() {
 		p[i]--;
 	}
 
-
 	lengths.clear();
 	cts.clear();
 	for (int i = 0;i < n;i++) {
@@ -100,7 +87,6 @@ void solve() {
 			cts[l]++;
 		}
 	}
-	// dbg(lengths);
 	
 	// lengths.clear();
 	// for (auto [k, v] : cts) {
@@ -111,8 +97,30 @@ void solve() {
 
 	vector<int> ret;
 
+	// int get_dp(int i, int j) {
+	// 	if (i == 0 || j <= 0) return 1e9;
+	// 	if (lengths[i-1] == j) return 0;
+	// 	if (dp[i][j] == INT_MAX) {
+	// 		dp[i][j] = min(get_dp(i-1, j), 1 + get_dp(i-1, j - lengths[i-1]));
+	// 	}
+	// 	return dp[i][j];
+	// }
+
+	for (int i = 1;i <= lengths.size();i++) {
+		for (int j = 0;j < n;j++) {
+			if (lengths[i-1] == j) dp[i][j] = 0;
+			else {
+				dp[i][j] = dp[i-1][j];
+				if (j > lengths[i-1] && dp[i-1][j - lengths[i-1]] != INT_MAX) {
+					dp[i][j] = min(dp[i][j], 1 + dp[i-1][j - lengths[i-1]]);
+				}
+			}
+		}
+	}
+	dbg(dp);
+
 	for (int lev = 1;lev <= n;lev++) {
-		ret.push_back(get_dp(lengths.size(), lev));
+		ret.push_back(dp[lengths.size()][lev]);
 	}
 
 	int mn = 1e9;
