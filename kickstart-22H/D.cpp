@@ -77,47 +77,65 @@ void solve() {
 		p[i]--;
 	}
 
-	lengths.clear();
+	// lengths.clear();
 	cts.clear();
 	for (int i = 0;i < n;i++) {
 		if (cyc[i] == 0) {
 			int l = dfs(i, 0);
-			lengths.push_back(l);
+			// lengths.push_back(l);
 			cyc[i] = l;
 			cts[l]++;
 		}
 	}
 	
-	// lengths.clear();
-	// for (auto [k, v] : cts) {
-	// 	lengths.push_back(k);
-	// }
+	lengths.clear();
+	for (auto [k, v] : cts) {
+		lengths.push_back(k);
+		// dbg(k, v);
+	}
+	// dbg(lengths);
 
-	dp = vector<vector<int>>(n+1, vector<int>(n+1, INT_MAX));
+	dp = vector<vector<int>>(lengths.size()+1, vector<int>(n+1, INT_MAX));
 
 	vector<int> ret;
 
-	// int get_dp(int i, int j) {
-	// 	if (i == 0 || j <= 0) return 1e9;
-	// 	if (lengths[i-1] == j) return 0;
-	// 	if (dp[i][j] == INT_MAX) {
-	// 		dp[i][j] = min(get_dp(i-1, j), 1 + get_dp(i-1, j - lengths[i-1]));
-	// 	}
-	// 	return dp[i][j];
-	// }
-
+	dp[0][0] = -1;
 	for (int i = 1;i <= lengths.size();i++) {
-		for (int j = 0;j < n;j++) {
-			if (lengths[i-1] == j) dp[i][j] = 0;
-			else {
-				dp[i][j] = dp[i-1][j];
-				if (j > lengths[i-1] && dp[i-1][j - lengths[i-1]] != INT_MAX) {
-					dp[i][j] = min(dp[i][j], 1 + dp[i-1][j - lengths[i-1]]);
+		int l = lengths[i-1];
+		int qty = cts[lengths[i-1]];
+		dp[i][0] = -1;
+		for (int m = 0;m < l;m++) {
+			deque<int> q;
+			for (int j = m;j <= n;j += l) {
+				// dp[i][j] = min(dp[i][j], dp[i-1][j]);
+				// if (j == l) {
+				// 	dp[i][j] = 0;
+				// 	continue;
+				// }
+				while (!q.empty() && q.front() + qty * l < j) {
+					q.pop_front();
 				}
+				while (!q.empty() && (dp[i-1][q.back()] - q.back()) >= (dp[i-1][j] - j)) {
+					q.pop_back();
+				}
+				q.push_back(j);
+				dbg(i, m, j, q);
+				if (j != 0)
+					dp[i][j] = (j - q.front())/l + (dp[i-1][q.front()]);
 			}
 		}
+
+		// for (int j = 0;j <= n;j++) {
+		// 	if (lengths[i-1] == j) dp[i][j] = 0;
+		// 	else {
+		// 		dp[i][j] = dp[i-1][j];
+		// 		if (j > lengths[i-1] && dp[i-1][j - lengths[i-1]] != INT_MAX) {
+		// 			dp[i][j] = min(dp[i][j], 1 + dp[i-1][j - lengths[i-1]]);
+		// 		}
+		// 	}
+		// }
 	}
-	dbg(dp);
+	// dbg(dp);
 
 	for (int lev = 1;lev <= n;lev++) {
 		ret.push_back(dp[lengths.size()][lev]);
