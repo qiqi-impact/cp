@@ -96,39 +96,37 @@ void solve() {
 			cts[l]++;
 		}
 	}
+
 	
 	vector<int> join_cost;
 	for (auto [k, v] : cts) {
+		// dbg(k, v);
+
+		int p2 = 1;
 		int kk = k;
-		while (v) {
-			if (1 && v) {
-				lengths.push_back(kk);
-				join_cost.push_back(kk/k - 1);
-			}
-			v /= 2;
+
+		while (v >= p2) {
+			lengths.push_back(kk);
+			join_cost.push_back(kk/k - 1);
+			v -= p2;
+			p2 *= 2;
 			kk *= 2;
 		}
+		if (v > 0) {
+			lengths.push_back(k * v);
+			join_cost.push_back(v - 1);
+		}
 	}
-	dbg(lengths, join_cost);
 
-	dp = vector<vector<int>>(n+1, vector<int>(n+1, INT_MAX));
+	dp = vector<vector<int>>(lengths.size()+1, vector<int>(n+1, INT_MAX));
 
 	vector<int> ret;
 
-	// int get_dp(int i, int j) {
-	// 	if (i == 0 || j <= 0) return 1e9;
-	// 	if (lengths[i-1] == j) return 0;
-	// 	if (dp[i][j] == INT_MAX) {
-	// 		dp[i][j] = min(get_dp(i-1, j), 1 + get_dp(i-1, j - lengths[i-1]));
-	// 	}
-	// 	return dp[i][j];
-	// }
-
 	for (int i = 1;i <= lengths.size();i++) {
 		for (int j = 0;j <= n;j++) {
-			if (lengths[i-1] == j) dp[i][j] = join_cost[i-1];
+			dp[i][j] = dp[i-1][j];
+			if (lengths[i-1] == j) dp[i][j] = min(dp[i][j], join_cost[i-1]);
 			else {
-				dp[i][j] = dp[i-1][j];
 				if (j > lengths[i-1] && dp[i-1][j - lengths[i-1]] != INT_MAX) {
 					dp[i][j] = min(dp[i][j], 1 + join_cost[i-1] + dp[i-1][j - lengths[i-1]]);
 				}
