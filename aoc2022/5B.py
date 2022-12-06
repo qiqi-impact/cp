@@ -13,10 +13,9 @@ with open("in") as f:
         if 'move' in xx:
             params = [int(xx[1]), int(xx[3])-1, int(xx[5])-1]
             # print(params)
-            a = stacks[params[1]][-params[0]:]
-            stacks[params[2]] += a
-            for i in range(params[0]):
-                stacks[params[1]].pop()
+            for x in range(params[0]):
+                a = stacks[params[1]][-params[0]:]
+                stacks[params[2]].append(a)
                 # print(stacks)
     # print(params)
     for i in range(len(stacks)):
