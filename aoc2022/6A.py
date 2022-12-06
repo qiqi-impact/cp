@@ -2,13 +2,9 @@ from collections import defaultdict
 
 with open("in") as f:
     d = defaultdict(int)
+    LEN = 4
     for x in f.read().splitlines():
-        for i in range(len(x)):
-            if i >= 4:
-                d[x[i-4]] -= 1
-                if d[x[i-4]] == 0:
-                    del d[x[i-4]]
-            d[x[i]] += 1
-            if len(d) == 4:
-                print(i+1)
+        for i in range(len(x)-LEN+1):
+            if len(set(x[i:i+LEN])) == LEN:
+                print(i+LEN)
                 break
