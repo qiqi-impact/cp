@@ -7,38 +7,44 @@ with open('in') as f:
         board.append([int(x) for x in x])
     R, C = len(board), len(board[0])
 
-    for i in range(R):
-        for j in range(C):
+    for i in range(1, R-1):
+        for j in range(1, C-1):
             v = board[i][j]
 
-            a = 0
+            block = False
             for ii in range(i-1, -1, -1):
-                a += 1
                 if board[ii][j] >= v:
+                    block = True
                     break
-            a = max(a, 1)
+            if not block:
+                ret += 1
+                continue
             
-            b = 0
+            block = False
             for ii in range(i+1, R):
-                b += 1
                 if board[ii][j] >= v:
+                    block = True
                     break
-            b = max(b, 1)
-
-            c = 0
+            if not block:
+                ret += 1
+                continue
+            
+            block = False
             for jj in range(j-1, -1, -1):
-                c += 1
                 if board[i][jj] >= v:
+                    block = True
                     break
-            c = max(c, 1)
+            if not block:
+                ret += 1
+                continue
             
-            d = 0
+            block = False
             for jj in range(j+1, C):
-                d += 1
                 if board[i][jj] >= v:
+                    block = True
                     break
-            d = max(d, 1)
-            
-            ret = max(ret, a*b*c*d)
+            if not block:
+                ret += 1
+                continue
 
-    print(ret)
+    print(ret + 2 * R + 2 * C - 4)
