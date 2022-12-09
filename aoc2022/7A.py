@@ -1,17 +1,9 @@
-from functools import cache
-
 class Node:
     def __init__(self, name, p):
         self.name = name
         self.sz = 0
         self.ch = {}
         self.parent = p
-
-# @cache
-# def size(node):
-#     a = node.sz
-#     b = sum([size(dirs[x]) for x in node.dir])
-#     return a + b
 
 root = Node('/', None)
 cur = root
