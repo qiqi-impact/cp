@@ -10,6 +10,5 @@ class Solution:
             fast = fast.next
             if fast:
                 slow = slow.next
-            if fast:
                 fast = fast.next
         return slow
