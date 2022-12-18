@@ -39,11 +39,12 @@ for k in nodes:
 NZ = len(nzidx)
 
 @cache
-def dfs(lv, bm, t):
+def dfs(lv, ev, bm, t):
     if t == 0:
         return 0
 
     name, cur, adj, idx = anodes[lv]
+    ename, ecur, eadj, eidx = anodes[ev]
     
     pressure = 0
     for i in range(NZ):
@@ -52,12 +53,21 @@ def dfs(lv, bm, t):
     
     ret = pressure * t
     for other in adj:
-        ret = max(ret, pressure + dfs(other, bm, t-1))
+        for eother in eadj:
+            ret = max(ret, pressure + dfs(other, eother, bm, t-1))
 
     if lv in nzd and not ((1 << nzd[lv]) & bm):
-        ret = max(ret, pressure + dfs(lv, bm ^ (1 << nzd[lv]), t-1))
+        for eother in eadj:
+            ret = max(ret, pressure + dfs(lv, eother, bm ^ (1 << nzd[lv]), t-1))
+
+    if ev in nzd and not ((1 << nzd[ev]) & bm):
+        for other in adj:
+            ret = max(ret, pressure + dfs(other, ev, bm ^ (1 << nzd[ev]), t-1))
+
+    if (lv in nzd and not ((1 << nzd[lv]) & bm)) and (ev in nzd and not ((1 << nzd[ev]) & bm)):
+         ret = max(ret, pressure + dfs(lv, ev, bm ^ (1 << nzd[lv]) ^ (1 << nzd[ev]), t-1))
     
     return ret
 
-print(dfs(nodes['AA'][3], 0, 30))
+print(dfs(nodes['AA'][3], nodes['AA'][3], 0, 26))
 
