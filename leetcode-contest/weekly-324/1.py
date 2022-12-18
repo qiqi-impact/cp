@@ -1,8 +1,13 @@
 class Solution:
     def similarPairs(self, words: List[str]) -> int:
+        bits = defaultdict(int)
+        for w in words:
+            bm = 0
+            for c in w:
+                bm |= (1 << (ord(c) - ord('a')))
+            bits[bm] += 1
+        
         ret = 0
-        for i in range(len(words)):
-            for j in range(i+1, len(words)):
-                if set(words[i]) == set(words[j]):
-                    ret += 1
+        for k in bits:
+            ret += (bits[k]) * (bits[k] - 1) // 2
         return ret
