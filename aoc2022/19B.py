@@ -29,15 +29,13 @@ def dfs(a, b, c, d, ra, rb, rc, rd, t, bpi):
     ret = dfs(a + ra, b + rb, c + rc, d + rd, ra, rb, rc, rd, t-1, bpi)
     if a >= bp[bpi][4] and c >= bp[bpi][5]:
         ret = max(ret, dfs(a - bp[bpi][4] + ra, b + rb, c - bp[bpi][5] + rc, d + rd, ra, rb, rc, rd + 1, t-1, bpi))
-    if t > 1:
-        if a >= bp[bpi][2] and b >= bp[bpi][3]:
-            ret = max(ret, dfs(a - bp[bpi][2] + ra, b - bp[bpi][3] + rb, c + rc, d + rd, ra, rb, rc + 1, rd, t-1, bpi))
-        if t > 2:
-            if a >= bp[bpi][1]:
-                ret = max(ret, dfs(a - bp[bpi][1] + ra, b + rb, c + rc, d + rd, ra, rb + 1, rc, rd, t-1, bpi))
+    elif a >= bp[bpi][2] and b >= bp[bpi][3]:
+        ret = max(ret, dfs(a - bp[bpi][2] + ra, b - bp[bpi][3] + rb, c + rc, d + rd, ra, rb, rc + 1, rd, t-1, bpi))
+    else:
+        if a >= bp[bpi][1]:
+            ret = max(ret, dfs(a - bp[bpi][1] + ra, b + rb, c + rc, d + rd, ra, rb + 1, rc, rd, t-1, bpi))
         if a >= bp[bpi][0]:
             ret = max(ret, dfs(a - bp[bpi][0] + ra, b + rb, c + rc, d + rd, ra + 1, rb, rc, rd, t-1, bpi))
-    
     return ret
 
 for bpi in [0]:
