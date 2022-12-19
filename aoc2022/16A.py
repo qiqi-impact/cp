@@ -32,10 +32,6 @@ for k in nodes:
     l = nodes[k]
     l[2] = [nodes[x][3] for x in l[2]]
 
-# print(anodes)
-
-# path = []
-
 NZ = len(nzidx)
 
 @cache
