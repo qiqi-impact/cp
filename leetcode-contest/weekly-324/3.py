@@ -2,8 +2,10 @@ class Solution:
     def isPossible(self, n: int, edges: List[List[int]]) -> bool:
         s = set()
         deg = defaultdict(int)
-        g = defaultdict(set)
+        g = [set() for _ in range(n)]
         for x, y in edges:
+            x -= 1
+            y -= 1
             g[x].add(y)
             g[y].add(x)
             deg[x] += 1
@@ -13,9 +15,7 @@ class Solution:
                 s.add(k)
                 if len(s) > 4:
                     return False
-        if len(s) % 2:
-            return False
-        elif len(s) == 0:
+        if len(s) == 0:
             return True
         elif len(s) == 4:
             l = list(s)
@@ -31,7 +31,7 @@ class Solution:
             l = list(s)
             if l[0] not in g[l[1]]:
                 return True
-            for k in g:
+            for k in range(n):
                 if k not in g[l[0]] and k not in g[l[1]]:
                     return True
             return False
