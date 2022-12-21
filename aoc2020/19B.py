@@ -42,7 +42,8 @@ with open('in') as f:
                         q.append(x)
                         val[x] = calc(op[x])
                 qp += 1
-            VALID = set(val[0])
+            A = set(val[42])
+            B = set(val[31])
             continue
 
         if stage == 0:
@@ -63,6 +64,24 @@ with open('in') as f:
                     dep[k].append(a)
                     ind[a] += 1
         else:
-            if l in VALID:
-                ret += 1
+            if len(l) % 8 == 0:
+                ac = bc = 0
+                flipped = False
+                fail = False
+                # print(l)
+                for i in range(0, len(l), 8):
+                    s = l[i:i+8]
+                    if s in A:
+                        if flipped:
+                            fail = True
+                            break
+                        ac += 1
+                    elif s in B:
+                        if not flipped:
+                            flipped = True
+                        bc += 1
+                    else:
+                        fail = True
+                        break
+                ret += int((not fail) and (bc >= 1 and ac > bc))
 print(ret)
