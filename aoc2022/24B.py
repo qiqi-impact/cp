@@ -53,7 +53,6 @@ def goto(a, b, c, d, t):
     }
 
     q = deque([(a, b, t)])
-    win = False
     while q:
         x, y, t = q.popleft()
         nt = (t+1)%T
