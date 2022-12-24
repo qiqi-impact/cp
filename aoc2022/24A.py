@@ -56,10 +56,7 @@ win = False
 while q:
     x, y, t = q.popleft()
     nt = (t+1)%T
-    if (x, y, nt) not in memo and (x, y) not in squares[nt]:
-        q.append((x, y, nt))
-        memo[x, y, nt] = memo[x, y, t] + 1
-    for dx, dy in D:
+    for dx, dy in D + [[0, 0]]:
         nx, ny = x+dx, y+dy
         if (nx, ny, nt) not in memo and 0 <= nx < R and 0 <= ny < C and board[nx][ny] != '#' and (nx, ny) not in squares[nt]:
             q.append((nx, ny, nt))
