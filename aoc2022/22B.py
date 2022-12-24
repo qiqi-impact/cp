@@ -44,6 +44,26 @@ for i in range(50):
     tele[49 - i, 49] = [(100 + i, 0), 0]
     tele[100 + i, -1] = [(49 - i, 50), 0]
 
+def prt(op):
+    global cx, cy, f, mxl
+    print((cx, cy), op)
+
+    WINDOW_SIZE = 4
+    print('-'*(WINDOW_SIZE * 2 + 3))
+    for i in range(cx - WINDOW_SIZE, cx + WINDOW_SIZE + 1):
+        l = '|'
+        for j in range(cy - WINDOW_SIZE, cy + WINDOW_SIZE + 1):
+            if not (0 <= i < len(board) and 0 <= j < mxl) or board[i][j] == ' ':
+                l += ' '
+            elif (i, j) == (cx, cy):
+                l += '>v<^'[f]
+            else:
+                l += board[i][j]
+        l += '|'
+        print(l)
+    print('='*(WINDOW_SIZE * 2 + 3))
+    input()
+
 with open('in') as f:
     for i, l in enumerate(f.read().splitlines()):
         if len(l) == 0:
@@ -85,7 +105,7 @@ for op in pw:
     elif op == 'L':
         f = (f-1)%4
     else:
-        print(cx, cy)
+        # prt(op)
         dx, dy = D[f]
         for i in range(op):
             nx, ny = cx+dx, cy+dy
@@ -93,16 +113,18 @@ for op in pw:
             if (nx, ny) in stele:
                 a, b = stele[nx, ny][f]
                 nx, ny = a
-                pdx, pdy = D[b]
+                f = b
+                pdx, pdy = D[f]
             elif (nx, ny) in tele:
                 a, b = tele[nx, ny]
                 nx, ny = a
-                pdx, pdy = D[b]
+                f = b
+                pdx, pdy = D[f]
             if board[nx][ny] == '#':
                 break
             cx, cy = nx, ny
             dx, dy = pdx, pdy
-            print(cx, cy, f)
+            # prt(op)
     
 print(cx, cy, f)
 print(1000 * (cx + 1) + 4 * (cy + 1) + f)
