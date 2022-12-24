@@ -49,7 +49,7 @@ def prt(op):
     print((cx, cy), op)
 
     WINDOW_SIZE = 4
-    print('-'*(WINDOW_SIZE * 2 + 3))
+    print('='*(WINDOW_SIZE * 2 + 3))
     for i in range(cx - WINDOW_SIZE, cx + WINDOW_SIZE + 1):
         l = '|'
         for j in range(cy - WINDOW_SIZE, cy + WINDOW_SIZE + 1):
@@ -99,31 +99,42 @@ for j in range(mxl):
 D = [[0, 1], [1, 0], [0, -1], [-1, 0]]
 f = 0
 R, C = len(board), len(board[0])
+req = False
 for op in pw:
     if op == 'R':
         f = (f+1)%4
     elif op == 'L':
         f = (f-1)%4
     else:
-        # prt(op)
         dx, dy = D[f]
+        nf = f
         for i in range(op):
+            if req:
+                # prt(op)
+                req = False
             nx, ny = cx+dx, cy+dy
             pdx, pdy = dx, dy
             if (nx, ny) in stele:
+                # prt(op)
                 a, b = stele[nx, ny][f]
                 nx, ny = a
-                f = b
-                pdx, pdy = D[f]
+                nf = b
+                pdx, pdy = D[nf]
+                req = True
+                print((nx, ny))
             elif (nx, ny) in tele:
+                # prt(op)
                 a, b = tele[nx, ny]
                 nx, ny = a
-                f = b
-                pdx, pdy = D[f]
+                nf = b
+                pdx, pdy = D[nf]
+                req = True
+                print((nx, ny))
             if board[nx][ny] == '#':
                 break
             cx, cy = nx, ny
             dx, dy = pdx, pdy
+            f = nf
             # prt(op)
     
 print(cx, cy, f)
