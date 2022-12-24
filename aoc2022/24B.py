@@ -68,4 +68,8 @@ def goto(a, b, c, d, t):
                 if (nx, ny) == (c, d):
                     return memo[nx, ny, nt]
 
-print(goto(0, 1, R-1, C-2, 230 + 251))
+x = goto(0, 1, R-1, C-2, 0)
+y = goto(R-1, C-2, 0, 1, x)
+z = goto(0, 1, R-1, C-2, x+y)
+
+print(x+y+z)
