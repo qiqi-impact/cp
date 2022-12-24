@@ -1,12 +1,11 @@
+# algo by betsymp
+
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        @cache
-        def dp(idx):
-            if idx >= len(prices):
-                return 0
-            mx = dp(idx+1)
-            for j in range(idx+1, len(prices)):
-                if prices[j] > prices[idx]:
-                    mx = max(mx, prices[j] - prices[idx] + dp(j+2))
-            return mx
-        return dp(0)
+        hold, sold, sold_last = -inf, 0, 0
+        for p in prices:
+            temp = hold
+            hold = max(hold, sold - p)
+            sold = sold_last
+            sold_last = max(sold_last, temp + p)
+        return sold_last
