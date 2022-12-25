@@ -20,8 +20,6 @@ class Solution:
                     bad += 1
                 if bad == 0:
                     ret = max(ret, j - i)
-            if bad == 0:
-                ret = max(ret, j - i)
             c = s[i]
             ct[c] += 1
             if ct[c] == 0:
