@@ -9,7 +9,7 @@ class Node:
         self.name = name
         self.small = (name == name.lower())
         self.adj = []
-        self.vis = 2
+        self.vis = 0
 
 ret = 0
 with open('in') as f:
@@ -22,23 +22,26 @@ with open('in') as f:
         nm[a].adj.append(nm[b])
         nm[b].adj.append(nm[a])
 
-nm['start'].vis = nm['end'].vis = 1
-
 used = False
+# path = []
 def dfs(node):
-    global ret
-    path.append(node.name)
+    global ret, used
+    # path.append(node.name)
     if node.name == 'end':
         ret += 1
-        print(path)
-    if node.small:
-        node.vis -= 1
-    for ch in node.adj:
-        if ch.vis > 0:
-            dfs(ch)
+        # print(path)
     if node.small:
         node.vis += 1
-    path.pop()
+    for ch in node.adj:
+        if not ch.vis:
+            dfs(ch)
+        elif ch.vis == 1 and ch.name not in ['start', 'end'] and not used:
+            used = True
+            dfs(ch)
+            used = False
+    if node.small:
+        node.vis -= 1
+    # path.pop()
 
 dfs(nm['start'])
 print(ret)
