@@ -50,7 +50,22 @@ def f(l):
             a, b = f(idx)
             q.append(a)
             idx = b
-    return sum(q), idx
 
-f(0)
-print(ret)
+    if t == 0:
+        r = sum(q)
+    elif t == 1:
+        r = math.prod(q)
+    elif t == 2:
+        r = min(q)
+    elif t == 3:
+        r = max(q)
+    elif t == 5:
+        r = int(q[0] > q[1])
+    elif t == 6:
+        r = int(q[0] < q[1])
+    elif t == 7:
+        r = int(q[0] == q[1])
+
+    return r, idx
+
+print(f(0)[0])
