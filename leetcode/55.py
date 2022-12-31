@@ -1,6 +1,6 @@
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
-        mx = 0
+        mx = 0 # mx = "how far can I go given the previous jump lengths"
         for i in range(len(nums)):
             if i > mx:
                 return False
