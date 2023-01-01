@@ -16,15 +16,15 @@ class Solution:
             elif l == r - 1:
                 rot = l if nums[l] < nums[r] else r
         
-        def get_val(idx):
-            return nums[(idx + rot)%len(nums)]
+        def rot_idx(idx):
+            return (idx + rot)%len(nums)
         
         l, r = 0, len(nums)-1
         while l <= r:
             mi = (l+r)//2
-            v = get_val(mi)
+            v = nums[rot_idx(mi)]
             if v == target:
-                return (mi + rot)%len(nums)
+                return rot_idx(mi)
             elif v < target:
                 l = mi + 1
             else:
