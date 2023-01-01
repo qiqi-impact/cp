@@ -1,3 +1,5 @@
+# algo by pawelb87
+
 class Solution:
     def closestPrimes(self, left: int, right: int) -> List[int]:
         def check_prime(n):
