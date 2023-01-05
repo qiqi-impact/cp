@@ -66,7 +66,7 @@ def dfs(idx, z):
                 return True
             path.pop()
     else:
-        for v in range(9, 0, -1):
+        for v in range(1, 10):
             path.append(v)
             if dfs(idx+1, simulate(inst, v, z)):
                 return True
