@@ -5,50 +5,53 @@ import heapq
 import math
 import re, json
 
-def simulate(inst, v):
-    reg = [v, 0, 0, 0]
+def div(l, r):
+    if l < 0 and r < 0:
+        l = -l
+        r = -r
+        l //= r
+    elif l < 0 or r < 0:
+        l = abs(l)
+        r = abs(r)
+        l //= r
+        l = -l
+    else:
+        l //= r
+    return l
+
+def simulate(inst, w, z):
+    reg = [w, 0, 0, z]
     for m, l, r in inst:
-        # print(m, l, r)
         l = ord(l) - ord('w')
         if type(r) != int:
             r = reg[ord(r) - ord('w')]
-        # print(l, r)
         if m == 'add':
             reg[l] += r
         elif m == 'mod':
-            reg[l] %= r
+            reg[l] = reg[l] - div(reg[l], r) * r
         elif m == 'mul':
             reg[l] *= r
         elif m == 'div':
-            if reg[l] < 0 and r < 0:
-                reg[l] = -reg[l]
-                r = -r
-                reg[l] //= r
-            elif l < 0 or r < 0:
-                reg[l] = abs(reg[l])
-                r = abs(r)
-                reg[l] //= r
-                reg[l] = -l
-            else:
-                reg[l] //= r
+            reg[l] = div(reg[l], r)
         elif m == 'eql':
             reg[l] = int(reg[l] == r)
-        print(reg)
-        input()
-    return reg[-1] == 0
-
+    return reg[-1]
 
 groups = []
+zopts = set([0])
 ret = ''
 with open('in') as f:
-    for i, l in enumerate(f.read().splitlines()):
+    for _, l in enumerate(f.read().splitlines()):
         t = l.split(' ')
         if len(t) == 2:
-            if groups:
-                for i in range(9, 0, -1):
-                    if simulate(groups[-1], i):
-                        ret += str(mx)
-                        break
+            # if groups:
+            #     r = set()
+            #     for i in range(9, 0, -1):
+            #         for z in zopts:
+            #             r.add(simulate(groups[-1], i, z))
+            #     zopts = r
+            #     print(min(zopts), max(zopts))
+            #     input()
             groups.append([])
             continue
         try:
@@ -56,8 +59,21 @@ with open('in') as f:
         except:
             pass
         groups[-1].append(t)
-for i in range(9, 0, -1):
-    if simulate(groups[-1], i):
-        ret += str(mx)
-        break
-print(ret)
+
+for i in range(11111111111111, 10**14):
+    print(i)
+    z = 0
+    for j, x in enumerate([int(c) for c in str(i)]):
+        z = simulate(groups[j], x, z)
+        print(z)
+        input()
+    print(i, z)
+    input()
+
+# r = set()
+# for i in range(9, 0, -1):
+#     for z in zopts:
+#         r.add(simulate(groups[-1], i, z))
+# zopts = r
+# print(0 in zopts)
+
