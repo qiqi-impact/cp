@@ -12,6 +12,8 @@ class Solution:
                 j += 1
             if ct >= k:
                 ret += len(nums) - j + 1
+            else:
+                break
             d[nums[i]] -= 1
             ct -= d[nums[i]]
         return ret
