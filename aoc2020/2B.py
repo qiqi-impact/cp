@@ -16,8 +16,6 @@ with open('in') as f:
         x = int(x)
         y = int(y)
         b = b[0]
-        f = defaultdict(int)
-        for d in c:
-            f[d] += 1
-        ret += int(x <= f[b] <= y)
+        ct = int(c[x-1] == b) + int(c[y-1] == b)
+        ret += int(ct == 1)
     print(ret)
