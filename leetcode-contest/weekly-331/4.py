@@ -1,13 +1,12 @@
 class Solution:
     def minCost(self, basket1: List[int], basket2: List[int]) -> int:
         ct = defaultdict(int)
-        a, b = defaultdict(int), defaultdict(int)
+        a = defaultdict(int)
         for x in basket1:
             ct[x] += 1
             a[x] += 1
         for x in basket2:
             ct[x] += 1
-            b[x] += 1
         for k in ct:
             if ct[k] % 2:
                 return -1
