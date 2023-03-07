@@ -7,10 +7,8 @@ class Solution:
             if cur + x > y:
                 if h and -h[0] > x:
                     t = heapq.heappop(h)
-                    t = -t
-                    cur -= t
                     heapq.heappush(h, -x)
-                    cur += x
+                    cur += x + t
             else:
                 heapq.heappush(h, -x)
                 cur += x
