@@ -20,7 +20,7 @@ class Solution:
             for p in primes:
                 if p*p > n:
                     break
-                if n%p == 0:
+                while n%p == 0:
                     if p not in d:
                         d[p] = [i, i]
                     else:
