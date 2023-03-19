@@ -6,5 +6,5 @@ class Solution:
         md = min(d)
         ret = md * value
         for i in range(value):
-            if d[i] < md+1:
+            if d[i] == md:
                 return ret + i
