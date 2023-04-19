@@ -7,12 +7,11 @@ class Fancy:
 
     def __init__(self):
         self.cmult = 1
-        self.mult = [(-1, 1)]
         self.add = 0
         self.vals = []
 
     def append(self, val: int) -> None:
-        self.vals.append(val - self.add)
+        self.vals.append((val - self.add) * inv(self.cmult) % MOD)
 
     def addAll(self, inc: int) -> None:
         self.add += inc
@@ -22,14 +21,11 @@ class Fancy:
         self.add %= MOD
         self.cmult *= m
         self.cmult %= MOD
-        self.mult.append((len(self.vals)-1, self.mult[-1][1] * inv(m) % MOD))
 
     def getIndex(self, idx: int) -> int:
         if not 0 <= idx < len(self.vals):
             return -1
-        j = bisect_left(self.mult, (idx, 0)) - 1
-        m = self.cmult * self.mult[j][1] % MOD
-        return (self.vals[idx] * m + self.add) % MOD
+        return (self.vals[idx] * self.cmult + self.add) % MOD
 
 
 # Your Fancy object will be instantiated and called as such:
