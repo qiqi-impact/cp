@@ -16,5 +16,3 @@ class Solution:
         if mx == len(nums):
             return len(nums)+1
         return len(nums)
-
-    
