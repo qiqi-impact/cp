@@ -11,5 +11,5 @@ while h:
     for o, w in g[cur]:
         if dist.get(o, inf) > cost + w:
             dist[o] = cost + w
-            heapq.heappush((cost + w, o))
+            heapq.heappush(h, (cost + w, o))
 return -1
