@@ -81,8 +81,7 @@ int main() {
 			if (primes[j] > 10000) break;
 			double cur = primes[i] * primes[i] * primes[j];
 			if (cur >= n) break;
-			int idx = lower_bound(primes.begin(), primes.end(), sqrt(n / cur)) - primes.begin();
-			// dbg(i, j, n, cur, idx)
+			int idx = lower_bound(primes.begin(), primes.end(), sqrt((n+1) / cur)) - primes.begin();
 			ret += max(0, idx - j - 1);
 		}
 	}
