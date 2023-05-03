@@ -75,13 +75,14 @@ int main() {
 	}
 
 	ll ret = 0;
+	double eps = 1e-18;
 	for (int i = 0;i < (int)primes.size();i++) {
 		if (primes[i] > 10000) break;
 		for (int j = i+1;j < (int)primes.size();j++) {
 			if (primes[j] > 10000) break;
 			ll cur = primes[i] * primes[i] * primes[j];
 			if (cur >= n) break;
-			int idx = lower_bound(primes.begin(), primes.end(), sqrt(n / cur)) - primes.begin();
+			int idx = lower_bound(primes.begin(), primes.end(), (ll)sqrt(n / cur)) - primes.begin();
 			ret += max(0, idx - j - 1);
 		}
 	}
