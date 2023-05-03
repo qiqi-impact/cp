@@ -58,12 +58,12 @@ int main() {
 	ll n;
 	cin >> n;
 
-	vector<double> primes;
+	vector<ll> primes;
 	primes.push_back(2);
-	for (int i = 3;i < MX;i += 2) {
+	for (ll i = 3;i < MX;i += 2) {
 		bool fail = false;
 		for (auto x: primes) {
-			if (i%(int)x == 0) {
+			if (i%x == 0) {
 				fail = true;
 				break;
 			}
@@ -79,9 +79,9 @@ int main() {
 		if (primes[i] > 10000) break;
 		for (int j = i+1;j < (int)primes.size();j++) {
 			if (primes[j] > 10000) break;
-			double cur = primes[i] * primes[i] * primes[j];
+			ll cur = primes[i] * primes[i] * primes[j];
 			if (cur >= n) break;
-			int idx = lower_bound(primes.begin(), primes.end(), sqrt((n+1) / cur)) - primes.begin();
+			int idx = lower_bound(primes.begin(), primes.end(), sqrt(n / cur)) - primes.begin();
 			ret += max(0, idx - j - 1);
 		}
 	}
