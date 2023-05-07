@@ -19,8 +19,6 @@ class FrequencyTracker:
         self.inv[v+1] -= 1
 
     def hasFrequency(self, frequency: int) -> bool:
-        if frequency == 0:
-            return False
         return self.inv[frequency] > 0
         
 
