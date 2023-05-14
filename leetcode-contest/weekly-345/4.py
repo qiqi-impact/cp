@@ -28,22 +28,6 @@ class DisjointSetUnion:
     def __len__(self):
         return self.num_sets
 
-
-class UnionFind:
-    def __init__(self, n):
-        self.parent = list(range(n))
-
-    def find(self, a):
-        acopy = a
-        while a != self.parent[a]:
-            a = self.parent[a]
-        while acopy != a:
-            self.parent[acopy], acopy = a, self.parent[acopy]
-        return a
-
-    def union(self, a, b):
-        self.parent[self.find(b)] = self.find(a)
-
 class Solution:
     def countCompleteComponents(self, n: int, edges: List[List[int]]) -> int:
         dsu = DisjointSetUnion(n)
