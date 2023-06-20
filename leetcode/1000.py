@@ -8,27 +8,18 @@ class Solution:
             pf.append(pf[-1] + x)
 
         @cache
-        def dp(l, r):
-            if l == r:
+        def dp(l, r, p):
+            if l >= r:
                 return 0
-            path = []
             ret = inf
-            def f(idx, cl, cost):
-                nonlocal ret, path
-                if idx == k:
-                    ret = min(ret, cost + sum(path))
-                    return
-                if idx == k-1:
-                    mr = r
-                else:
-                    mr = cl
-                for cr in range(mr, r+1-(k-1-idx), k-1):
-                    q = dp(cl, cr)
-                    rem = pf[cr+1] - pf[cl]
-                    path.append(rem)
-                    f(idx+1, cr+1, cost+q)
-                    path.pop()
-            f(0, l, 0)
+            if p == 1:
+                mr = r
+            else:
+                mr = l
+            for cr in range(mr, r+1-(p-1), k-1):
+                q = dp(l, cr, k)
+                ret = min(ret, q + dp(cr+1, r, p-1))
+            if p == k:
+                ret += pf[r+1] - pf[l]
             return ret
-        return dp(0, len(stones)-1)
-
+        return dp(0, len(stones)-1, k)
