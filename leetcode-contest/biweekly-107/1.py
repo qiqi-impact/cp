@@ -1,11 +1,12 @@
 class Solution:
     def maximumNumberOfStringPairs(self, words: List[str]) -> int:
-        ct = Counter(words)
+        s = set()
         ret = 0
-        for k in ct:
-            if k[0] <= k[1]:
-                if k[0] == k[1]:
-                    ret += ct[k] // 2
+        for w in words:
+            if w[0] != w[1]:
+                if w[1] + w[0] in s:
+                    s.discard(w[1] + w[0])
+                    ret += 1
                 else:
-                    ret += min(ct[k], ct[k[1] + k[0]])
+                    s.add(w)
         return ret
