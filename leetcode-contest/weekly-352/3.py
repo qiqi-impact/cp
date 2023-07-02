@@ -2,16 +2,13 @@ from sortedcontainers import SortedList
 
 class Solution:
     def continuousSubarrays(self, nums: List[int]) -> int:
-        l = sorted(zip(nums, range(len(nums))))
-        sl = SortedList(range(-1, len(nums)+1))
+        sl = SortedList()
+        j = 0
         ret = 0
-        h = []
-        for x, i in l:
-            while h and h[0][0] < x-2:
-                sl.add(h[0][1])
-                heapq.heappop(h)
-            idx = sl.index(i)
-            ret += (sl[idx] - sl[idx-1]) * (sl[idx+1] - sl[idx])
-            heapq.heappush(h, (x, i))
-            sl.remove(i)
+        for i in range(len(nums)):
+            sl.add(nums[i])
+            while sl[-1] - sl[0] > 2:
+                sl.remove(nums[j])
+                j += 1
+            ret += i-j+1
         return ret
