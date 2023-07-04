@@ -53,43 +53,40 @@ using namespace output;
 int solve() {
 	int n;
 	cin >> n;
-	vvi g = vvi(n, vi());
-	vi deg = vi(n, 0);
 	vvi seg = vvi();
+	vvi unions = vvi();
+
 	for (int i = 0;i < n;i++) {
 		int x, y;
 		cin >> x >> y;
 		for (int j = 0;j < seg.size();j++) {
 			int a = seg[j][0];
 			int b = seg[j][1];
-			if (max(a, x) <= min(b, y)) {
-				g[i].push_back(j);
-				g[j].push_back(i);
-				deg[i]++;
-				deg[j]++;
+			int c = max(a,x);
+			int d = min(b,y);
+			if (c <= d) {
+				unions.push_back({min(a,x),max(b,y)});
 			}
 		}
 		seg.push_back({x,y});
 	}
-	while (1) {
-		int mx = 0;
-		int mxi = 0;
-		int sm = 0;
-		for (int i = 0;i < n;i++) {
-			if (deg[i] > mx) {
-				mx = deg[i];
-				mxi = i;
-			}
-			sm += deg[i];
-		}
-		if (mx <= 1) {
-			return (n - sm/2*2);
-		}
-		deg[mxi] = 0;
-		for (auto x : g[mxi]) {
-			deg[x] = max(0, deg[x]-1);
+
+	auto f = [](vi &a, vi &b) {
+		return a[1] < b[1];
+	};
+
+	sort(unions.begin(), unions.end(), f);
+
+	int ret = 0;
+	int lst = -1;
+	for (auto x : unions) {
+		if (x[0] > lst) {
+			ret++;
+			lst = x[1];
 		}
 	}
+
+	return n - 2 * ret;
 }
 
 int main() {
