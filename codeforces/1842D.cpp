@@ -4,6 +4,7 @@ using ll = long long;
 using ld = long double;
 using vi = vector<int>;
 using vvi = vector<vector<int>>;
+using vvll = vector<vector<ll>>;
 
 namespace output {
 	void pr(int x) { cout << x; }
@@ -50,15 +51,68 @@ namespace output {
 
 using namespace output;
 
+const ll MX = 1e12;
+
 void solve() {
-    
+    int n, m;
+	cin >> n >> m;
+	// vector<unordered_map<int, int>> g;
+
+	vvll dist(n, vector<ll>(n, MX));
+	for (int i = 0;i < n;i++) dist[i][i] = 0;
+
+	for (int i = 0;i < m;i++) {
+		int u, v, y;
+		cin >> u >> v >> y;
+		u--;
+		v--;
+		dist[u][v] = dist[v][u] = y;
+	}
+
+	for (int k = 0;k < n;k++) {
+		for (int i = 0;i < n;i++) {
+			for (int j = 0;j < n;j++) {
+				dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+			}
+		}
+	}
+	
+	vi ord;
+	for (int i = 0;i < n;i++) ord.push_back(i);
+	sort(ord.begin(), ord.end(), [&](int a, int b) {
+		if (dist[0][a] != dist[0][b]) return dist[0][a] < dist[0][b];
+		return a < b;
+	});
+
+	int fin;
+	for (fin = 0;fin < n;fin++) {
+		if (ord[fin] == n-1) break;
+	}
+
+	if (dist[0][n-1] == MX) {
+		cout << "inf" << endl;
+		return;
+	}
+
+	cout << dist[0][n-1] << " " << fin << endl;
+
+	vi inc(n, 0);
+	for (int i = 0;i < fin;i++) {
+		int v = ord[i];
+		inc[v] = 1;
+		for (int i = 0;i < n;i++) {
+			cout << inc[i];
+		}
+		cout << " " << (dist[0][ord[i+1]] - dist[0][ord[i]]) << endl;
+	}
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int t;
-    cin >> t;
-    while (t--) solve();
+    // int t;
+    // cin >> t;
+    // while (t--) solve();
+	solve();
     return 0;
 }
