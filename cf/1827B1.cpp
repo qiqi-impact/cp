@@ -5,7 +5,7 @@ using ld = long double;
 using vi = vector<int>;
 using vvi = vector<vector<int>>;
 
-namespace output {
+namespace op {
 	void pr(int x) { cout << x; }
 	void pr(long x) { cout << x; }
 	void pr(ll x) { cout << x; }
@@ -48,41 +48,50 @@ namespace output {
 	#define dbg(x...) pr("[",#x,"] = ["), pc(x);
 }
 
-using namespace output;
+using namespace op;
 
 void solve() {
     int n;
 	cin >> n;
-	vi a(n);//, ord(n);
+	vi a(n);
 	for (int i = 0;i < n;i++) {
 		cin >> a[i];
-		// ord[i] = i;
 	}
-	// sort(ord.begin(), ord.end(), [&](int x, int y) {
-	// 	return a[x] < a[y];
-	// });
-	// for (int i = 0;i < n;i++) {
-	// 	a[ord[i]] = i;
-	// }
 
-	// for (int i = 0;i < n;i++) {
-	// 	int pt = 0;
-	// 	int cut = 0;
-	// 	while (pt < n && seen[pt] != 0) pt++;
-	// 	for (int j = i;j < n;j++) {
-	// 		seen[a[j]] = 1;
-	// 		while (pt < n && seen[pt] != 0) pt++;
-	// 		if (pt >= )
-	// 	}
-		
+	// dbg(a);
 
-	// 	for (int j = 0;i < n;i++) {
-	// 		if (seen[j] == 1) {
-	// 			seen[j] = 0;
-	// 		}
-	// 	}
-	// 	seen[i] = 2;
-	// }
+	ll ret = (ll)n * (n+1) * (n-1) / 6;
+	for (int i = 0;i < n;i++) {
+		int k = -1;
+		for (int j = i-1;j >= 0;j--) {
+			if (a[j] < a[i]) {
+				k = j;
+				break;
+			}
+		}
+		// if (k == -1) continue;
+
+		int x = -1;
+		for (int j = k-1;j >= 0;j--) {
+			if (a[j] > a[i]) {
+				x = j;
+				break;
+			}
+		}
+
+		int y = n;
+		for (int j = i+1;j < n;j++) {
+			if (a[j] < a[i]) {
+				y = j;
+				break;
+			}
+		}
+
+		// dbg(x, k, i, y, (ll)(y - i) * (ll)(k - x));
+		ret -= (ll)(y - i) * (ll)(k - x);
+	}
+	cout << ret << endl;
+	return;
 }
 
 int main() {
