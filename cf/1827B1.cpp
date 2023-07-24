@@ -5,7 +5,7 @@ using ld = long double;
 using vi = vector<int>;
 using vvi = vector<vector<int>>;
 
-namespace op {
+namespace output {
 	void pr(int x) { cout << x; }
 	void pr(long x) { cout << x; }
 	void pr(ll x) { cout << x; }
@@ -48,7 +48,7 @@ namespace op {
 	#define dbg(x...) pr("[",#x,"] = ["), pc(x);
 }
 
-using namespace op;
+using namespace output;
 
 void solve() {
     int n;
@@ -57,8 +57,6 @@ void solve() {
 	for (int i = 0;i < n;i++) {
 		cin >> a[i];
 	}
-
-	// dbg(a);
 
 	ll ret = (ll)n * (n+1) * (n-1) / 6;
 	for (int i = 0;i < n;i++) {
@@ -69,7 +67,6 @@ void solve() {
 				break;
 			}
 		}
-		// if (k == -1) continue;
 
 		int x = -1;
 		for (int j = k-1;j >= 0;j--) {
@@ -87,7 +84,6 @@ void solve() {
 			}
 		}
 
-		// dbg(x, k, i, y, (ll)(y - i) * (ll)(k - x));
 		ret -= (ll)(y - i) * (ll)(k - x);
 	}
 	cout << ret << endl;
