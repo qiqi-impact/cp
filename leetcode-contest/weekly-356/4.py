@@ -19,7 +19,7 @@ class Solution:
                         ret += dp(dig-1, i, 2)
             else:
                 for x in [prv-1, prv+1]:
-                    if 0 <= x <= min(cap, 9):
+                    if 0 <= x <= cap:
                         ret += dp(dig-1, x, lim if x==cap else 2)
             return ret % MOD
         
