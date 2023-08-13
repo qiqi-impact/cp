@@ -68,8 +68,12 @@ void solve() {
     int n, q;
 	cin >> n >> q;
 	vll a(n);
+	ll sm = 0;
 	vll aux(n), msf(n), mfr(n);
-	for (int i = 0;i < n;i++) cin >> a[i];
+	for (int i = 0;i < n;i++) {
+		cin >> a[i];
+		sm += a[i];
+	}
 	sort(a.begin(), a.end());
 	for (int i = n-1;i >= 0;i--) {
 		if (i == n-1) {
@@ -97,18 +101,23 @@ void solve() {
 			mn = msf[k-1] - (n - k);
 			if (k < n) mn = min(mn, mfr[k]);
 		} else {
-			int take = n - (k-n)%2;
-			int kill = (k - take)/2;
+			ll take = n - (k-n)%2;
+			ll kill = (k - take)/2;
 
-			vll b(n);
+			ll aa = msf[take-1] + k - n;
+			if (take != n) aa = min(aa, mfr[n-1]);
 
-			ll aa = LLONG_MAX, bb = 0;
+			ll bb = sm + ((ll)k * (k+1) / 2) - ((ll)(k - take) * (k - take + 1) / 2);
 
-			for (int j = 0;j < n;j++) {
-				b[j] = a[j] + ((j < take) ? k - j : 0);
-				bb += b[j];
-				aa = min(aa, b[j]);
-			}
+			// vll b(n);
+
+			// ll aa = LLONG_MAX, bb = 0;
+
+			// for (int j = 0;j < n;j++) {
+			// 	b[j] = a[j] + ((j < take) ? k - j : 0);
+			// 	bb += b[j];
+			// 	aa = min(aa, b[j]);
+			// }
 
 			if (bb - aa * n >= kill) {
 				mn = aa;
