@@ -67,37 +67,54 @@ bool can(ll mi, vi &b, ll kill) {
 void solve() {
     int n, q;
 	cin >> n >> q;
-	vi a(n);
+	vll a(n);
+	vll aux(n), msf(n), mfr(n);
 	for (int i = 0;i < n;i++) cin >> a[i];
 	sort(a.begin(), a.end());
+	for (int i = n-1;i >= 0;i--) {
+		if (i == n-1) {
+			mfr[i] = a[i];
+		} else {
+			mfr[i] = min(mfr[i+1], a[i]);
+		}
+	}
+	for (int i = 0;i < n;i++) {
+		aux[i] = a[i] + n - i;
+		if (i == 0) msf[i] = aux[i]; else {
+			msf[i] = min(msf[i-1], aux[i]);
+		}
+	}
+	// dbg(aux, msf);
+
 	for (int i = 0;i < q;i++) {
 		int k;
 		cin >> k;
-		int mn = INT_MAX;
+		ll mn;
 		if (k <= n) {
-			for (int j = 0;j < n;j++) {
-				mn = min(mn, a[j] + ((j < k) ? k - j : 0));
-			}
+			// for (int j = 0;j < n;j++) {
+			// 	mn = min(mn, a[j] + ((j < k) ? k - j : 0));
+			// }
+			mn = msf[k-1] - (n - k);
+			if (k < n) mn = min(mn, mfr[k]);
 		} else {
 			int take = n - (k-n)%2;
 			int kill = (k - take)/2;
 
-			vi b(n);
+			vll b(n);
+
+			ll aa = LLONG_MAX, bb = 0;
+
 			for (int j = 0;j < n;j++) {
 				b[j] = a[j] + ((j < take) ? k - j : 0);
+				bb += b[j];
+				aa = min(aa, b[j]);
 			}
 
-			ll l = -1e18, r = 1e18;
-			while (l < r) {
-				ll mi = l + (r-l+1)/2;
-				if (can(mi, b, kill)) {
-					l = mi;
-				} else {
-					r = mi - 1;
-				}
+			if (bb - aa * n >= kill) {
+				mn = aa;
+			} else {
+				mn = aa - (kill - (bb - aa * n) + n - 1) / n;
 			}
-
-			mn = l;
 		}
 		cout << mn << " ";
 	}
