@@ -52,15 +52,60 @@ namespace output {
 
 using namespace output;
 
+bool can(int mi, vi &b, int kill) {
+	bool c = false;
+	for (auto x: b) {
+		if (x < mi) {
+			return false;
+		}
+		kill -= (x - mi);
+		if (kill <= 0) c = true;
+	}
+	return c;
+}
+
 void solve() {
-    
+    int n, q;
+	cin >> n >> q;
+	vi a(n);
+	for (int i = 0;i < n;i++) cin >> a[i];
+	sort(a.begin(), a.end());
+	for (int i = 0;i < q;i++) {
+		int k;
+		cin >> k;
+		int mn = INT_MAX;
+		if (k <= n) {
+			for (int j = 0;j < n;j++) {
+				mn = min(mn, a[j] + ((j < k) ? k - j : 0));
+			}
+		} else {
+			int take = n - (k-n)%2;
+			int kill = (k - take)/2;
+
+			vi b(n);
+			for (int j = 0;j < n;j++) {
+				b[j] = a[j] + ((j < take) ? k - j : 0);
+			}
+
+			int l = -1e9, r = 1e9;
+			while (l < r) {
+				int mi = l + (r-l+1)/2;
+				if (can(mi, b, kill)) {
+					l = mi;
+				} else {
+					r = mi - 1;
+				}
+			}
+
+			mn = l;
+		}
+		cout << mn << " ";
+	}
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
-    int t;
-    cin >> t;
-    while (t--) solve();
+	solve();
     return 0;
 }
