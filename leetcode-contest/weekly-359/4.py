@@ -18,5 +18,7 @@ class Solution:
                     ret = max(ret, sl[-1])
                 else:
                     break
+            sl.discard(d[nums[i]])
             d[nums[i]] -= 1
+            sl.add(d[nums[i]])
         return ret
