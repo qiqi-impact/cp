@@ -1,15 +1,13 @@
 class Solution:
     def minimumSum(self, n: int, k: int) -> int:
-        l = []
+        s = set()
         i = 0
         while True:
             i += 1
             fail = False
-            for j in l:
-                if j + i == k:
-                    fail = True
-                    break
+            if k - i in s:
+                fail = True
             if not fail:
-                l.append(i)
-                if len(l) == n:
-                    return sum(l)
+                s.add(i)
+                if len(s) == n:
+                    return sum(s)
