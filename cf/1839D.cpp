@@ -53,22 +53,22 @@ namespace output {
 
 using namespace output;
 
-int dp(int idx, int left, vvi &memo, vvi &g) {
-	if (memo[idx][left] != -1) {
-		return memo[idx][left];
-	}
-	int n = g.size();
-	int ret = 1000;
-	if (left == 0) {
-		ret = idx != n-2;
-	} else {
-		for (auto i : g[idx]) {
-			ret = min(ret, dp(i, left-1, memo, g) + (i != idx+1));
-		}
-	}
-	memo[idx][left] = ret;
-	return ret;
-}
+// int dp(int idx, int left, vvi &memo, vvi &g) {
+// 	if (memo[idx][left] != -1) {
+// 		return memo[idx][left];
+// 	}
+// 	int n = g.size();
+// 	int ret = 1000;
+// 	if (left == 0) {
+// 		ret = idx != n-2;
+// 	} else {
+// 		for (auto i : g[idx]) {
+// 			ret = min(ret, dp(i, left-1, memo, g) + (i != idx+1));
+// 		}
+// 	}
+// 	memo[idx][left] = ret;
+// 	return ret;
+// }
 
 void solve() {
     int n;
@@ -83,35 +83,31 @@ void solve() {
 		if (x < a[a.size()-1]) sorted = false;
 		a.push_back(x);
 	}
-
-	if (sorted) {
-		for (int i = 0;i < n;i++) cout << 0 << " ";
-		cout << endl;
-		return;
-	}
-
 	a.push_back(n+1);
 	for (int i = 0;i < n+2;i++) {
-		for (int j = i+1;j < n+1;j++) {
+		for (int j = i+1;j < n+2;j++) {
 			if (a[i] < a[j]) g[i].push_back(j);
 		}
 	}
-	vvi memo(n+2, vi(n+1, -1));
-	
-	vi ret;
-	for (int i = 1;i <= n;i++) {
-		ret.push_back(dp(0, i, memo, g));
+
+	vvi dp(n+2, vi(n+1, INT_MIN));
+	dp[0][0] = 0;
+	for (int i = 0;i < n+1;i++) {
+		for (int j = 0;j < n+1;j++) {
+			for (auto t : g[i]) {
+				int q = t != i+1;
+				if (j+q <= n) {
+					dp[t][j+q] = max(dp[t][j+q], 1 + dp[i][j]);
+				}
+			}
+		}
 	}
 
-	vi ans(n);
-	int ptr = 0;
-	for (int i = 0;i < n;i++) {
-		while (ret[ptr] <= i+1) {
-			ptr++;
-		}
-		ans[i] = n-ptr;
+	int mx = dp[n+1][0];
+	for (int i = 1;i <= n;i++) {
+		mx = max(mx, dp[n+1][i]);
+		cout << (n - mx + 1) << " ";
 	}
-	for (auto x: ans) cout << x << " ";
 	cout << endl;
 }
 
