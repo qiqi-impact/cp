@@ -6,6 +6,7 @@ using vi = vector<int>;
 using vvi = vector<vi>;
 using vll = vector<ll>;
 using vvll = vector<vll>;
+using pii = pair<int, int>;
 
 namespace output {
 	void pr(int x) { cout << x; }
@@ -30,7 +31,7 @@ namespace output {
 		pr(t); pr(ts...); 
 	}
 	template<class T1, class T2> void pr(const pair<T1,T2>& x) { 
-		pr("{",x.f,", ",x.s,"}"); 
+		pr("{",x.first,", ",x.second,"}"); 
 	}
 	template<class T> void pr(const T& x) { 
 		pr("{"); // const iterator needed for vector<bool>
