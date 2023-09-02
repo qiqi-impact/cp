@@ -1,13 +1,4 @@
-MX = 10**5+1
 MOD = 10**9+7
-
-FAC = [1]
-for i in range(1, MX):
-    FAC.append(FAC[-1] * i % MOD)
-    
-def p(y, k):
-    return (FAC[y] * pow(FAC[k], -1, MOD) * pow(FAC[y-k], -1, MOD)) % MOD
-
 class Solution:
     def countKSubsequencesWithMaxBeauty(self, s: str, k: int) -> int:
         f = Counter(s)
@@ -25,7 +16,7 @@ class Solution:
                 ret *= pow(x, y, MOD)
                 ret %= MOD
             else:
-                ret *= p(y, k) * pow(x, k, MOD)
+                ret *= math.comb(y, k) * pow(x, k, MOD)
                 ret %= MOD
                 k = 0
         return ret if k == 0 else 0
