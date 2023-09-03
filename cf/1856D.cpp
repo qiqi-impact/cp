@@ -53,8 +53,39 @@ namespace output {
 
 using namespace output;
 
+int dfs(int l, int r) {
+	if (l == r) return l;
+	int a = dfs(l, (l+r)/2);
+	int b = dfs((l+r)/2+1, r);
+	int c = 0, d = 0, e = 0, f = 0;
+	if (a > l) {
+		cout << "? " << l << " " << a << endl << flush;
+		cin >> c;
+	}
+	if (a-1 > l) {
+		cout << "? " << l << " " << a-1 << endl << flush;
+		cin >> d;
+	}
+	if (a < r) {
+		cout << "? " << a << " " << r << endl << flush;
+		cin >> e;
+	}
+	if (a+1 < r) {
+		cout << "? " << a+1 << " " << r << endl << flush;
+		cin >> f;
+	}
+	if (c-d == 0 && e-f == r-a) {
+		return a;
+	} else {
+		return b;
+	}
+}
+
 void solve() {
-    
+    int n;
+	cin >> n;
+	int x = dfs(1, n);
+	cout << "! " << x << endl << flush;
 }
 
 int main() {
