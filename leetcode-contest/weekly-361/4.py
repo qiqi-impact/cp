@@ -23,7 +23,7 @@ class Solution:
                     cw[w] -= 1
         dfs(0, 0, 0)
         
-        MX = 14
+        MX = 32
         
         for _ in range(MX):
             pp = [p[-1][p[-1][i]] for i in range(n)]
@@ -32,24 +32,15 @@ class Solution:
         def lca(x, y):
             if depth[x] < depth[y]:
                 x, y = y, x
-            l, r = depth[x]-depth[y], depth[x]
-            while l < r:
-                mi = (l+r)//2
-                a, b = x, y
-                for i in range(MX):
-                    if mi & (1 << i):
-                        a = p[i][a]
-                for i in range(MX):
-                    if (mi-(depth[x]-depth[y])) & (1 << i):
-                        b = p[i][b]
-                if a == b:
-                    r = mi
-                else:
-                    l = mi+1
             for i in range(MX):
-                if r & (1 << i):
+                if (depth[x]-depth[y]) & (1 << i):
                     x = p[i][x]
-            return x
+            if x == y:
+                return x
+            for i in range(MX-1, -1, -1):
+                if p[i][x] != p[i][y]:
+                    x, y = p[i][x], p[i][y]
+            return p[0][x]
         
         ret = []
         for a, b in queries:
@@ -59,5 +50,3 @@ class Solution:
                 y[i] = cum[a][i] + cum[b][i] - 2 * cum[t][i]
             ret.append(sum(y) - max(y))
         return ret
-            
-            
