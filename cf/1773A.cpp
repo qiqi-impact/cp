@@ -53,89 +53,64 @@ namespace output {
 
 using namespace output;
 
-void sv(vi &aa) {
-	int n = aa.size();
-	dbg(aa);
-	vi a(n+1), p(n+1), q(n+1), ai(n+1);
-	for (int i = 1;i <= n;i++) a[i] = aa[i-1];
-	set<pii> avail;
-	for (int i = 1;i <= n;i++) {
-		// cin >> a[i];
-		ai[a[i]] = i;
-		avail.insert(pii(-2, i));
-	}
-	for (int i = 1;i <= n;i++) {
-		int found = -1;
-		// dbg(avail);
-		for (auto &[x, y]: avail) {
-			if (y != i && y != ai[i]) {
-				found = y;
-				break;
-			}
-		}
-		if (found == -1) {
-			cout << "Impossible" << endl;
-			return;
-		}
-		avail.erase(pii(-2, found));
-		avail.erase(pii(-1, found));
-
-		for (int j = 1;j <= 2;j++) {
-			for (auto t : {i, ai[i]}) {
-				if (avail.find(pii(-j, t)) != avail.end()) {
-					avail.erase(pii(-j, t));
-					avail.insert(pii(-j+1, t));
-					break;
-				}
-			}
-		}
-
-		q[i] = found;
-	}
-
-	for (int i = 1;i <= n;i++) {
-		p[q[i]] = ai[i];
-	}
-
-	cout << "Possible" << endl;
-	for (auto x: p) if (x) cout << x << " "; cout << endl;
-	for (auto x: q) if (x) cout << x << " "; cout << endl;
+mt19937 gen(0);
+ 
+vi random(int n) {
+  vector<int> p(n);
+  iota(p.begin(), p.end(), 0);
+  shuffle(p.begin(), p.end(), gen);
+  return p;
 }
 
 void solve() {
     int n;
 	cin >> n;
-	vi aa(n), bb(n);
+	vi a(n), q(n), p(n), ai(n);
 	for (int i = 0;i < n;i++) {
-		aa[i] = i+1;
-		bb[i] = i;
+		cin >> a[i];
+		a[i]--;
+		ai[a[i]] = i;
 	}
-	do {
-		bool s = false;
-		vi p = bb;
+
+	bool poss = false;
+	if (n < 4) {
+		iota(q.begin(), q.end(), 0);
 		do {
-			vi q = bb;
-			do {
-				// dbg(p, q);
-				bool should = true;
-				for (int i = 0;i < n;i++) {
-					if (i == p[i] || i == q[i] || aa[p[q[i]]] != i+1) {
-						should = false;
-						break;
-					}
-				}
-				if (should) {
-					dbg(p, q, should);
-					s = true;
+			bool fail = false;
+			for (int i = 0;i < n;i++) {
+				p[q[i]] = ai[i];
+				if (q[i] == i || q[i] == ai[i]) {
+					fail = true;
 					break;
 				}
-			} while (next_permutation(q.begin(), q.end()));
-			if (s) break;
-		} while (next_permutation(p.begin(), p.end()));
+			}
+			if (!fail) {
+				poss = true;
+				break;
+			}
+		} while (next_permutation(q.begin(), q.end()));
+	} else {
+		poss = true;
+		while (1) {
+			q = random(n);
+			bool fail = false;
+			for (int i = 0;i < n;i++) {
+				p[q[i]] = ai[i];
+				if (q[i] == i || q[i] == ai[i]) {
+					fail = true;
+					break;
+				}
+			}
+			if (!fail) break;
+		}
+	}
 
-		dbg(s);
-		sv(aa);
-	} while (next_permutation(aa.begin(), aa.end()));
+	if (!poss) {cout << "Impossible" << endl; return;}
+	
+	cout << "Possible" << endl;
+	for (auto x: p) cout << x+1 << " "; cout << endl;
+	for (auto x: q) cout << x+1 << " "; cout << endl;
+	// for (int i = 0;i < n;i++) cout << a[p[q[i]]]+1 << " "; cout << endl;
 }
 
 int main() {
