@@ -1,27 +1,22 @@
 class Solution:
     def numberOfWays(self, s: str, t: str, k: int) -> int:
         MOD = 10**9+7
-        
-        h = 0
-        for c in s:
-            h = (26 * h + (ord(c)-97)) % MOD
-            
-        th = 0
-        for c in t:
-            th = (26 * th + (ord(c)-97)) % MOD
-            
+
         x = 0
-        df = h == th
-        if df:
+        df = False
+        if s == t:
             x += 1
+            df = True
+
+        ss = s+s
         n = len(s)
-        
-        q = pow(26, n-1, MOD)
-        
-        for i in range(1, n):
-            h = ((h - q * (ord(s[i-1])-97)) * 26 + (ord(s[(i+n-1)%n])-97))%MOD
-            if h == th:
-                x += 1
+        idx = ss.find(t, 1)
+        if idx != n and idx != -1:
+            x += 1
+            i2 = ss.find(t, idx+1)
+            if i2 != n and i2 != -1:
+                per = i2 - idx
+                x += (n - 1 - idx) // per
         
         ret = ((pow(n-1, k, MOD) - pow(-1, k, MOD)) * pow(n, -1, MOD) * x % MOD)
         
