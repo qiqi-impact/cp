@@ -56,44 +56,42 @@ using namespace output;
 void solve() {
     int n, q;
 	cin >> n >> q;
-	vi a(n);
-	vector<vector<pair<int, int>>> st(n), ed(n);
-	vi ret(q, -1);
-	unordered_map<int, set<int>> m;
-	for (int i = 0;i < n;i++) cin >> a[i];
-	for (int i = 0;i < q;i++) {
-		int x, y, z;
-		cin >> x >> y >> z;
-		x--;
-		y--;
-		st[x].emplace_back(i, z);
-		ed[y].emplace_back(i, z);
-	}
+	string s;
+	cin >> s;
+	vi a(n, 0);
 	for (int i = 0;i < n;i++) {
-		for (auto [x, y] : st[i]) {
-			m[y].insert(x);
-		}
-		vi del;
-		for (auto &[x, y] : m) {
-			if (x != a[i]) {
-				del.push_back(x);
-				for (auto z : y) {
-					ret[z] = i+1;
-				}
-			}
-		}
-		for (auto x : del) {
-			m.erase(x);
-		}
-		for (auto [x, y] : ed[i]) {
-			m[y].erase(x);
+		if (s[i] == '(') a[i] = 1;
+	}
+	set<int> oo;
+	for (int i = 0;i < n-1;i++) {
+		if (a[i] == a[i+1]) oo.insert(i);
+	}
+	for (int i = 0;i < q;i++) {
+		int p;
+		cin >> p;
+		p--;
+		if (n%2) {cout << "NO" << endl; continue;}
+		if (p > 0 && a[p-1] == a[p]) oo.erase(p-1);
+		if (p < n-1 && a[p+1] == a[p]) oo.erase(p);
+		a[p] = 1-a[p];
+		if (p > 0 && a[p-1] == a[p]) oo.insert(p-1);
+		if (p < n-1 && a[p+1] == a[p]) oo.insert(p);
+
+		if (a[0] == 0 || a[n-1] == 1) {
+			cout << "NO" << endl;
+		} else if (oo.empty()) {
+			cout << "YES" << endl;
+		} else if (a[*oo.begin()] == 0 || a[*oo.rbegin()] == 1) {
+			cout << "NO" << endl;
+		} else {
+			cout << "YES" << endl;
 		}
 	}
-	for (auto x : ret) cout << x << endl;
 }
 
 int main() {
     ios::sync_with_stdio(false);
-    cin.tie(0); solve();
+    cin.tie(0);
+	solve();
     return 0;
 }
