@@ -1,5 +1,5 @@
 class Solution:
-    def countPairs(self, coordinates, k) -> int:
+    def countPairs(self, coordinates: List[List[int]], k: int) -> int:
         ct = {}
         ret = 0
         for x, y in coordinates:
@@ -16,5 +16,3 @@ class Solution:
                 ct[x][y] = 0
             ct[x][y] += 1
         return ret
-
-print(Solution().countPairs([[1,3],[1,3],[1,3],[1,3],[1,3]], 0))
