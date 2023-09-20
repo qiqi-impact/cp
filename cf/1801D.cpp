@@ -53,8 +53,63 @@ namespace output {
 
 using namespace output;
 
+using ppp = pair<pair<ll, ll>, pii>;
+
 void solve() {
-    
+    int n, m;
+	ll p;
+	cin >> n >> m >> p;
+	vll w(n);
+	for (int i = 0;i < n;i++) cin >> w[i];
+	vector<unordered_map<int, int>> g(n);
+	for (int i = 0;i < m;i++) {
+		int a, b, s;
+		cin >> a >> b >> s;
+		a--;
+		b--;
+		if (!g[a].contains(b) || g[a][b] > s) {
+			g[a][b] = s;
+		}
+	}
+	map<pii, pair<ll, ll>> dist;
+	auto comp = [&](ppp &a, ppp &b) {
+		return a.first > b.first;
+	};
+	priority_queue<ppp, vector<ppp>, decltype(comp)> dijk(comp);
+	dijk.push(ppp(pair<ll, ll>(0LL, -p), pii(0, w[0])));
+	dist[pii(0, w[0])] = pair<ll, ll>(0LL, -p);
+	while (!dijk.empty()) {
+		auto [y, x] = dijk.top();
+		dijk.pop();
+		
+		if (dist[x] != y) continue;
+
+		if (x.first == n-1) {
+			cout << y.first << endl;
+			return;
+		}
+		
+		for (auto [nei, cost] : g[x.first]) {
+			ll nyf = y.first;
+			ll nys = -y.second - cost;
+			if (nys < 0) {
+				ll pf = (ll)(-nys + x.second - 1) / x.second;
+				nyf += pf;
+				nys += (ll)pf * x.second;
+			}
+			int nxf = nei;
+			int nxs = max(x.second, (int)w[nei]);
+
+			pii P = pii(nxf, nxs);
+			pair<ll, ll> Q = pair<ll, ll>(nyf, -nys);
+
+			if (!dist.contains(P) || dist[P] > Q) {
+				dist[P] = Q;
+				dijk.push(ppp(Q, P));
+			}
+		}
+	}
+	cout << -1 << endl;
 }
 
 int main() {
