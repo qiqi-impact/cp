@@ -81,7 +81,7 @@ void solve() {
 	cin >> s;
 	int sm = 0, mn = INT_MAX, cur = 0;
 	for (int i = 0;i < s.length();i++) {
-		if (s[i] == 'B') {
+		if (s[i] == 'A') {
 			cur++;
 		} else {
 			sm += cur;
