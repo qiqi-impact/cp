@@ -53,57 +53,60 @@ namespace output {
 
 using namespace output;
 
-vi a, d, ord;
+vi a, d;
+set<pii> avail;
+vvi start;
 int n;
+ll sm;
 
 bool can(int x) {
-	vi f(n, 0);
-	set<int> avail;
-	for (int i = 0;i < n;i++) avail.insert(i);
-	for (auto idx : ord) {
-		int cur = a[idx];
-		auto l = lower_bound(avail.begin(), avail.end(), idx-d[idx]);
-		while (cur) {
-			if (l == avail.end()) return false;
-			int amt = min(cur, x - f[*l]);
-			f[*l] += amt;
-			auto r = next(l);
-			if (f[*l] == x) {
-				avail.erase(l);
+	vi drain(n, 0);
+	avail.clear();
+	ll tot = 0;
+
+	for (int i = 0;i < n;i++) {
+		for (auto x : start[i]) {
+			avail.insert(pii(x+d[x], x));
+		}
+		int left = x;
+		while (left && !avail.empty()) {
+			auto [lb, idx] = *avail.begin();
+			if (lb < i) {
+				avail.erase(avail.begin());
+				continue;
 			}
-			l = r;
-			cur -= amt;
+			int amt = min(left, a[idx] - drain[idx]);
+			drain[idx] += amt;
+			left -= amt;
+			tot += amt;
+			if (a[idx] == drain[idx]) {
+				avail.erase(avail.begin());
+			} else {
+				break;
+			}
 		}
 	}
-	return true;
+	return tot == sm;
 }
 
 void solve() {
     cin >> n;
 	a = vi(n);
 	d = vi(n);
-	ord = vi(n);
-	ll sm = 0;
+	start = vvi(n);
+	sm = 0;
 	for (int i = 0;i < n;i++) {
 		cin >> a[i];
 		sm += a[i];
 	}
 	for (int i = 0;i < n;i++) {
 		cin >> d[i];
-		ord[i] = i;
+		start[max(0, i - d[i])].push_back(i);
 	}
-	sort(ord.begin(), ord.end(), [&](int x, int y) {
-		return x+d[x] < y+d[y];
-	});
 	int l = (int)((sm + n - 1)/n), r = (int)1e9;
-
-	// cout << l << endl;
-
 	while (l < r) {
 		int mi = (l+r)/2;
-		// cout << mi << endl;
 		if (can(mi)) {
-			
 			r = mi;
 		} else {
 			l = mi + 1;
