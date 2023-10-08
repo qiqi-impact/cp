@@ -58,8 +58,8 @@ void solve() {
 	cin >> n >> m;
 	vi vis(n, 0);
 
-	vector<unordered_set<int>> g(n);
-	for (int i = 0;i < n;i++) {
+	vector<set<int>> g(n);
+	for (int i = 0;i < m;i++) {
 		int x, y;
 		cin >> x >> y;
 		x--; y--;
@@ -67,7 +67,7 @@ void solve() {
 		g[y].insert(x);
 	}
 
-    unordered_set<int> avail, kill;
+    set<int> avail, kill;
 	for (int i = 0;i < n;i++) avail.insert(i);
 	int ct = 0;
 	vi sz;
@@ -84,15 +84,15 @@ void solve() {
 				int cur = q.front();
 				q.pop_front();
 				for (auto x : avail) {
-					if (!vis[x] && !g[cur].count(x)) {
+					if (!vis[x] && !g[cur].contains(x)) {
 						kill.insert(x);
 						q.push_back(x);
 						vis[x] = 1;
 					}
 				}
 				for (auto x : kill) avail.erase(x);
+				kill.clear();
 			}
-			kill.clear();
 			sz.push_back(cs);
 		}
 	}
