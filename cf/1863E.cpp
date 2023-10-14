@@ -60,6 +60,8 @@ void solve() {
 	cin >> n >> m >> k;
 	vi h(n), deg(n, 0);
 	vvi g(n);
+	vll st(n);
+	vi tick(n, 0);
 	for (int i = 0;i < n;i++) cin >> h[i];
 	for (int i = 0;i < m;i++) {
 		int x, y;
@@ -72,6 +74,8 @@ void solve() {
 	for (int i = 0;i < n;i++) {
 		if (!deg[i]) {
 			pq.push(pli(h[i], i));
+			st[i] = h[i];
+			tick[i] = -1;
 		}
 	}
 	ll start = -1, end = -1;
@@ -92,10 +96,44 @@ void solve() {
 					rem = p.first + h[x] - rem;
 				}
 				pq.push(pli(rem, x));
+				st[x] = rem;
 			}
 		}
 	}
-	cout << end - start << endl;
+
+	vi ord(n);
+	ll ret = LLONG_MAX;
+	iota(ord.begin(), ord.end(), 0);
+	sort(ord.begin(), ord.end(), [&](int i, int j) {
+		return st[i] < st[j];
+	});
+	ll endtime = end;
+	// dbg(st);
+	for (auto i : ord) {
+		if (tick[i] == -1) {
+			ret = min(ret, endtime - st[i]);
+			endtime = max(endtime, st[i] + k);
+
+			deque<int> q;
+			q.push_back(i);
+			tick[i] = 1;
+			while (!q.empty()) {
+				int cur = q.front();
+				q.pop_front();
+				for (auto x : g[cur]) {
+					if (st[x] < st[cur] + (tick[cur] == 1 ? k : 0)) {
+						tick[x] = 1;
+						q.push_back(x);
+						endtime = max(endtime, st[x] + k);
+					}
+				}
+			}
+			// dbg(i, st[i], endtime);
+			
+			
+		}
+	}
+	cout << ret << endl;
 }
 
 int main() {
