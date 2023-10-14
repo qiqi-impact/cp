@@ -112,19 +112,19 @@ void solve() {
 	for (auto i : ord) {
 		if (tick[i] == -1) {
 			ret = min(ret, endtime - st[i]);
-			endtime = max(endtime, st[i] + k);
+			st[i] += k;
+			endtime = max(endtime, st[i]);
 
 			deque<int> q;
 			q.push_back(i);
-			tick[i] = 1;
 			while (!q.empty()) {
 				int cur = q.front();
 				q.pop_front();
 				for (auto x : g[cur]) {
-					if (st[x] < st[cur] + (tick[cur] == 1 ? k : 0)) {
-						tick[x] = 1;
+					if (st[x] < st[cur]) {
 						q.push_back(x);
-						endtime = max(endtime, st[x] + k);
+						st[x] += k;
+						endtime = max(endtime, st[x]);
 					}
 				}
 			}
