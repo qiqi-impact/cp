@@ -62,23 +62,31 @@ void solve() {
 		cin >> x;
 		ct[x]++;
 	}
-	dbg(ct);
-	ll ret = n * (n-1) / 2;
+	ll ret = (ll)n * (n-1) / 2;
+
+	vll dp(n+1, 0);
+	for (int i = n;i > 0;i--) {
+		ll cur = 0;
+		ll tot = 0;
+		for (int j = i;j <= n;j += i) {
+			cur += ct[j];
+			tot -= dp[j];
+		}
+		dp[i] = cur * (cur - 1) / 2 + tot;
+	}
+
 	for (int i = 1;i <= n;i++) {
-		if (ct[i] || mark[i]) {
-			ll acc = 0;
+		if (ct[i]) {
 			for (int j = i;j <= n;j += i) {
-				acc += ct[j];
-				mark[j]++;
+				mark[j] = 1;
 			}
-			if (mark[i]%2) {
-				ret -= acc * (acc - 1) / 2;
-			} else {
-				ret += acc * (acc - 1) / 2;
-			}
-			dbg(i, acc, ct, mark);
 		}
 	}
+
+	for (int i = 1;i <= n;i++) {
+		if (mark[i]) ret -= dp[i];
+	}
+
 	cout << ret << endl;
 }
 
