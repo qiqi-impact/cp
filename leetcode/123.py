@@ -8,4 +8,4 @@ class Solution:
                 return max(dp(idx+1, state), prices[idx] + dp(idx+1, state-1))
             else:
                 return max(dp(idx+1, state), -prices[idx] + dp(idx+1, state-1))
-        return max(dp(0, 4), dp(0, 2))
+        return dp(0, 4)
