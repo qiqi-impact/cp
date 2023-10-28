@@ -77,7 +77,7 @@ void solve() {
 		dbg(par);
 		dbg(pp);
 		for (int i = 1;i < 32;i += 2) {
-			int od = pp[clstz[i]+1] - pp[clstz[i-1]+1];
+			int od = par[clstz[i]+1] - par[clstz[i-1]+1];
 			int ev = clstz[i] - clstz[i-1] - od;
 			ret += par[i+1]%2 ? od : ev;
 			dbg(i, i-1, od, ev, ret);
