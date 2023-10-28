@@ -76,11 +76,11 @@ void solve() {
 		dbg(clstz);
 		dbg(par);
 		dbg(pp);
-		for (int i = 1;i < 32;i += 2) {
-			int od = par[clstz[i]+1] - par[clstz[i-1]+1];
-			int ev = clstz[i] - clstz[i-1] - od;
-			ret += par[i+1]%2 ? od : ev;
-			dbg(i, i-1, od, ev, ret);
+		for (int j = 1;j < 32;j += 2) {
+			int od = pp[clstz[j]+1] - pp[clstz[j-1]+1];
+			int ev = clstz[j] - clstz[j-1] - od;
+			ret += (par[j+1]%2) ? od : ev;
+			dbg(j, j-1, od, ev, ret);
 		}
 	}
 	cout << ret << endl;
