@@ -56,17 +56,37 @@ using namespace output;
 void solve() {
     int n;
 	cin >> n;
-	vll ct(n+1);
+	vll ct(n+1), amt(n+1), mark(n+1);
 	int x;
 	for (int i = 0;i < n;i++) {
 		cin >> x;
 		ct[x]++;
 	}
+	ll ans = n * (n-1) / 2;
+	// cout << ans << endl;
 	for (int i = n;i >= 1;i--) {
+		ll tot = 0;
+		ll bad = 0;
 		for (int j = i;j <= n;j += i) {
-			
+			tot += ct[j];
+			bad += amt[j];
+		}
+		amt[i] = tot * (tot - 1) / 2 - bad;
+	}
+
+	for (int i = 1;i <= n;i++) {
+		if (ct[i]) {
+			for (int j = i;j <= n;j += i) {
+				mark[j] = 1;
+			}
 		}
 	}
+
+	for (int i = 1;i <= n;i++) {
+		if (mark[i]) ans -= amt[i];
+	}
+
+	cout << ans << endl;
 }
 
 int main() {
