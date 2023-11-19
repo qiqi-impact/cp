@@ -62,7 +62,7 @@ void solve() {
 		cin >> x;
 		ct[x]++;
 	}
-	ll ans = n * (n-1) / 2;
+	ll ans = (ll)n * (n-1) / 2;
 	// cout << ans << endl;
 	for (int i = n;i >= 1;i--) {
 		ll tot = 0;
@@ -72,6 +72,7 @@ void solve() {
 			bad += amt[j];
 		}
 		amt[i] = tot * (tot - 1) / 2 - bad;
+		dbg(i, amt[i], ct[i]);
 	}
 
 	for (int i = 1;i <= n;i++) {
