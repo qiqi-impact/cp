@@ -56,7 +56,7 @@ using namespace output;
 void solve() {
     int n, q;
 	cin >> n >> q;
-	vector<set<int>> balls;
+	vector<set<int>> balls(n);
 	for (int i = 0;i < n;i++) {
 		int x;
 		cin >> x;
@@ -70,11 +70,13 @@ void solve() {
 			for (auto t : balls[x]) {
 				balls[y].insert(t);
 			}
+			balls[x].clear();
 		} else {
 			for (auto t : balls[y]) {
 				balls[x].insert(t);
 			}
 			swap(balls[x], balls[y]);
+			balls[x].clear();
 		}
 		cout << balls[y].size() << endl;
 	}
@@ -82,9 +84,6 @@ void solve() {
 
 int main() {
     ios::sync_with_stdio(false);
-    cin.tie(0);
-    int t;
-    cin >> t;
-    while (t--) solve();
+    cin.tie(0); solve();
     return 0;
 }
