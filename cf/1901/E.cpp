@@ -53,18 +53,65 @@ namespace output {
 
 using namespace output;
 
-void solve() {
-    vi s(36);
-	vvi take(6, vi(6));
-	for (int i = 0;i < 36;i++) {
-		cin >> s[i];
-	}
-	int s0 = s[0];
-	for (int i = 0;i < 36;i++) {
-		s[i] -= s0;
-	}
-	//unfinished
+int n;
+vvi g;
+vll a;
+ll ret;
 
+ll dp(int idx, int p) {
+	vll dps;
+	ll top = a[idx];
+	int ct = 0;
+	for (auto x : g[idx]) {
+		if (x != p) {
+			ll y = dp(x, idx);
+			dps.push_back(y);
+			top = max(top, y);
+			if (y >= 0) ct++;
+		}
+	}
+	sort(dps.rbegin(), dps.rend());
+	ll acc = a[idx];
+	if (dps.size() >= 2) {
+		for (int i = 0;i < dps.size();i++) {
+			if (i >= 2 && dps[i] <= 0) break;
+			acc += dps[i];
+		}
+	}
+	top = max(top, acc);
+	
+	acc = a[idx];
+	ll ot = 0;
+	for (int i = 0;i < dps.size();i++) {
+		ot += dps[i];
+		if (i == 1) {
+			acc = max(acc, ot);
+		} else {
+			acc = max(acc, ot + a[idx]);
+		}
+	}
+	ret = max(ret, acc);
+	return top;
+}
+
+void solve() {
+	cin >> n;
+	a = vll(n);
+	for (int i = 0;i < n;i++) {
+		cin >> a[i];
+	}
+	g = vvi(n);
+	for (int i = 0;i < n-1;i++) {
+		int x, y;
+		cin >> x >> y;
+		x--; y--;
+		g[x].push_back(y);
+		g[y].push_back(x);
+	}
+	ret = 0;
+	dp(0, -1);
+	ret = max(ret, a[0]);
+	cout << ret << endl;
 }
 
 int main() {

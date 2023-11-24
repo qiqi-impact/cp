@@ -54,17 +54,7 @@ namespace output {
 using namespace output;
 
 void solve() {
-    vi s(36);
-	vvi take(6, vi(6));
-	for (int i = 0;i < 36;i++) {
-		cin >> s[i];
-	}
-	int s0 = s[0];
-	for (int i = 0;i < 36;i++) {
-		s[i] -= s0;
-	}
-	//unfinished
-
+    
 }
 
 int main() {

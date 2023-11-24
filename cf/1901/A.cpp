@@ -54,17 +54,24 @@ namespace output {
 using namespace output;
 
 void solve() {
-    vi s(36);
-	vvi take(6, vi(6));
-	for (int i = 0;i < 36;i++) {
-		cin >> s[i];
+    int n;
+	ll x;
+	cin >> n >> x;
+	vll a(n+1, 0);
+	ll ret = 0;
+	for (int i = 0;i < n;i++) {
+		cin >> a[i+1];
+		if (a[i+1] < x) {
+			ret = max(ret, a[i+1] - a[i]);
+		} else {
+			ret = max(ret, 2 * (x - a[i]));
+			break;
+		}
 	}
-	int s0 = s[0];
-	for (int i = 0;i < 36;i++) {
-		s[i] -= s0;
+	if (x > a[n]) {
+		ret = max(ret, 2 * (x - a[n]));
 	}
-	//unfinished
-
+	cout << ret << endl;
 }
 
 int main() {

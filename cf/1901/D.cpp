@@ -54,24 +54,27 @@ namespace output {
 using namespace output;
 
 void solve() {
-    vi s(36);
-	vvi take(6, vi(6));
-	for (int i = 0;i < 36;i++) {
-		cin >> s[i];
+    int n;
+	cin >> n;
+	vll a(n);
+	multiset<ll> s;
+	for (int i = 0;i < n;i++) {
+		cin >> a[i];
+		s.insert(a[i] + i);
 	}
-	int s0 = s[0];
-	for (int i = 0;i < 36;i++) {
-		s[i] -= s0;
+	ll ret = *(s.rbegin());
+	for (int i = 0;i < n-1;i++) {
+		s.insert(a[i] + (n - 1 - i));
+		s.insert(a[i+1]);
+		s.erase(s.find(a[i]));
+		s.erase(s.find(a[i+1] + i + 1));
+		ret = min(ret, *(s.rbegin()));
 	}
-	//unfinished
-
+	cout << ret << endl;
 }
 
 int main() {
     ios::sync_with_stdio(false);
-    cin.tie(0);
-    int t;
-    cin >> t;
-    while (t--) solve();
+    cin.tie(0);solve();
     return 0;
 }

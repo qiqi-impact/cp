@@ -54,17 +54,41 @@ namespace output {
 using namespace output;
 
 void solve() {
-    vi s(36);
-	vvi take(6, vi(6));
-	for (int i = 0;i < 36;i++) {
-		cin >> s[i];
+    int n;
+	cin >> n;
+	vll a(n);
+	ll t = -1e18, u = 1e18;
+	for (int i = 0;i < n;i++) {
+		cin >> a[i];
+		t = max(t, a[i]);
+		u = min(u, a[i]);
 	}
-	int s0 = s[0];
-	for (int i = 0;i < 36;i++) {
-		s[i] -= s0;
+	if (t == u) {
+		cout << 0 << endl;
+		return;
 	}
-	//unfinished
-
+	sort(a.rbegin(), a.rend());
+	// dbg(a);
+	vll ops;
+	for (int j = 0;j < 34;j++) {
+		ll df = 1 - a[0]%2;
+		ll mx = -1e18, mn = 1e18;
+		for (int i = 0;i < n;i++) {
+			a[i] = (a[i]+df)/2;
+			mx = max(mx, a[i]);
+			mn = min(mn, a[i]);
+		}
+		ops.push_back(df);
+		// dbg(mx, mn);
+		if (mx == mn) {
+			cout << j+1 << endl;
+			if (j+1 <= n) {
+				for (auto x : ops) cout << x << " ";
+				cout << endl;
+			}
+			return;
+		}
+	}
 }
 
 int main() {
