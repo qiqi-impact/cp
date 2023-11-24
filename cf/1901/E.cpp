@@ -61,13 +61,11 @@ ll ret;
 ll dp(int idx, int p) {
 	vll dps;
 	ll top = a[idx];
-	int ct = 0;
 	for (auto x : g[idx]) {
 		if (x != p) {
 			ll y = dp(x, idx);
 			dps.push_back(y);
 			top = max(top, y);
-			if (y >= 0) ct++;
 		}
 	}
 	sort(dps.rbegin(), dps.rend());
