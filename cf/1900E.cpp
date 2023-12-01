@@ -59,6 +59,9 @@ vi order;
 vi component;
 vvi components;
 vi used;
+vector<pair<int, ll>> mx;
+vector<set<int>> cond_adj;
+vector<pair<int, ll>> val;
 
 void dfs1(int v) {
 	used[v] = 1;
@@ -80,11 +83,23 @@ void dfs2(int v) {
 	}
 }
 
+pair<int, ll> dfs3(int i) {
+	if (mx[i].first != 0) return mx[i];
+	for (auto x : cond_adj[i]) {
+		auto y = dfs3(x);
+		mx[i] = max(mx[i], y);
+	}
+	mx[i].first += val[i].first;
+	mx[i].second += val[i].second;
+	return mx[i];
+}
+
 void solve() {
     int n, m;
 	cin >> n >> m;
 	vi a(n);
 	for (int i = 0;i < n;i++) cin >> a[i];
+	// dbg(a);
 	adj = vvi(n);
 	adj_rev = vvi(n);
 	order = vi();
@@ -94,10 +109,11 @@ void solve() {
 	for (int i = 0;i < m;i++) {
 		int x, y;
 		cin >> x >> y;
-		x-- y--;
+		x--; y--;
 		adj[x].push_back(y);
-		adj_rev[u].push_back(x);
+		adj_rev[y].push_back(x);
 	}
+	// dbg(adj);
 	for (int i = 0;i < n;i++) {
 		if (!used[i]) {
 			dfs1(i);
@@ -112,6 +128,38 @@ void solve() {
 			component = vi();
 		}
 	}
+
+	// dbg(components);
+
+	int cs = components.size();
+	map<int, int> itoc;
+	val = vector<pair<int, ll>>(cs);
+	mx = vector<pair<int, ll>>(cs, {0, 0});
+	for (int i = 0;i < cs;i++) {
+		for (auto x : components[i]) {
+			itoc[x] = i;
+			val[i].first++;
+			val[i].second -= a[x];
+		}
+	}
+
+	// dbg(val);
+	cond_adj = vector<set<int>>(cs);
+	vi ind(cs);
+	for (int i = 0;i < n;i++) {
+		for (auto x : adj[i]) {
+			if (itoc[i] != itoc[x] && !cond_adj[itoc[i]].contains(itoc[x])) {
+				cond_adj[itoc[i]].insert(itoc[x]);
+				ind[itoc[x]]++;
+			}
+		}
+	}
+	// dbg(ind, cond_adj);
+	pair<int, ll> ret;
+	for (int i = 0;i < cs;i++) {
+		if (ind[i] == 0) ret = max(ret, dfs3(i));
+	}
+	cout << ret.first << " " << -ret.second << endl;
 }
 
 int main() {
