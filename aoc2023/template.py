@@ -3,9 +3,9 @@ from collections import defaultdict, deque
 import math
 
 with open("in") as f:
-    for x in f.read().splitlines():
+    for a in f.read().splitlines():
         try:
-            c = int(x)
+            b = int(a)
             break
         except:
             pass
