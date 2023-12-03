@@ -11,10 +11,7 @@ class Solution:
     def numberOfSequence(self, n: int, sick: List[int]) -> int:
         ret = 1
         gaps = []
-        sg = 0
         pw = 0
-        sick.sort()
-        # ss = set(sick)
         if sick[0] != 0:
             gaps.append(sick[0])
         if sick[-1] != n-1:
