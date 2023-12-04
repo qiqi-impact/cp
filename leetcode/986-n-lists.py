@@ -29,4 +29,3 @@ class Solution:
                 heapq.heappush(h, (lists[i][pt[i]], pt[i]%2, i))
                 pt[i] += 1
         return ret
-            
