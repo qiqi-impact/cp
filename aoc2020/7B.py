@@ -25,11 +25,11 @@ with open("in") as f:
             d[k].append((b, a))
 
 @cache
-def has(k):
-    ret = 0
-    for x, _ in d[k]:
-        if x == 'shiny gold bags' or has(x):
-            ret = 1
+def amt(k):
+    ret = 1
+    for x, y in d[k]:
+        ret += amt(x) * y
+    # print(k, ret)
     return ret
 
-print(sum([has(k) for k in list(d.keys())]))
+print(amt('shiny gold bags')-1)
