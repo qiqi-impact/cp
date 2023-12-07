@@ -8,12 +8,16 @@ def ints(s, split=' '):
 def colon(s):
     return s.split(': ')[1]
 
+def merge(l):
+    return ''.join([str(x) for x in l])
+
 digits = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 digmap = {}
 for i, x in enumerate(digits):
     digmap[x] = i
-print(digmap)
 
-ret = []
+lines = []
 with open("in") as f:
     for a in f.read().splitlines():
+        lines.append(a)
+ln = len(lines)
