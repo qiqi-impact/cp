@@ -40,6 +40,7 @@ for i in range(0, len(seeds)-1, 2):
 # print(maps)
 
 for m in maps:
+    print(m)
     nc = []
     ev = defaultdict(list)
     for (x, y) in cur:
@@ -56,12 +57,14 @@ for m in maps:
     for k in ks:
         # print(k)
         l = sorted(ev[k])
+        print(l)
         for x, y, i in l:
-            # print(x, y, z)
+            print(x, y, i, k)
             if x == 0:
                 df += m[i][2]
                 if L is not None:
-                    nc.append([L, m[i][0]-1])
+                    if m[i][0] > L:
+                        nc.append([L, m[i][0]-1])
                     L = m[i][0]+df
             elif x == 2:
                 if L is not None:
@@ -74,10 +77,10 @@ for m in maps:
                 else:
                     nc.append([L, k+df])
                     L = None
-            # print(df, L, nc)
+            print(df, L, nc)
     cur = nc
     # print(m)
-    # print(cur)
+    print(cur)
 
     ev = defaultdict(int)
     for x, y in cur:
