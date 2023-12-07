@@ -93,7 +93,7 @@ for m in maps:
             cur.append([k, None])
         elif st == 0 and st-ev[k] > 0:
             cur[-1][1] = k-1
-    # print(cur)
+    print(cur)
 
 
             
