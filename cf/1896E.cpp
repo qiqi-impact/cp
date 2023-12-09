@@ -53,24 +53,39 @@ namespace output {
 
 using namespace output;
 
-vi fw;
-int n;
+struct FenwickTree {
+    vector<int> bit;  // binary indexed tree
+    int n;
 
-void inc(int i, int amt) {
-	for (;i <= 2 * n;i += i & -i) {
-		fw[i] += amt;
-	}
-}
+    FenwickTree(int n) {
+        this->n = n;
+        bit.assign(n, 0);
+    }
 
-int prefix_sum(int i) {
-	int ret = 0;
-	for(;i > 0; i -= i & -i) {
-		ret += fw[i];
-	}
-	return ret;
-}
+    FenwickTree(vector<int> const &a) : FenwickTree(a.size()) {
+        for (size_t i = 0; i < a.size(); i++)
+            add(i, a[i]);
+    }
+
+    int sum(int r) {
+        int ret = 0;
+        for (; r >= 0; r = (r & (r + 1)) - 1)
+            ret += bit[r];
+        return ret;
+    }
+
+    int sum(int l, int r) {
+        return sum(r) - sum(l - 1);
+    }
+
+    void add(int idx, int delta) {
+        for (; idx < n; idx = idx | (idx + 1))
+            bit[idx] += delta;
+    }
+};
 
 void solve() {
+	int n;
     cin >> n;
 	vi a(n);
 	vector<pii> path;
@@ -85,16 +100,15 @@ void solve() {
 		}
 	}
 	sort(path.rbegin(), path.rend());
-	fw = vi(2 * n + 1);
+	FenwickTree fw(2 * n);
 	vi ret(n);
 	// dbg(path);
 	for (auto [l, r] : path) {
 		if (l < n) {
-			int v = (prefix_sum(r+1) - prefix_sum(l));
-			// dbg(l, r, v, a[l]);
+			int v = fw.sum(l, r);
 			ret[a[l]] = r - l - v;
 		}
-		inc(r+1, 1);
+		fw.add(r, 1);
 	}
 	for (auto x : ret) cout << x << " ";
 	cout << endl;
