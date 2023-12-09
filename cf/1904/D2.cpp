@@ -276,20 +276,17 @@ void solve() {
 		int found = 0;
 		auto it = lower_bound(aa[b[i]].begin(), aa[b[i]].end(), i);
 		if (it != aa[b[i]].end()) {
-			// dbg(i, *it);
 			if (smx.prod(i, *it + 1) == b[i] && (*it == i+1 || smn.prod(i, *it) == b[i])) {
 				found = 1;
 			}
 		}
 		it = prev(it);
 		if (next(it) != aa[b[i]].begin()) {
-			// dbg(i, *it);
 			if (smx.prod(*it, i+1) == b[i] && (*it == i-1 || smn.prod(*it+1, i+1) == b[i])) {
 				found = 1;
 			}
 		}
 		if (!found) {
-			// dbg(i);
 			cout << "NO" << endl;
 			return;
 		}
