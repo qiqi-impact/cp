@@ -53,15 +53,55 @@ namespace output {
 
 using namespace output;
 
+vi fw;
+int n;
+
+void inc(int i, int amt) {
+	for (;i <= 2 * n;i += i & -i) {
+		fw[i] += amt;
+	}
+}
+
+int prefix_sum(int i) {
+	int ret = 0;
+	for(;i > 0; i -= i & -i) {
+		ret += fw[i];
+	}
+	return ret;
+}
+
 void solve() {
     cin >> n;
 	vi a(n);
-	for (int i = 0;i < n;i++) cin >> a[i];
+	vector<pii> path;
+	for (int i = 0;i < n;i++) {
+		cin >> a[i];
+		a[i]--;
+		if (a[i] >= i) {
+			path.push_back(pii(i, a[i]));
+			path.push_back(pii(i + n, a[i] + n));
+		} else {
+			path.push_back(pii(i, a[i] + n));
+		}
+	}
+	sort(path.rbegin(), path.rend());
+	fw = vi(2 * n + 1);
+	vi ret(n);
+	// dbg(path);
+	for (auto [l, r] : path) {
+		if (l < n) {
+			int v = (prefix_sum(r+1) - prefix_sum(l));
+			// dbg(l, r, v, a[l]);
+			ret[a[l]] = r - l - v;
+		}
+		inc(r+1, 1);
+	}
+	for (auto x : ret) cout << x << " ";
+	cout << endl;
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
+    cin.tie(0)->sync_with_stdio(false);
     int t;
     cin >> t;
     while (t--) solve();
