@@ -61,8 +61,13 @@ q = 0
 for l in lines:
     a, b = l.split(' ')
     b = ints(b, ',')
-    print(a, b)
     
+
+    a = '?'.join(5 * [a])
+    b = b * 5
+
+    print(a, b)
+
     x = dp(a+'.', tuple(b), 0, 0, 0)
     print(x)
     q += x
