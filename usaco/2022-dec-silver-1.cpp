@@ -68,6 +68,7 @@ ll ssc(int idx, int p) {
 	if (ret > 0) {
 		path.push_back({idx+1, p+1, ret});
 	}
+	ss[idx] = ret;
 	return ret;
 }
 
@@ -109,10 +110,9 @@ void solve() {
 	path = vvll();
 	ssc(0, -1);
 	dist(0, -1);
-	cout << path.size() << endl;
+	cout << path.size() << '\n';
 	for (auto x : path) {
-		cout << x[0] << " " << x[1] << " " << x[2];
-		cout << endl;
+		cout << x[0] << " " << x[1] << " " << x[2] << '\n';
 	}
 }
 
