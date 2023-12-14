@@ -56,6 +56,7 @@ using namespace output;
 vvi g;
 ll avg;
 vll a, ss;
+vvll path;
 
 ll ssc(int idx, int p) {
 	ll ret = a[idx] - avg;
@@ -65,7 +66,7 @@ ll ssc(int idx, int p) {
 		}
 	}
 	if (ret > 0) {
-		cout << (idx+1) << " " << (p+1) << " " << ret << endl;
+		path.push_back({idx+1, p+1, ret});
 	}
 	return ret;
 }
@@ -73,7 +74,7 @@ ll ssc(int idx, int p) {
 void dist(int idx, int p) {
 	for (auto x : g[idx]) {
 		if (x != p && ss[x] < 0) {
-			cout << (idx+1) << " " << (x+1) << " " << -ss[x] << endl;
+			path.push_back({idx+1, x+1, -ss[x]});
 		}
 	}
 	for (auto x : g[idx]) {
@@ -87,6 +88,7 @@ void solve() {
 	int n;
 	cin >> n;
 	a = vll(n);
+	
 	ss = vll(n);
 	ll tot = 0;
 	for (int i = 0;i < n;i++) {
@@ -95,7 +97,7 @@ void solve() {
 	}
 	avg = tot / n;
 	g = vvi(n);
-
+	
 	for (int i = 0;i < n-1;i++) {
 		int x, y;
 		cin >> x >> y;
@@ -104,14 +106,17 @@ void solve() {
 		g[y].push_back(x);
 	}
 
+	path = vvll();
 	ssc(0, -1);
 	dist(0, -1);
+	cout << path.size() << endl;
+	for (auto x : path) {
+		cout << x[0] << " " << x[1] << " " << x[2];
+		cout << endl;
+	}
 }
 
 int main() {
-    cin.tie(0)->sync_with_stdio(false);
-    int t;
-    cin >> t;
-    while (t--) solve();
+    cin.tie(0)->sync_with_stdio(false);solve();
     return 0;
 }
