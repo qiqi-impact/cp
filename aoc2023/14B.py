@@ -39,10 +39,6 @@ def spin(g):
                 ng[q][j] = 'O'
                 q += 1
 
-    # for r in ng:
-    #     print(''.join(r))
-
-
     g = ng
     ng = [['.' for _ in range(C)] for _ in range(R)]
 
@@ -56,9 +52,6 @@ def spin(g):
             elif v == 'O':
                 ng[i][q] = 'O'
                 q += 1
-
-    # for r in ng:
-    #     print(''.join(r))
 
     g = ng
     ng = [['.' for _ in range(C)] for _ in range(R)]
@@ -90,8 +83,6 @@ def spin(g):
 
     return ng
 
-# print(grid)
-
 seen = {}
 val = {}
 os = None
@@ -106,25 +97,10 @@ for j in range(C):
         elif v == 'O':
             tot += q
             q -= 1
-print(0, tot)
 
 for t in range(1, 1000000001):
     grid = spin(grid)
-    # for r in grid:
-    #     print(''.join(r))
-    # print()
     s = ''
-
-    # tot = 0
-    # for j in range(C):
-    #     q = R-1
-    #     for i in range(R):
-    #         v = grid[i][j]
-    #         if v == '#':
-    #             q = R-i-1
-    #         elif v == 'O':
-    #             tot += q
-    #             q -= 1
     tot = 0
     for i in range(R):
         for j in range(C):
