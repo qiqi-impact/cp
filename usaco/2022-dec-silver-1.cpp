@@ -53,8 +53,59 @@ namespace output {
 
 using namespace output;
 
+vvi g;
+ll avg;
+vll a, ss;
+
+ll ssc(int idx, int p) {
+	ll ret = a[idx] - avg;
+	for (auto x : g[idx]) {
+		if (x != p) {
+			ret += ssc(x, idx);
+		}
+	}
+	if (ret > 0) {
+		cout << (idx+1) << " " << (p+1) << " " << ret << endl;
+	}
+	return ret;
+}
+
+void dist(int idx, int p) {
+	for (auto x : g[idx]) {
+		if (x != p && ss[x] < 0) {
+			cout << (idx+1) << " " << (x+1) << " " << -ss[x] << endl;
+		}
+	}
+	for (auto x : g[idx]) {
+		if (x != p) {
+			dist(x, idx);
+		}
+	}
+}
+
 void solve() {
-	
+	int n;
+	cin >> n;
+	a = vll(n);
+	ss = vll(n);
+	ll tot = 0;
+	for (int i = 0;i < n;i++) {
+		cin >> a[i];
+		tot += a[i];
+	}
+	avg = tot / n;
+	g = vvi(n);
+
+	for (int i = 0;i < n-1;i++) {
+		int x, y;
+		cin >> x >> y;
+		x--;y--;
+		g[x].push_back(y);
+		g[y].push_back(x);
+	}
+
+	ssc(0, -1);
+	dist(0, -1);
 }
 
 int main() {
