@@ -42,7 +42,7 @@ for i in range(R):
 
 while q:
     x, y = q.popleft()
-    if dist[x, y] == 64:
+    if dist[x, y] == 2 * 131 + 65:
         continue
     for dx, dy in dirmap.values():
         nx, ny = x+dx, y+dy
@@ -53,6 +53,6 @@ while q:
 
 ret = 0
 for v in dist.values():
-    if v%2 == 0:
+    if v%2 == 1:
         ret += 1
-print(ret)
+print(ret, R, C)

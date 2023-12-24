@@ -31,13 +31,10 @@ dirmap = {
 
 R, C = ln, len(lines[0])
 
-
-
 for i in range(R):
     for j in range(C):
         if lines[i][j] == 'S':
             lines[i] = lines[i][:j] + '.' + lines[i][j+1:]
-            print(i, j)
 
 @cache
 def parity(sx, sy, D):
@@ -50,19 +47,20 @@ def parity(sx, sy, D):
             continue
         for dx, dy in dirmap.values():
             nx, ny = x+dx, y+dy
-            if 0 <= nx < R and 0 <= ny < C and lines[nx][ny] == '.':
+            if 0 <= nx < R and 0 <= ny < C and lines[nx][ny] in '.':
                 if (nx, ny) not in dist:
                     dist[nx, ny] = 1 + dist[x, y]
                     ret[dist[nx, ny]%2] += 1
                     q.append((nx, ny))
+    print(sx, sy, D, ret)
     return ret
 
 N = 26501365 // R
+# N = 2
 MID = (R-1)//2
 ans = 0
 
 x, y = parity(MID, MID, 1000)
-print(x, y)
 ans += N*N*x + (N-1)*(N-1)*y
 
 for a in [0, R-1]:
@@ -72,7 +70,7 @@ for a in [0, R-1]:
 
 for (a, b) in [(MID, 0), (MID, R-1), (0, MID), (R-1, MID)]:
     x, y = parity(a, b, R-1)
-    ans += y
+    ans += x
 
 for a in [0, R-1]:
     for b in [0, C-1]:
