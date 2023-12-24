@@ -100,21 +100,5 @@ for l in lines:
         root = {'x':[1,4000], 'm':[1,4000], 'a':[1,4000], 's':[1,4000]}
         process(root, 'in')
         break
-
-
-        # cur = 'in'
-        # while cur not in ['A', 'R']:
-        #     for r in d[cur]:
-        #         if len(r) == 1:
-        #             cur = r[0]
-        #         else:
-        #             if r[1] == '>' and st[r[0]] > r[2]:
-        #                 cur = r[3]
-        #                 break
-        #             elif r[1] == '<' and st[r[0]] < r[2]:
-        #                 cur = r[3]
-        #                 break
-        # if cur == 'A':
-        #     ret += sum(st.values())
 print(ret)
 
