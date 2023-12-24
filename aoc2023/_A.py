@@ -16,14 +16,14 @@ digmap = {}
 for i, x in enumerate(digits):
     digmap[x] = i
 
-dirmap = {
-    'R': [0, 1],
-    'L': [0, -1],
-    'U': [-1, 0],
-    'D': [1, 0],
-}
-L, R, U, D = [[0,-1], [0,1], [-1,0], [1,0]]
-DIR = [R, D, L, U]
+# dirmap = {
+#     'R': [0, 1],
+#     'L': [0, -1],
+#     'U': [-1, 0],
+#     'D': [1, 0],
+# }
+# L, R, U, D = [[0,-1], [0,1], [-1,0], [1,0]]
+# DIR = [R, D, L, U]
 
 lines = []
 with open("in") as f:
