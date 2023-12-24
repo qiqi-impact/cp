@@ -30,3 +30,48 @@ with open("in") as f:
     for a in f.read().splitlines():
         lines.append(a)
 ln = len(lines)
+
+step = 0
+
+d = {}
+ret = 0
+for l in lines:
+    if not l.strip():
+        step += 1
+        continue
+    if step == 0:
+        name, b = l.split('{')
+        rules = []
+        for x in b[:-1].split(','):
+            if ':' not in x:
+                rules.append([x])
+                continue
+            rule, dst = x.split(':')
+            for k in '<>':
+                if k in rule:
+                    xx, yy = rule.split(k)
+                    ru = [xx, k, int(yy), dst]
+                    rules.append(ru)
+        d[name] = rules
+    else:
+        st = {}
+        print(l)
+        for x in l[1:-1].split(','):
+            a, b = x.split('=')
+            st[a] = int(b)
+        cur = 'in'
+        while cur not in ['A', 'R']:
+            for r in d[cur]:
+                if len(r) == 1:
+                    cur = r[0]
+                else:
+                    if r[1] == '>' and st[r[0]] > r[2]:
+                        cur = r[3]
+                        break
+                    elif r[1] == '<' and st[r[0]] < r[2]:
+                        cur = r[3]
+                        break
+        if cur == 'A':
+            ret += sum(st.values())
+print(ret)
+
