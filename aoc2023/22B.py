@@ -74,13 +74,22 @@ for b in bricks:
 # print(g)
 # print(ind)
 
+def sim(p):
+    idd = ind.copy()
+    ret = 0
+    q = deque([p])
+    while q:
+        idx = q.popleft()
+        for x in g[idx]:
+            idd[x] -= 1
+            if idd[x] == 0:
+                ret += 1
+                q.append(x)
+    return ret
+
 ret = 0
 for k in range(ln):
-    f = 1
-    for x in g[k]:
-        if ind[x] == 1:
-            f = 0
-            break
-    ret += f
-    # if f: print(k)
+    v = sim(k)
+    ret += v
+    print(k, v)
 print(ret)
