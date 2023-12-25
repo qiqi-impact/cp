@@ -31,72 +31,65 @@ lines = [[c for c in r] for r in lines]
 def opts(i, j):
     return [[0,-1], [0,1], [-1,0], [1,0]]
 
-def dfs(x, y):
+dist = defaultdict(dict)
+def dfs(x, y, sx, sy, fx, fy, r):
+    global R, C, dist
+    if x == fx and y == fy:
+        dist[sx, sy][fx, fy] = r
+    for dx, dy in opts(x, y):
+        nx, ny = x+dx, y+dy
+        if 0 <= nx < R and 0 <= ny < C and lines[nx][ny] not in '#F' and (nx, ny) not in seen:
+            seen.add((nx, ny))
+            dfs(nx, ny, sx, sy, fx, fy, 1+r)
+            seen.discard((nx, ny))
+
+viable = set([(0, 1), (R-1, C-2)])
+
+for i in range(1, R-1):
+    for j in range(1, C-1):
+        ct = 0
+        for dx in range(-1, 2):
+            for dy in range(-1, 2):
+                if abs(dx)+abs(dy) == 1 and lines[i+dx][j+dy] in '<>^v':
+                    ct += 1
+        if ct >= 3:
+            lines[i][j] = 'F'
+            for dx in range(-1, 2):
+                for dy in range(-1, 2):
+                    if lines[i+dx][j+dy] in '<>^v':
+                        viable.add((i+dx, j+dy))
+                        dist[i, j][i+dx, j+dy] = 1
+                        dist[i+dx, j+dy][i, j] = 1
+
+for x, y in viable:
+    seen = set([(x, y)])
+    for fx, fy in viable:
+        if fx != x or fy != y:
+            dfs(x, y, x, y, fx, fy, 0)
+# print(dist[5, 3])
+
+print(len(viable))
+
+seen = set([(0, 1)])
+pp = [(0, 1)]
+ret = 0
+def dfs2(x, y, tot):
+    # print(x, y, tot)
     global R, C, ret
     if x == R-1 and y == C-2:
-        ret = max(ret, len(seen))
+        if tot > ret:
+            ret = tot
+            print(x, y, tot, pp)
         return
-    for dx, dy in opts(x, y):
-        nx, ny = x+dx, y+dy
+    for nx, ny in dist[x, y]:
         if 0 <= nx < R and 0 <= ny < C and lines[nx][ny] != '#' and (nx, ny) not in seen:
             seen.add((nx, ny))
-            dfs(nx, ny)
+            pp.append((nx, ny))
+            # if (nx, ny) == (6, 3):
+            #     print(dist[x,y][nx,ny])
+            dfs2(nx, ny, tot + dist[x, y][nx, ny])
+            pp.pop()
             seen.discard((nx, ny))
 
-seen2 = set()
-ff = 0
-chokeidx = [(0, 1)]
-def spread(x, y):
-    global R, C, ff
-    if ff and (x, y) in choke:
-        chokeidx.append((x, y))
-        ff += 1
-    if x == R-1 and y == C-2:
-        return True
-    for dx, dy in opts(x, y):
-        nx, ny = x+dx, y+dy
-        if 0 <= nx < R and 0 <= ny < C and lines[nx][ny] != '#' and (nx, ny) not in seen2:
-            seen2.add((nx, ny))
-            if spread(nx, ny):
-                return True
-    return False
-
-choke = set()
-for i in range(1, R-1):
-    print(i)
-    for j in range(1, C-1):
-        ret = -1
-        seen2 = set([(0, 1)])
-        if lines[i][j] == '.':
-            lines[i][j] = '#'
-            if not spread(0, 1):
-                choke.add((i, j))
-            lines[i][j] = '.'
-ff = 1
-# print(choke)
-
-seen2 = set([(0, 1)])
-spread(0, 1)
-chokeidx.append((R-1, C-2))
-
-def lgt(x, y, fx, fy, r):
-    global R, C
-    if x == fx and y == fy:
-        r[0] = max(r[0], len(seen)-1)
-        return
-    for dx, dy in opts(x, y):
-        nx, ny = x+dx, y+dy
-        if 0 <= nx < R and 0 <= ny < C and lines[nx][ny] != '#' and (nx, ny) not in seen:
-            seen.add((nx, ny))
-            lgt(nx, ny, fx, fy, r)
-            seen.discard((nx, ny))
-
-ret = 0
-for a, b in pairwise(chokeidx):
-    print(a, b)
-    seen = set([(a[0], a[1])])
-    rr = [0]
-    lgt(*a, *b, rr)
-    print(rr[0])
-    ret += rr[0]
+dfs2(0, 1, 0)
 print(ret)
