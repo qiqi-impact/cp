@@ -1,17 +1,15 @@
 class Solution:
     def maximumLength(self, s: str) -> int:
         runs = defaultdict(list)
-        lst = None
+        lst = s[0]
         l = 0
         for c in s + '.':
             if c != lst:
-                if lst != None:
-                    runs[lst].append(l)
+                runs[lst].append(l)
                 lst = c
                 l = 1
             else:
                 l += 1
-        # print(runs)
         
         mx = -1
         for k in runs:
