@@ -53,6 +53,5 @@ with open("test_contest_in") as f:
         l = SIGNATURE[i%len(SIGNATURE)](l)
         tc.append(l)
         if len(tc) == len(SIGNATURE):
-            print(tc)
             print(Solution().F(*tc))
             tc = []
