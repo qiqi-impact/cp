@@ -12,10 +12,22 @@ def zf(s):
             r = i + z[i]
     return z
 
+def search_pattern(pattern, text):
+    concatenated = pattern + "$" + text
+    z = zf(concatenated)
+    pattern_length = len(pattern)
+    matches = []
+
+    for i in range(len(concatenated)):
+        if z[i] == pattern_length:
+            matches.append(i - pattern_length - 1)
+
+    return matches
+
 tc = [
     'aaaaa',
     'aaabaab',
     'abacaba',
 ]
 for t in tc:
-    print(zf(t))
+    print(search_pattern('aa', t))
