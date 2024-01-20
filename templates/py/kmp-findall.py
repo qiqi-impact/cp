@@ -54,3 +54,11 @@ def computeLPSArray(pat, M, lps):
             else:
                 lps[i] = 0
                 i += 1
+
+tc = [
+    'aaaaa',
+    'aaabaab',
+    'abacaba',
+]
+for t in tc:
+    print(KMPSearch('aa', t))
