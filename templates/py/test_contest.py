@@ -4,54 +4,52 @@ from functools import cache
 SIGNATURE = [int, int, int, str]
 
 
+from sortedcontainers import SortedList
+
 class Solution:
-    def F(self, start: int, finish: int, limit: int, s: str) -> int:
-        for c in s:
-            if int(c) > limit:
-                return 0
+    def minimumCost(self, nums, k, dist):
+        mn = 0
+        for i in range(k):
+            mn += nums[i]
             
-        finish = [int(c) for c in str(finish)]
-        start = [int(c) for c in str(start-1)]
-        if len(start) < len(finish):
-            start = ([0]*(len(finish)-len(start))) + start
-        s = [int(c) for c in s]
+        l, r = SortedList(), SortedList()
         
-        q = [start, finish]
+        hs = 0
+        pt = 2
         
-        @cache
-        def dp(li, idx, cap):
-            L = q[li]
-            if idx == len(q[li]):
-                # print(li, idx, cap, 1, p)
-                return 1
-            ret = 0
-            mx = limit
-            if cap:
-                mx = min(mx, L[idx])
-            for dig in range(mx+1):
-                if idx >= len(L)-len(s):
-                    if dig != s[idx - (len(L)-len(s))]:
-                        continue
-                iscap = cap and dig == L[idx]
-                ret += dp(li, idx+1, iscap)
-            # print(li, idx, cap, ret, p)
-            return ret
-        
-        return dp(1, 0, True) - dp(0, 0, True)
+        for i in range(1, len(nums)):
+            p = (nums[i], i)
+            if l.count(p):
+                l.discard(p)
+                hs -= nums[i]
+            if r.count(p):
+                r.discard(p)
+            while pt <= i+dist and pt < len(nums):
+                np = (nums[pt], pt)
+                r.add(np)
+                pt += 1
+            while r and len(l) < k-2:
+                q = r.pop(0)
+                l.add(q)
+                hs += q[0]
+            if len(l) == k-2:
+                mn = min(mn, hs + nums[0] + nums[i])
+            print(mn, len(l), l, r)
+        return mn
 
 
 
 
+print(Solution().minimumCost([6,40,41,11,50,15,47,48,50,12,16,30,38,45,13,34,26,25,32,28], 9, 13))
 
 
-
-with open("test_contest_in") as f:
-    tc = []
-    for i, l in enumerate(f.read().splitlines()):
-        if l[0] == '"' and l[-1] == '"':
-            l = l[1:-1]
-        l = SIGNATURE[i%len(SIGNATURE)](l)
-        tc.append(l)
-        if len(tc) == len(SIGNATURE):
-            print(Solution().F(*tc))
-            tc = []
+# with open("test_contest_in") as f:
+#     tc = []
+#     for i, l in enumerate(f.read().splitlines()):
+#         if l[0] == '"' and l[-1] == '"':
+#             l = l[1:-1]
+#         l = SIGNATURE[i%len(SIGNATURE)](l)
+#         tc.append(l)
+#         if len(tc) == len(SIGNATURE):
+#             print(Solution().F(*tc))
+#             tc = []
