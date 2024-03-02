@@ -8,6 +8,7 @@ class Solution:
             g[x].append(y)
             g[y].append(x)
         
+        @cache
         def dfs(node, p, t):
             cv = nums[node]
             if t: cv ^= k
@@ -15,7 +16,6 @@ class Solution:
             
             l = []
             sm = 0
-            
             for o in g[node]:
                 if o != p:
                     a, b = dfs(o, node, False), dfs(o, node, True)
@@ -31,3 +31,5 @@ class Solution:
             return max(eo)
         
         return dfs(0, -1, 0)
+            
+            
