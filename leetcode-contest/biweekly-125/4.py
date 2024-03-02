@@ -12,7 +12,7 @@ class Solution:
         def dfs(node, p, t):
             cv = nums[node]
             if t: cv ^= k
-            eo = [-inf, -inf]
+            best = -inf
             
             l = []
             sm = 0
@@ -23,13 +23,11 @@ class Solution:
                     sm += a
             l.sort(reverse=True)
             
-            eo[0] = cv + sm
+            best = cv + sm
             for i in range(len(l)):
                 cv ^= k
                 sm += l[i]
-                eo[(i+1)%2] = max(eo[(i+1)%2], cv + sm)
-            return max(eo)
+                best = max(best, cv + sm)
+            return best
         
         return dfs(0, -1, 0)
-            
-            
