@@ -5,13 +5,6 @@ class Solution:
         for i in range(len(nums)):
             if nums[i]: l.append(i)
                 
-        t = sum(l)
-        pf = [t]
-        ct = 1
-        for i in range(1, len(l)):
-            df = l[i] - l[i-1]
-            pf.append(df * ct - df * (len(l)-ct))
-                
         mc = min(mc, k)
         def f(m):
             q = k - m
