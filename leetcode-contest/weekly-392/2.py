@@ -1,6 +1,5 @@
 class Solution:
     def getSmallestString(self, s: str, k: int) -> str:
-        cur = k
         def dst(x, y):
             xx, yy = ord(x), ord(y)
             xx, yy = max(xx, yy), min(xx, yy)
