@@ -5,11 +5,10 @@ def KMPSearch(pat, txt):
  
     # create lps[] that will hold the longest prefix suffix
     # values for pattern
-    lps = [0]*M
     j = 0  # index for pat[]
  
     # Preprocess the pattern (calculate lps[] array)
-    computeLPSArray(pat, M, lps)
+    lps = LPS(pat)
  
     i = 0  # index for txt[]
     while (N - i) >= (M - j):
@@ -31,29 +30,20 @@ def KMPSearch(pat, txt):
                 i += 1
     return ret
 
-def computeLPSArray(pat, M, lps):
-    len = 0  # length of the previous longest prefix suffix
- 
-    lps[0] = 0  # lps[0] is always 0
-    i = 1
- 
-    # the loop calculates lps[i] for i = 1 to M-1
-    while i < M:
-        if pat[i] == pat[len]:
-            len += 1
-            lps[i] = len
-            i += 1
+def LPS(word):
+    lps = [0] * len(word)
+    l = 0
+    for i in range(1, len(word)):
+        if word[l] == word[i]:
+            l += 1
+            lps[i] = l
         else:
-            # This is tricky. Consider the example.
-            # AAACAAAA and i = 7. The idea is similar
-            # to search step.
-            if len != 0:
-                len = lps[len-1]
- 
-                # Also, note that we do not increment i here
-            else:
-                lps[i] = 0
-                i += 1
+            while l and word[i] != word[l]:
+                l = lps[l-1]
+            if word[i] == word[l]:
+                l += 1
+                lps[i] = l
+    return lps
 
 tc = [
     'aaaaa',
