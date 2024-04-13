@@ -1,3 +1,7 @@
+g = [{} for _ in range(n)]
+for x, y, w in edges:
+    g[x][y] = g[y][x] = min(g[x].get(y, inf), w)
+
 START = 0, x
 END = y
 h = [START]
