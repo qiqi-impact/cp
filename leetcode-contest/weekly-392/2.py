@@ -13,4 +13,3 @@ class Solution:
                     ret += x
                     break
         return ret
-                    
