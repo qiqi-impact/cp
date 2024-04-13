@@ -8,7 +8,7 @@ while h:
         continue
     if cur == END:
         return cost
-    for o, w in g[cur]:
+    for o, w in g[cur].items():
         if dist.get(o, inf) > cost + w:
             dist[o] = cost + w
             heapq.heappush(h, (cost + w, o))
