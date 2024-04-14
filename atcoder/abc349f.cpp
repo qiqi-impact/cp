@@ -58,17 +58,16 @@ int n;
 int fl;
 vector<pair<ll, int>> fac;
 const ll MOD = 998244353LL;
-// vi valid, bb;
 vi bmct;
+vll pw2;
 
 ll f(int idx, int bm) {
-	// TODO - combine A_i by bitmask/count to reduce complexity
 	if (idx == 1 << fl) {
-		return (int)(bm == (1 << fl) - 1);
+		return (ll)(bm == (1 << fl) - 1);
 	}
 	if (dp[idx][bm] != -1) return dp[idx][bm];
 	ll r = f(idx+1, bm);
-	if (bmct[idx]) r += ((1LL << bmct[idx]) - 1) * f(idx+1, bm | idx) % MOD;
+	if (bmct[idx]) r += (pw2[bmct[idx]] - 1 + MOD) % MOD * f(idx+1, bm | idx) % MOD;
 	r %= MOD;
 	dp[idx][bm] = r;
 	return r;
@@ -78,10 +77,11 @@ void solve() {
 	ll m;
 	cin >> n >> m;
 	vi a(n);
-	// valid = vi(n, 0);
-	// bb = vi(n, 0);
-
-	
+	pw2 = vll(n);
+	pw2[0] = 1;
+	for (int i = 1;i < n;i++) {
+		pw2[i] = pw2[i-1] * 2 % MOD;
+	}
 
 	for (int i = 0;i < n;i++) cin >> a[i];
 	fac = vector<pair<ll, int>>();
