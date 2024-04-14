@@ -53,7 +53,7 @@ namespace output {
 
 using namespace output;
 
-vvll dp;
+vll dp;
 int n;
 int fl;
 vector<pair<ll, int>> fac;
@@ -61,29 +61,23 @@ const ll MOD = 998244353LL;
 vi bmct;
 vll pw2;
 
-ll f(int idx, int bm) {
-	if (idx == 1 << fl) {
-		return (ll)(bm == (1 << fl) - 1);
-	}
-	if (dp[idx][bm] != -1) return dp[idx][bm];
-	ll r = f(idx+1, bm);
-	if (bmct[idx]) r += (pw2[bmct[idx]] - 1 + MOD) % MOD * f(idx+1, bm | idx) % MOD;
-	r %= MOD;
-	dp[idx][bm] = r;
-	return r;
-}
-
 void solve() {
 	ll m;
 	cin >> n >> m;
-	vi a(n);
+	vll a(n);
 	pw2 = vll(n+1);
 	pw2[0] = 1;
 	for (int i = 1;i <= n;i++) {
 		pw2[i] = pw2[i-1] * 2 % MOD;
 	}
-
 	for (int i = 0;i < n;i++) cin >> a[i];
+	if (m == 1) {
+		int ct = 0;
+		for (int i = 0;i < n;i++) ct += (int)(a[i] == 1);
+		cout << (pw2[ct] - 1 + MOD)%MOD << endl;
+		return;
+	}
+
 	fac = vector<pair<ll, int>>();
 	int ct = 0;
 	while (m%2 == 0) {
@@ -91,17 +85,19 @@ void solve() {
 		ct++;
 	}
 	if (ct) fac.push_back(pair<ll, int>(2, ct));
-	for (ll p = 3;p < (ll)1e8;p += 2) {
+	for (ll p = 3;p*p <= m;p += 2) {
 		int ct = 0;
 		while (m%p == 0) {
 			m /= p;
 			ct++;
 		}
 		if (ct) fac.push_back(pair<ll, int>(p, ct));
+		if (m == 1) break;
 	}
 	if (m != 1) fac.push_back(pair<ll, int>(m, 1));
 	fl = fac.size();
-	dp = vvll(1 << fl, vll(1 << fl, -1));
+	dp = vll(1 << fl);
+	dp[(1 << fl)-1] = 1;
 	bmct = vi(1 << fl);
 	
 	for (int i = 0;i < n;i++) {
@@ -124,9 +120,17 @@ void solve() {
 		if (a[i] != 1) fail = 1;
 		if (!fail) bmct[bm]++;
 	}
-	// dbg(valid, bb);
 
-	cout << f(0, 0) << endl;
+	for (int idx = (1<<fl)-1;idx >= 0;idx--) {
+		if (bmct[idx]) {
+			for (int bm = 0;bm < (1 << fl);bm++) {
+				dp[bm] += (pw2[bmct[idx]] - 1 + MOD) % MOD * dp[bm | idx] % MOD;
+				dp[bm] %= MOD;
+			}
+		}
+	}
+	cout << dp[0] << endl;
+
 }
 
 int main() {
