@@ -77,9 +77,9 @@ void solve() {
 	ll m;
 	cin >> n >> m;
 	vi a(n);
-	pw2 = vll(n);
+	pw2 = vll(n+1);
 	pw2[0] = 1;
-	for (int i = 1;i < n;i++) {
+	for (int i = 1;i <= n;i++) {
 		pw2[i] = pw2[i-1] * 2 % MOD;
 	}
 
