@@ -58,16 +58,17 @@ int n;
 int fl;
 vector<pair<ll, int>> fac;
 const ll MOD = 998244353LL;
-vi valid, bb;
+// vi valid, bb;
+vi bmct;
 
 ll f(int idx, int bm) {
 	// TODO - combine A_i by bitmask/count to reduce complexity
-	if (idx == n) {
+	if (idx == 1 << fl) {
 		return (int)(bm == (1 << fl) - 1);
 	}
 	if (dp[idx][bm] != -1) return dp[idx][bm];
 	ll r = f(idx+1, bm);
-	if (valid[idx]) r += f(idx+1, bm | bb[idx]);
+	if (bmct[idx]) r += ((1LL << bmct[idx]) - 1) * f(idx+1, bm | idx) % MOD;
 	r %= MOD;
 	dp[idx][bm] = r;
 	return r;
@@ -77,10 +78,11 @@ void solve() {
 	ll m;
 	cin >> n >> m;
 	vi a(n);
-	valid = vi(n, 0);
-	bb = vi(n, 0);
+	// valid = vi(n, 0);
+	// bb = vi(n, 0);
 
 	
+
 	for (int i = 0;i < n;i++) cin >> a[i];
 	fac = vector<pair<ll, int>>();
 	int ct = 0;
@@ -99,10 +101,12 @@ void solve() {
 	}
 	if (m != 1) fac.push_back(pair<ll, int>(m, 1));
 	fl = fac.size();
-	dp = vvll(n, vll(1 << fl, -1));
+	dp = vvll(1 << fl, vll(1 << fl, -1));
+	bmct = vi(1 << fl);
 	
 	for (int i = 0;i < n;i++) {
 		int fail = 0;
+		int bm = 0;
 		for (int j = 0;j < fl;j++) {
 			auto &[x, y] = fac[j];
 			int ct = 0;
@@ -114,11 +118,11 @@ void solve() {
 				fail = 1;
 				break;
 			} else if (ct == y) {
-				bb[i] ^= 1 << j;
+				bm ^= 1 << j;
 			}
 		}
 		if (a[i] != 1) fail = 1;
-		if (!fail) valid[i] = 1;
+		if (!fail) bmct[bm]++;
 	}
 	// dbg(valid, bb);
 
