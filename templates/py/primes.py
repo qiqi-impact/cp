@@ -12,6 +12,8 @@ def get_primes(n):
             ret.append(i)
     return ret
 
+PRIMES = get_primes(10000)
+
 def check_prime(n):
     if n==2 or n==3: return True
     if n%2==0 or n<2: return False

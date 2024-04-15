@@ -1,3 +1,6 @@
+#include <bits/stdc++.h>
+using namespace std;
+
 #ifndef ATCODER_INTERNAL_BITOP_HPP
 #define ATCODER_INTERNAL_BITOP_HPP 1
 
@@ -195,14 +198,14 @@ int e() {
     return INT_MIN;
 }
 
-bool f(int v) { return v < 5; }
+bool f(int v) { return v < -6; }
 
 int main() {
-    vi a = {-10, 1, 3, -5};
+    vector<int> a = {-10, 1, 3, -5};
     segtree<int, op, e> seg(a);
 
     // dbg(seg.prod(0, 3));
-    dbg(seg.max_right<f>(0));
+    cout << seg.max_right<f>(0) << endl;
 
     return 0;
 }
