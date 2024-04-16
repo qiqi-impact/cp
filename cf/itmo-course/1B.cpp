@@ -187,10 +187,10 @@ template <class S, S (*op)(S, S), S (*e)()> struct segtree {
 };
 
 ll op(ll a, ll b) {
-    return a + b;
+    return min(a, b);
 }
 
-ll ex() { return 0; }
+ll ex() { return LLONG_MAX; }
 
 void solve() {
     int n, q;
