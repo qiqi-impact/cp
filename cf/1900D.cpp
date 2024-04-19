@@ -55,31 +55,9 @@ namespace output {
 
 using namespace output;
 
-int fp[Nmax]; //fp = first prime, i == fp[i] means prime
-int np[Nmax]; //np = num primes
-vi makeSieve(int lim) {
-  vi ret;
-  for(int i=2;i<=lim;++i) {
-    if(!fp[i]) {
-      ret.push_back(i);
-      for(int j=i;i*j<=lim;++j) {
-        if(!fp[1LL*i*j]) fp[1LL*i*j] = i;
-        ++np[j];
-      }
-      fp[i] = i;
-    }
-  }
-  return ret;
-}
-vi getPrimes(int x) {
-  vi ret;
-  while(x > 1) {
-    int p = fp[x];
-    ret.push_back(p);
-    while(x % p == 0) x /= p;
-  }
-  return ret;
-}
+const int MXN = 100001;
+vi dd[MXN];
+vvi ind;
 
 void solve() {
     int n;
@@ -91,49 +69,23 @@ void solve() {
 		mx = max(mx, a[i]);
 	}
 	sort(a.begin(), a.end());
-	map<int, int> above, freq;
-	set<int> factors;
-	for (int i = n - 1;i >= 0;i--) {
-		freq[a[i]]++;
-
-		for (int j = 1;j * j <= a[i];j++) {
-			factors.insert(j);
-			factors.insert(a[i] / j);
-		}
-
-		if (i == n - 1 || a[i] < a[i+1]) {
-			above[a[i]] = n - i - 1;
+	ind = vvi(mx+1);
+	for (int i = 0;i < n;i++) {
+		for (auto x : dd[a[i]]) {
+			ind[x].push_back(i);
 		}
 	}
-	map<int, map<int, ll>> hits;
-	for (auto i : factors) {
-		int below = 0;
-		for (int j = i;j <= mx;j += i) {
-			ll ct = 0;
-			for (int k = 0;k < freq[j];k++) {
-				ct += (ll)(below + k) * (above[j] + freq[j] - k - 1);
-			}
-			if (freq.count(j)) below += freq[j];
-			if (ct) hits[j][i] = ct;
-		}
-	}
-	// dbg(hits);
 	ll ret = 0;
-	for (auto &[i, hi] : hits) {
-		vi ks;
-		for (auto &[x, y] : hi) {
-			ks.push_back(x);
+	vll ct(mx+1);
+	for (int i = mx;i >= 1;i--) {
+		for (int j = 0;j < ind[i].size();j++) {
+			int x = ind[i][j];
+			ct[i] += (ll)j * (n - 1 - x);
 		}
-		sort(ks.rbegin(), ks.rend());
-		for (auto x : ks) {
-			for (int j = 2*x;j <= mx;j += x) {
-				if (hits[i].count(j)) {
-					hits[i][x] -= hits[i][j];
-				}
-			}
-			// dbg(i, x, (ll)x * hits[i][x]);
-			ret += (ll)x * hits[i][x];
+		for (int j = 2*i;j <= mx;j += i) {
+			ct[i] -= ct[j];
 		}
+		ret += ct[i] * i;
 	}
 	cout << ret << endl;
 }
@@ -142,6 +94,13 @@ int main() {
     cin.tie(0)->sync_with_stdio(false);
     int t;
     cin >> t;
+
+	for (int i = 1;i < MXN;i++) {
+		for (int j = i;j < MXN;j += i) {
+			dd[j].push_back(i);
+		}
+	}
+
     while (t--) solve();
     return 0;
 }
