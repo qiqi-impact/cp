@@ -1,9 +1,7 @@
 #include "bits/stdc++.h"
 #pragma GCC optimize ("O3")
 #pragma GCC target ("sse4")
-
-#define DEBUG 1
-
+ 
 using namespace std;
  
 typedef long long ll;
@@ -40,6 +38,7 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 #define ub upper_bound
 #define all(x) x.begin(), x.end()
 #define ins insert
+// #define DEBUG 1
  
 template<class T> bool ckmin(T& a, const T& b) { return b < a ? a = b, 1 : 0; }
 template<class T> bool ckmax(T& a, const T& b) { return a < b ? a = b, 1 : 0; }
@@ -67,6 +66,9 @@ void __print(const T &x) {int f = 0; cerr << '{'; for (auto &i: x) cerr << (f++ 
 void _print() {cerr << "]\n";}
 template <typename T, typename... V>
 void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
+
+// #define DEBUG
+
 #ifdef DEBUG
 #define dbg(x...) cerr << "\e[91m"<<__func__<<":"<<__LINE__<<" [" << #x << "] = ["; _print(x); cerr << "\e[39m" << endl;
 #else
@@ -92,11 +94,11 @@ void solve() {
             if (j*j > A[i]) break;
             if (A[i]%j) continue;
             ans += cnt[j] * val[j] * (N - i - 1);
-            dbg(A[i], j, cnt[j], val[j]);
+            //dbg(A[i], j, cnt[j], val[j]);
             cnt[j]++;
             if (j*j != A[i]) {
                 ans += cnt[A[i]/j] * val[A[i]/j] * (N-i-1);
-                dbg(A[i], A[i]/j, cnt[A[i]/j], val[A[i]/j]);
+                //dbg(A[i], A[i]/j, cnt[A[i]/j], val[A[i]/j]);
  
                 cnt[A[i]/j]++;
             }
@@ -109,15 +111,14 @@ void solve() {
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
     val[1] = 1;
-    FOR(i, 2, MX) {
-        val[i] = i-1;
-        FOR(j, 2, MX) {
-            if (j*j > i) break;
-            if (i%j) continue;
-            val[i] -= val[j];
-            if (j*j != i) val[i] -= val[i/j];
-        }
-    }
+	for(int i = 2; i < MX; i++) {
+		if(!val[i]) {
+			val[i] = i - 1;
+			for(int j = i << 1; j < MX; j += i) {
+				val[j] = (j / i) % i ? (i - 1) * val[j / i] : i * val[j / i];
+			}
+		}
+	}
  
     int T = 1;
     cin >> T;
