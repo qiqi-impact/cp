@@ -7,7 +7,7 @@ class Solution:
                 if c not in lst:
                     lst[c] = i
             else:
-                lst[c] = max(lst.get(c, 0), i)
+                lst[c] = i
         ret = 0
         for i in range(26):
             x, y = U[i], L[i]
