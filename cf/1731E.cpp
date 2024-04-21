@@ -53,14 +53,33 @@ namespace output {
 
 using namespace output;
 
-void solve() {
-    
+ll solve() {
+    int n;
+	ll m;
+	cin >> n >> m;
+	vll ct(n+1);
+	ll ret = 0;
+	for (int d = n/2;d >= 2;d--) {
+		ll x = n/d;
+		ll q = x * (x - 1) / 2;
+		ct[d] = q;
+		for (int j = 2*d;j <= n;j += d) {
+			ct[d] -= ct[j];
+		}
+		q = ct[d];
+		ll amt = min(q, m) / (d-1);
+		ret += amt * d;
+		m -= amt * (d - 1);
+		if (!m) break;
+	}
+	if (m > 0) return -1;
+	return ret;
 }
 
 int main() {
     cin.tie(0)->sync_with_stdio(false);
     int t;
     cin >> t;
-    while (t--) solve();
+    while (t--) cout << solve() << endl;
     return 0;
 }
