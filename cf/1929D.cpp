@@ -89,7 +89,6 @@ void solve() {
 		g[b].push_back(a);
 	}
 	dfs(0, -1);
-	dbg(dp);
 	cout << (dp[0][0] + dp[0][1] + 1) % MOD << endl;
 }
 
