@@ -53,14 +53,29 @@ namespace output {
 
 using namespace output;
 
+map<ll, ld> dp;
+ll n, a, x, y;
+
+ld f(ll t) {
+	if (dp.count(t)) return dp[t];
+	ld ret = x + f(t / a);
+	ld other = y;
+	for (int i = 2;i <= 6;i++) {
+		other += f(t / i) / 6;
+	}
+	other *= (ld)6 / 5;
+	dp[t] = min(ret, other);
+	return dp[t];
+}
+
 void solve() {
-    
+	cin >> n >> a >> x >> y;
+	dp[0] = 0;
+	cout << std::setprecision(17) << f(n) << endl;
 }
 
 int main() {
     cin.tie(0)->sync_with_stdio(false);
-    int t;
-    cin >> t;
-    while (t--) solve();
+    solve();
     return 0;
 }
