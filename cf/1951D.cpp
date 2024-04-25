@@ -53,8 +53,30 @@ namespace output {
 
 using namespace output;
 
+ll n, k;
+
 void solve() {
-    
+	cin >> n >> k;
+	vll ans;
+	int ret = 0;
+	if (n == k) {
+		ret = 1;
+		ans.push_back(1);
+	} else if (n > k) {
+		if (2 * k <= n + 1) {
+			ret = 1;
+			ans.push_back(n - k + 1);
+			ans.push_back(1);
+		}
+	}
+	if (ret) {
+		cout << "YES" << endl;
+		cout << ans.size() << endl;
+		for (auto x : ans) cout << x << " ";
+		cout << endl;
+	} else {
+		cout << "NO" << endl;
+	}
 }
 
 int main() {
