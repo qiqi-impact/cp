@@ -53,14 +53,54 @@ namespace output {
 
 using namespace output;
 
-void solve() {
-    
+ll solve() {
+    ll m;
+	cin >> m;
+	vll l(m), r(m), tot(m);
+	vector<map<ll, ll>> ac(m);
+	ll sl = 0, sr = 0, ct = 0;
+	ll n, c;
+	map<ll, vector<int>> inc;
+	for (int i = 0;i < m;i++) {
+		cin >> n >> l[i] >> r[i];
+		vll a(n);
+		ct += n;
+		sl += l[i];
+		sr += r[i];
+		for (int j = 0;j < n;j++) {
+			cin >> a[j];
+			inc[a[j]].push_back(i);
+		}
+		for (int j = 0;j < n;j++) {
+			cin >> c;
+			tot[i] += c;
+			ac[i][a[j]] = c;
+		}
+	}
+	if (sr - sl > ct) return 0;
+	ll ret = 1e18;
+	for (ll x = sl;x <= sr;x++) {
+		if (!inc.count(x)) return 0;
+		ll free = 0;
+		ll scur = sr;
+		ll force = 0;
+		ll ss = 0, tt = 0;
+		for (auto y : inc[x]) {
+			force += max(0LL, l[y] - (tot[y] - ac[y][x]));
+			ss += l[y];
+			tt += max(0LL, min(r[y], tot[y] - ac[y][x]) - l[y]);
+			scur -= r[y];
+		}
+		ll ftake = scur + ss;
+		ret = min(ret, force + max(0LL, x - ftake - tt));
+	}
+	return ret;
 }
 
 int main() {
     cin.tie(0)->sync_with_stdio(false);
     int t;
     cin >> t;
-    while (t--) solve();
+    while (t--) cout << solve() << endl;
     return 0;
 }
