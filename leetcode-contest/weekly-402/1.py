@@ -4,9 +4,6 @@ class Solution:
         ret = 0
         for x in hours:
             m = x%24
-            if m == 0:
-                ret += md[0]
-            else:
-                ret += md[24-m]
+            ret += md[(24-m)%24]
             md[m] += 1
         return ret
