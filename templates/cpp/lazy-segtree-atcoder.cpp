@@ -303,5 +303,7 @@ F composition(F l, F r) { return (l && !r) || (!l && r); }
 F id() { return false; }
 
 int main() {
+    int n = 1;
+    lazy_segtree<S, op, e, F, mapping, composition, id> lst(n);
     return 0;
 }
