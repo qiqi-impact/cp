@@ -128,7 +128,9 @@ class LazySegtree:
                         sm = op(sm, self.d[l])
                         l += 1
                 return l - self.size
-            if l & -l != l:
+            sm = op(sm, self.d[l])
+            l += 1
+            if l & -l == l:
                 break
         return self._n
 
@@ -151,7 +153,8 @@ class LazySegtree:
                         sm = op(self.d[r], sm)
                         r -= 1
                 return r + 1 - self.size
-            if r & -r != r:
+            sm = op(self.d[r], sm)
+            if r & -r == r:
                 break
         return 0
 

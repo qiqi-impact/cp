@@ -21,6 +21,10 @@ class Segtree:
         for i in range(self.size - 1, 0, -1):
             self.update(i)
 
+    def _psh(self, p):
+        for i in range(self.log, 0, -1):
+            self.push(p >> i)
+
     def _upd(self, p):
         for i in range(1, self.log + 1):
             self.update(p >> i)
@@ -65,19 +69,19 @@ class Segtree:
         assert g(e())
         if l == self._n: return self._n
         l += self.size
-        self._psh(l)
         sm = e()
         while True:
             while l % 2 == 0: l >>= 1
             if not g(op(sm, self.d[l])):
                 while l < self.size:
-                    self.push(l)
                     l = 2 * l
                     if g(op(sm, self.d[l])):
                         sm = op(sm, self.d[l])
                         l += 1
                 return l - self.size
-            if l & -l != l:
+            sm = op(sm, self.d[l])
+            l += 1
+            if l & -l == l:
                 break
         return self._n
 
@@ -87,20 +91,19 @@ class Segtree:
         assert g(e())
         if r == 0: return 0
         r += self.size
-        self._psh(r - 1)
         sm = e()
         while True:
             r -= 1
             while r > 1 and r % 2: r >>= 1
             if not g(op(self.d[r], sm)):
                 while r < self.size:
-                    self.push(r)
                     r = 2 * r + 1
                     if g(op(self.d[r], sm)):
                         sm = op(self.d[r], sm)
                         r -= 1
                 return r + 1 - self.size
-            if r & -r != r:
+            sm = op(self.d[r], sm)
+            if r & -r == r:
                 break
         return 0
 
