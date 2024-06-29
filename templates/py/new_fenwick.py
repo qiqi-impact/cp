@@ -13,6 +13,13 @@ class FenwickTree:
             self.bit[idx] += x
             idx |= idx + 1
 
+    def set(self, idx, x):
+        old = self.get(idx)
+        self.update(idx, x - old)
+
+    def get(self, idx):
+        return self.query(idx+1) - self.query(idx)
+
     def query(self, end):
         """calc sum(bit[:end])"""
         x = 0
@@ -20,6 +27,12 @@ class FenwickTree:
             x += self.bit[end - 1]
             end &= end - 1
         return x
+
+    def query_range(self, start, end):
+        """calc sum(bit[start:end])"""
+        if end < start:
+            return 0
+        return self.query(end) - self.query(start)
 
     def findkth(self, k):
         """Find largest idx such that sum(bit[:idx]) <= k"""
