@@ -11,8 +11,8 @@ def diam(n, edges):
         visited[node] = 1
         count += 1
         for i in adj[node]:
-            if (visited[i] == 0):
-                if (count >= maxCount):
+            if visited[i] == 0:
+                if count >= maxCount:
                     maxCount = count
                     far = i
                 dfsUtil(i, count)
