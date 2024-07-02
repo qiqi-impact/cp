@@ -336,23 +336,43 @@ struct S {
 
 using F = ll;
 
+vi unused;
+
+S e() { return S{-1, (ll)1e18}; }
+
 S op(S l, S r) {
 	int mi;
 	ll mv;
-	
-	if (l.min_value <= r.min_value) {
+
+    int a, b;
+    if (l.min_index == -1) {
+        a = 0;
+    } else {
+        a = unused[l.min_index];
+    }
+    if (r.min_index == -1) {
+        b = 0;
+    } else {
+        b = unused[r.min_index];
+    }
+    if (a > b) {
+        mi = l.min_index;
+		mv = l.min_value;
+    } else if (b > a) {
+        mi = r.min_index;
+		mv = r.min_value;
+    } else if (!(a+b)) {
+        return e();
+    } else if (l.min_value <= r.min_value) {
 		mi = l.min_index;
 		mv = l.min_value;
 	} else {
 		mi = r.min_index;
 		mv = r.min_value;
 	}
-	// dbg(l.min_value, r.min_value, mv);
 
     return S{mi, mv};
 }
-
-S e() { return S{-1, (ll)1e18}; }
 
 S mapping(F l, S r) {
     return S{r.min_index, min(l, r.min_value)};
@@ -362,37 +382,13 @@ F composition(F l, F r) { return min(l, r); }
 
 F id() { return (ll)1e18; }
 
-// struct S2 {
-//     vi three;
-// };
-
-// using F2 = int;
-
-// S2 op2(S2 l, S2 r) {
-// 	copy(r.begin(), r.end(), back_inserter(l));
-//     return S2{
-//         l
-//     };
-// }
-
-// S2 e2() { return vi(); }
-
-// S2 mapping2(F2 l, S2 r) {
-// 	r.push_back(l);
-//     return S2{r};
-// }
-
-// F2 composition2(F2 l, F2 r) { return l + r; }
-
-// F2 id2() { return -1; }
-
 struct Node {
 	int _l, _r;
 	Node *_left, *_right;
-	set<int> _v;
+	vi _v;
 	public:
     	Node(int l, int r) : _l(l), _r(r) {
-			_v = set<int>();
+			_v = vi();
 			if (l != r) {
 				int mi = (l + r) / 2;
 				_left = new Node(l, mi);
@@ -402,24 +398,24 @@ struct Node {
 		void add(int p, int l, int r) {
 			if (_l > r || _r < l) return;
 			if (_l >= l && _r <= r) {
-				_v.insert(p);
+				_v.push_back(p);
 			} else {
 				_left->add(p, l, r);
 				_right->add(p, l, r);
 			}
 		}
-		void get(int idx, set<int> &z) {
+		void get(int idx, vi &z) {
 			if (_l == _r) {
-				for (auto x : _v) z.insert(x);
-				_v = set<int>();
+				for (auto x : _v) z.push_back(x);
+				_v = vi();
 			} else {
 				if (idx <= (_l + _r) / 2) {
 					_left->get(idx, z);
 				} else {
 					_right->get(idx, z);
 				}
-				for (auto x : _v) z.insert(x);
-				_v = set<int>();
+				for (auto x : _v) z.push_back(x);
+				_v = vi();
 			}
 		}
 };
@@ -429,13 +425,14 @@ int main() {
     cin.tie(0)->sync_with_stdio(false);
 	int n, q, s;
 	cin >> n >> q >> s;
+    unused = vi(n);
+    for (int i = 0;i < n;i++) unused[i] = 1;
 	s--;
 	lazy_segtree<S, op, e, F, mapping, composition, id> A(n);
 	Node B(0, n-1);
-    // lazy_segtree<S2, op2, e2, F2, mapping2, composition2, id2> B(n);
 	vvi plans;
-	map<int, vi> two;
-	map<int, vi> one;
+	vvi two(n);
+	vvi one(n);
 	for (int i = 0;i < q;i++) {
 		int t;
 		cin >> t;
@@ -466,7 +463,6 @@ int main() {
 		S ss = A.all_prod();
 		int cur = ss.min_index;
 		ll v = ss.min_value;
-		// dbg(cur, v);
 		if (v > (ll)1e17) {
 			break;
 		}
@@ -477,16 +473,13 @@ int main() {
 		for (auto p : two[cur]) {
 			A.apply(plans[p][1], plans[p][2] + 1, v + plans[p][3]);
 		}
-		set<int> z;
+		vi z;
 		B.get(cur, z);
-		// dbg(z);
 		for (auto p : z) {
 			A.apply(plans[p][0], v + plans[p][3]);
 		}
-		// dbg(A.all_prod().min_index);
-		A.set(cur, S{cur, (ll)1e18});
-		// dbg(A.all_prod().min_index);
-
+        unused[cur] = 0;
+        A.set(cur, S{cur, A.get(cur).min_value});
 	}
 	for (auto x : ret) {
 		cout << x << " ";
