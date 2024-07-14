@@ -10,11 +10,9 @@ class Solution:
         tail = root
         s = set(nums)
         while cur:
-            if cur.val in s:
-                cur = cur.next
-            else:
+            if cur.val not in s:
                 tail.next = cur
                 tail = cur
-                cur = cur.next
-                tail.next = None
+            cur = cur.next
+        tail.next = None
         return root.next
