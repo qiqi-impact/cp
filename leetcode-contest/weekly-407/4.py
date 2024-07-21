@@ -5,19 +5,11 @@ class Solution:
         lst = 0
         ret = 0
         for x in s:
-            if x == 0:
-                lst = 0
-                continue
-            elif x > 0:
-                if lst >= x:
-                    lst = x
-                else:
+            if x > 0:
+                if lst < x:
                     ret += min(x - lst, x)
-                    lst = x
-            else:
-                if lst <= x:
-                    lst = x
-                else:
+            elif x < 0:
+                if lst > x:
                     ret += min(lst - x, -x)
-                    lst = x
+            lst = x
         return ret
