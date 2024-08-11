@@ -19,4 +19,4 @@ class Solution:
                 else:
                     dp[i%2][j] = 0
                 ps[i%2][j+1] = (ps[i%2][j] + dp[i%2][j])%MOD
-        return sum(dp[0]) % MOD
+        return ps[0][-1] % MOD
