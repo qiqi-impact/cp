@@ -205,19 +205,6 @@ namespace output {
 
 using namespace output;
 
-void dfs(int x, vi &p, string &s, vi &ccs, vi &blk) {
-	int c = x;
-	int b = 0;
-	int cc = blk.size();
-	while (1) {
-		if (s[c] == '0') b++;
-		ccs[c] = cc;
-		c = p[c];
-		if (c == x) break;
-	}
-	blk.push_back(b);
-}
-
 void solve() {
 	ll n;
 	cin >> n;

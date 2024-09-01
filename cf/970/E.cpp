@@ -82,7 +82,6 @@ int solve() {
 	int ret = 1e9;
 	if (n%2 == 0) {
 		ret = (n+1)/2 - mx(p) + n/2 - mx(q);
-		// cout << ret << endl;
 	} else {
 		for (int i = 0;i < s.size();i++) {
 			vi np(26), nq(26);
@@ -95,9 +94,6 @@ int solve() {
 				np[j] = lp[j] + q[j] - lq[j];
 				nq[j] = lq[j] + p[j] - lp[j];
 			}
-			// dbg(i);
-			// dbg(np);
-			// dbg(nq);
 			ret = min(ret, sm(np) + sm(nq) - mx(np) - mx(nq));
 			if (i%2) {
 				q[s[i]-'a']++;
