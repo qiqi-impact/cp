@@ -9,9 +9,6 @@ class Solution:
         ra[n-1][0].add(0)
         ra[n-1][1].add(nums[n-1])
 
-        if n == 2:
-            return nums[0] ^ nums[1]
-
         for i in range(1, n):
             t = nums[i]
             for j in range(k+1):
