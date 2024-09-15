@@ -4,7 +4,6 @@ HMOD = 2147483647
 HBASE1 = random.randrange(HMOD)
 HBASE2 = random.randrange(HMOD)
 
-
 class Hashing:
     def __init__(self, s, mod=HMOD, base1=HBASE1, base2=HBASE2):
         self.mod, self.base1, self.base2 = mod, base1, base2
