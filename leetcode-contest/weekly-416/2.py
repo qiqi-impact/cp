@@ -3,8 +3,7 @@ class Solution:
         h = [(x, 1, x) for x in w]
         h.sort()
         ret = 0
-        while m > 0:
-            m -= 1
+        for _ in range(m):
             x, y, z = heapq.heappop(h)
             ret = x
             heapq.heappush(h, (x + (y+1)*z, y+1, z))
