@@ -30,4 +30,5 @@ tc = [
     'abacaba',
 ]
 for t in tc:
-    print(search_pattern('aa', t))
+    # print(search_pattern('aa', t))
+    print(zf(t))
