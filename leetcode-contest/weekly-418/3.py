@@ -1,11 +1,3 @@
-def adj(d, i, j):
-    ret = []
-    for dx, dy in pairwise([1,0,-1,0,1]):
-        nx, ny = i+dx, j+dy
-        if (nx, ny) in d:
-            ret.append((nx, ny, d[nx, ny]))
-    return ret
-
 class Solution:
     def constructGridLayout(self, n: int, edges: List[List[int]]) -> List[List[int]]:
         g = [[] for _ in range(n)]

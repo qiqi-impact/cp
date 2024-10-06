@@ -5,11 +5,5 @@ class Solution:
             q = [nums[a], nums[b], nums[c]]
             l = [bin(x)[2:] for x in q]
             t = ''.join(l)
-            ret = 0
-            c = 1
-            for i in range(len(t)-1, -1, -1):
-                if t[i] == '1':
-                    ret += c
-                c *= 2
-            mx = max(mx, ret)
+            mx = max(mx, int(t, 2))
         return mx
