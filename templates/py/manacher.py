@@ -11,8 +11,15 @@ def manacher_odd(s):
             l, r = i - p[i], i + p[i]
     return p[1:-1]
 
-def manacher_even(s):
+def manacher(s):
+    t = ''
     for c in s:
         t += '#' + c
     res = manacher_odd(t + '#')
-    return res[1:-1]
+    return res
+
+def check_pali(arr, i, j):
+    return arr[i+j+1] >= j-i+1
+
+arr = manacher('abcba')
+print(check_pali(arr, 0, 4))
