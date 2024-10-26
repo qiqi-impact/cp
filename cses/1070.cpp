@@ -56,18 +56,27 @@ using namespace output;
 void solve() {
     int n;
 	cin >> n;
-	ll ret = 0;
-	int lst = 0;
-	for (int i = 0;i < n;i++) {
-		int x;
-		cin >> x;
-		if (x < lst) {
-			ret += lst - x;
-		} else {
-			lst = x;
-		}
+	if (n == 1) {
+		cout << "1" << endl;
+		return;
 	}
-	cout << ret << endl;
+	if (n <= 3) {
+		cout << "NO SOLUTION" << endl;
+		return;
+	}
+	vi a(n);
+	int cur = 1;
+	for (int i = (n-1)/2;i >= 0;i--) {
+		a[i] = cur;
+		cur += 2;
+	}
+	cur = n/2*2;
+	for (int i = (n-1)/2+1;i < n;i++) {
+		a[i] = cur;
+		cur -= 2;
+	}
+	for (auto x : a) cout << x << " ";
+	cout << endl;
 }
 
 int main() {
