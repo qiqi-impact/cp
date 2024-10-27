@@ -3,7 +3,7 @@ class MatrixFastPower:
         return
 
     @staticmethod
-    def _matrix_mul(a, b, mod=10 ** 9 + 7):
+    def _matrix_mul(a, b, mod=10**9+7):
         n = len(a)
         res = [[0] * n for _ in range(n)]
         for i in range(n):
@@ -13,7 +13,7 @@ class MatrixFastPower:
                         res[i][j] = (res[i][j] + a[i][k] * b[k][j]) % mod
         return res
 
-    def matrix_pow(self, base, p, mod=10 ** 9 + 7):
+    def matrix_pow(self, base, p, mod=10**9+7):
         n = len(base)
         ans = [[0] * n for _ in range(n)]
         for i in range(n):
