@@ -53,14 +53,46 @@ namespace output {
 
 using namespace output;
 
-void solve() {
-    
+const ll MOD = (ll)(1e9)+7;
+
+ll solve() {
+    string ss;
+	cin >> ss;
+	int k;
+	cin >> k;
+	unordered_set<string> s;
+	for (int i = 0;i < k;i++) {
+		string t;
+		cin >> t;
+		s.insert(t);
+	}
+	int n = ss.length();
+
+	unordered_map<int, ll> memo;
+	auto dp = [&](auto &&dp, int idx) -> ll {
+		if (idx == n) {
+			return 1;
+		}
+		if (memo.contains(idx)) {
+			return memo[idx];
+		}
+		ll ret = 0;
+		string q;
+		for (int i = idx;i < n;i++) {
+			q += ss[i];
+			if (s.contains(q)) {
+				ret += dp(dp, i + 1);
+				ret %= MOD;
+			}
+		}
+		memo[idx] = ret;
+		return ret;
+	};
+	return dp(dp, 0);
 }
 
 int main() {
     cin.tie(0)->sync_with_stdio(false);
-    int t;
-    cin >> t;
-    while (t--) solve();
+    cout << solve() << endl;
     return 0;
 }
