@@ -68,12 +68,12 @@ ll solve() {
 	}
 	int n = ss.length();
 
-	unordered_map<int, ll> memo;
+	vector<int> memo(n, -1);
 	auto dp = [&](auto &&dp, int idx) -> ll {
 		if (idx == n) {
 			return 1;
 		}
-		if (memo.contains(idx)) {
+		if (memo[idx] != -1) {
 			return memo[idx];
 		}
 		ll ret = 0;
