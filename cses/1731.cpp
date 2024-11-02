@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#define pb push_back
 using namespace std;
 using ll = long long;
 using ld = long double;
@@ -54,41 +55,96 @@ namespace output {
 using namespace output;
 
 const ll MOD = (ll)(1e9)+7;
+struct trie {
+    struct node {
+        array<int, 26> child;
+        int eow = 0, cnt = 0;
+        node() { fill(child.begin(), child.end(), -1); }
+        inline bool has(int c) const { return child[c] != -1; }
+        int operator[](int c) const { return child[c]; }
+    };
+
+    vector<node> nodes;
+
+    trie() { alloc(); }
+
+    int alloc() {
+        nodes.push_back(node());
+        return nodes.size() - 1;
+    }
+
+    void add(string word) {
+        int now = 0;
+        for (char ch : word) {
+            int id = ch - 'a';
+            if (!nodes[now].has(id))
+                nodes[now].child[id] = alloc();
+            ++nodes[now].cnt;
+            now = nodes[now].child[id];
+        }
+        ++nodes[now].eow;
+        ++nodes[now].cnt;
+    }
+
+    node *search(string word) {
+        int now = 0;
+        for (char ch : word) {
+            int id = ch - 'a';
+            if (!nodes[now].has(id))
+                return nullptr;
+            now = nodes[now].child[id];
+        }
+        return (!nodes[now].eow) ? nullptr : &nodes[now];
+    }
+
+    pair<node &, int> prefix(string pre) {
+        int now = 0, len = 0;
+        for (char ch : pre) {
+            int id = ch - 'a';
+            if (!nodes[now].has(id))
+                return {nodes[now], len};
+            now = nodes[now].child[id];
+            ++len;
+        }
+        return {nodes[now], len};
+    }
+
+    node &operator[](int i) { return nodes[i]; }
+};
 
 ll solve() {
     string ss;
 	cin >> ss;
 	int k;
 	cin >> k;
-	unordered_set<string> s;
+
+	trie T;
+
+	// set<string> s;
 	for (int i = 0;i < k;i++) {
 		string t;
 		cin >> t;
-		s.insert(t);
+		// s.insert(t);
+		T.add(t);
 	}
 	int n = ss.length();
 
-	vector<int> memo(n, -1);
-	auto dp = [&](auto &&dp, int idx) -> ll {
-		if (idx == n) {
-			return 1;
-		}
-		if (memo[idx] != -1) {
-			return memo[idx];
-		}
+	vector<ll> dp(n+1, -1);
+	dp[n] = 1;
+	for (int idx = n-1;idx >= 0;idx--) {
 		ll ret = 0;
-		string q;
+		int root = 0;
 		for (int i = idx;i < n;i++) {
-			q += ss[i];
-			if (s.contains(q)) {
-				ret += dp(dp, i + 1);
+			if (!T[root].has(ss[i] = 'a')) break;
+			root = T[root][ss[i] - 'a'];
+			if (T[root].eow) {
+				ret += dp[i+1];
 				ret %= MOD;
 			}
 		}
-		memo[idx] = ret;
-		return ret;
+		dp[idx] = ret;
 	};
-	return dp(dp, 0);
+	return dp[0];
 }
 
 int main() {
