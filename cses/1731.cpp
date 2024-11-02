@@ -119,12 +119,9 @@ ll solve() {
 	cin >> k;
 
 	trie T;
-
-	// set<string> s;
 	for (int i = 0;i < k;i++) {
 		string t;
 		cin >> t;
-		// s.insert(t);
 		T.add(t);
 	}
 	int n = ss.length();
@@ -135,7 +132,7 @@ ll solve() {
 		ll ret = 0;
 		int root = 0;
 		for (int i = idx;i < n;i++) {
-			if (!T[root].has(ss[i] = 'a')) break;
+			if (!T[root].has(ss[i] - 'a')) break;
 			root = T[root][ss[i] - 'a'];
 			if (T[root].eow) {
 				ret += dp[i+1];
