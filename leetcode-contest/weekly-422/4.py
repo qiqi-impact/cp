@@ -17,6 +17,9 @@ class Solution:
             SM += int(x)
         if SM % 2:
             return 0
+        for i in range(10):
+            tot[i] = (0 if i == 0 else tot[i-1]) + l[i] * i
+            tc[i] = (0 if i == 0 else tc[i-1]) + l[i]
         
         @cache
         def dp(idx, ct, sm):
@@ -34,3 +37,5 @@ class Solution:
             return ret
 
         return dp(9, (len(num)+1)//2, SM//2)
+                
+                
