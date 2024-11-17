@@ -46,8 +46,6 @@ class Solution:
                     if len(r) == 2:
                         return False
                     cur = yy
-                    if cur < xx:
-                        return False
                     r.append(cur)
                 if i < n-1 and nums[i+1] == -1 and i+1 not in used:
                     a, b = rm[i+1]
