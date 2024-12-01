@@ -42,8 +42,14 @@ while ch:
                     for dy in range(-1, 2):
                         if dx != 0 or dy != 0:
                             nx, ny = i+dx, j+dy
-                            if 0 <= nx < R and 0 <= ny < C and lines[nx][ny] in ['#', '<']:
-                                occ = True
+                            while 0 <= nx < R and 0 <= ny < C:
+                                if lines[nx][ny] in ['#', '<']:
+                                    occ = True
+                                    break
+                                elif lines[nx][ny] == '.':
+                                    nx, ny = nx+dx, ny+dy
+                                else:
+                                    break
                 if not occ:
                     ch = True
                     lines[i][j] = '>'
@@ -53,9 +59,15 @@ while ch:
                     for dy in range(-1, 2):
                         if dx != 0 or dy != 0:
                             nx, ny = i+dx, j+dy
-                            if 0 <= nx < R and 0 <= ny < C and lines[nx][ny] in ['#', '<']:
-                                occ += 1
-                if occ >= 4:
+                            while 0 <= nx < R and 0 <= ny < C:
+                                if lines[nx][ny] in ['#', '<']:
+                                    occ += 1
+                                    break
+                                elif lines[nx][ny] == '.':
+                                    nx, ny = nx+dx, ny+dy
+                                else:
+                                    break
+                if occ >= 5:
                     ch = True
                     lines[i][j] = '<'
     for i in range(R):
