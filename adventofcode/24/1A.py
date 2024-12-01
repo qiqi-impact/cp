@@ -26,7 +26,16 @@ for i, x in enumerate(digits):
 # DIR = [R, D, L, U]
 
 lines = []
+ret = 0
 with open("in") as f:
+    t, y = [], []
+    ct = {}
     for a in f.read().splitlines():
         lines.append(a)
+        x = a.split('  ')
+        t.append(int(x[0]))
+        ct[int(x[1])] = ct.get(int(x[1]), 0) + 1
+    for i in range(len(t)):
+        ret += t[i] * ct.get(t[i], 0)
+print(ret)
 ln = len(lines)
