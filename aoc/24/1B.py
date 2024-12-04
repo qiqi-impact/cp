@@ -34,10 +34,8 @@ with open("in") as f:
         lines.append(a)
         x = a.split('  ')
         t.append(int(x[0]))
-        y.append(int(x[1]))
-        t.sort()
-        y.sort()
+        ct[int(x[1])] = ct.get(int(x[1]), 0) + 1
     for i in range(len(t)):
-        ret += abs(t[i] - y[i])
+        ret += t[i] * ct.get(t[i], 0)
 print(ret)
 ln = len(lines)
