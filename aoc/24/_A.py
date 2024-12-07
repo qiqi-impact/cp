@@ -39,4 +39,3 @@ lines = []
 with open("in") as f:
     for a in f.read().splitlines():
         lines.append(a)
-ln = len(lines)
