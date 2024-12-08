@@ -163,12 +163,3 @@ class Solution:
                                 # print(x, y, px, py, a, b, c, d, (xm[x] - xm[px]) * (ym[y] - ym[py]))
                 t.set(y, t.get(y) + 1)
         return ret
-                
-                
-                
-                        
-                
-                
-                
-        
-        
