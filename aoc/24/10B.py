@@ -43,23 +43,23 @@ with open("in") as f:
 print(lines)
 R, C = len(lines), len(lines[0])
 
-v = defaultdict(set)
+v = defaultdict(int)
 q = deque()
 for i in range(R):
     for j in range(C):
         if lines[i][j] == 9:
             q.append((i, j))
-            v[i,j].add((i, j))
+            v[i,j] = 1
 
 ret = 0
 while q:
     i, j = q.popleft()
     if lines[i][j] == 0:
-        ret += len(v[i,j])
+        ret += v[i,j]
     for dx, dy in DIR:
         nx, ny = i+dx, j+dy
         if 0 <= nx < R and 0 <= ny < C and lines[nx][ny] == lines[i][j] - 1:
             if (nx, ny) not in v:
                 q.append((nx, ny))
-            v[nx,ny] |= v[i,j]
+            v[nx,ny] += v[i,j]
 print(ret)
