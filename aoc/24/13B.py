@@ -2,6 +2,8 @@ from functools import cache
 from collections import defaultdict, deque
 import math
 
+import numpy as np
+
 def ints(s, split=' '):
     return [int(x) for x in s.split(split) if x]
 
@@ -62,83 +64,12 @@ for i in range(0, len(r), 3):
     a, b = r[i][0], r[i][1]
     c, d = r[i+1][0], r[i+1][1]
 
-    if not (a >= b and c <= d) and not (a <= b and c >= d):
-        # print(a, b, c, d, e, f)
-        continue
-
-    L, R = 0, e // a
-    while L <= R:
-        # print(L, R)
-        mi = (L + R) // 2
-        E = e - a * mi
-        F = f - b * mi
-        if E < 0 or F < 0:
-            R = mi - 1
-            continue
-        if E * d == F * c:
-            if E % c == 0:
-                # print(3 * mi, E // c)
-                y += 3 * mi + E // c
-            break
-        elif E * d > F * c:
-            if a >= b:
-                L = mi + 1
-            else:
-                R = mi - 1
-        else:
-            if a >= b:
-                R = mi - 1
-            else:
-                L = mi + 1
+    A = np.array([[a, c], [b, d]])
+    B = np.array([e, f])
+    x = np.linalg.solve(A, B)
+    t = [int(round(x[0])), int(round(x[1]))]
+    if t[0] * a + t[1] * c == e and t[0] * b + t[1] * d == f:
+        y += t[0] * 3 + t[1]
 
 
-
-    # ee = e % c
-    # aa = a % c
-
-    # orig = ee
-    # first = None
-    # g = math.gcd(a, c)
-
-    # for i in range(2 * c):
-    #     if orig == 0:
-    #         if first is None:
-    #             first = i
-    #         else:
-    #             break
-    #     orig = (orig - aa) % c
-
-    # ff = f % d
-    # bb = b % d
-    # orig = ff
-    # second = None
-    # g = math.gcd(b, d)
-
-    # for j in range(2 * d):
-    #     if orig == 0:
-    #         if second is None:
-    #             second = i
-    #         else:
-    #             break
-    #     orig = (orig - bb) % d
-
-
-
-    # print(first, second)
-        
-
-
-    # for a in range(10**18):
-    #     if t % r[i+1][0] == 0 and v % r[i+1][1] == 0:
-    #         o, p = t // r[i+1][0], v // r[i+1][1]
-    #         if o == p:
-    #             mn = min(mn, 3 * a + o)
-    #     t -= r[i][0]
-    #     v -= r[i][1]
-    #     if t < 0 or v < 0:
-    #         break
-
-    # if mn < math.inf:
-    #     y += mn
-
-print(y)
+print(int(y))
