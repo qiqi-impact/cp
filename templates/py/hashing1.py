@@ -14,7 +14,7 @@ class Hashing:
         self.f_hash, self.f_pow = f_hash, f_pow
 
     def hashed(self, start, stop):
-        return self.f_hash[stop] - self.f_pow[stop - start] * self.f_hash[start]) % self.mod
+        return (self.f_hash[stop] - self.f_pow[stop - start] * self.f_hash[start]) % self.mod
 
     def get_hashes(self, length):
         return [(self.f_hash[i + length] - self.f_pow[length] * self.f_hash[i]) % self.mod for i in range(self._len - length + 1)]
