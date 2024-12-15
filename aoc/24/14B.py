@@ -76,21 +76,38 @@ with open("in") as f:
         t, y = a.split(' ')
         l = t.split('=') + y.split('=')
         p, v = l[1].split(','), l[3].split(',')
+        # print(p, v)
         y, x = int(p[0]), int(p[1])
         vy, vx = int(v[0]), int(v[1])
-        ss.add((x, y))
+        # print(x, y, vx, vy)
+        ss.add((x, y, vx, vy))
+    
+    ct = 0
+    while 1:
+        if ct % 1000 == 0:
+            print(ct)
+        if maybe({(x, y) for (x, y, _, _) in ss}):
+            prt({(x, y) for (x, y, _, _) in ss})
+            print(ct)
+            input()
+            
+        ct += 1
 
-        tx = (x + 100 * vx) % H
-        ty = (y + 100 * vy) % W
+        nss = set()
+        for x, y, vx, vy in ss:
+            tx = (x + 1 * vx) % H
+            ty = (y + 1 * vy) % W
+            nss.add((tx, ty, vx, vy))
+        ss = nss
 
-        a = H // 2 - tx
-        b = W // 2 - ty
-        # print(a, b)
+        # a = H // 2 - tx
+        # b = W // 2 - ty
+        # # print(a, b)
 
-        if a < 0 and b < 0: ct[0] += 1
-        if a > 0 and b < 0: ct[1] += 1
-        if a < 0 and b > 0: ct[2] += 1
-        if a > 0 and b > 0: ct[3] += 1
+        # if a < 0 and b < 0: ct[0] += 1
+        # if a > 0 and b < 0: ct[1] += 1
+        # if a < 0 and b > 0: ct[2] += 1
+        # if a > 0 and b > 0: ct[3] += 1
         # print(ct)
 
-print(ct[0] * ct[1] * ct[2] * ct[3])
+# print(ct[0] * ct[1] * ct[2] * ct[3])
