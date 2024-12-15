@@ -54,14 +54,14 @@ def prt(s):
 
 
 def maybe(s):
-    for (x, y) in s:
+    for (x, y, _, _) in s:
         # if x + y <= W // 10 or (W - y) + x <= W // 10:
         #     return False
         for dx in [-1, 1]:
             for dy in [0]:
                 for j in range(1, 2):
                     r = 1
-                    for i in range(3):
+                    for i in range(1):
                         if (x+dx*i*j, y+dy*i*j) not in s:
                             r = 0
                             break
@@ -80,25 +80,24 @@ with open("in") as f:
         y, x = int(p[0]), int(p[1])
         vy, vx = int(v[0]), int(v[1])
         # print(x, y, vx, vy)
-        ss.add((x, y))
+        ss.add((x, y, vx, vy))
     
-
     ct = 0
     while 1:
         if ct % 1000 == 0:
             print(ct)
         if maybe(ss):
-            prt(ss)
+            prt({(x, y) for (x, y, _, _) in ss})
             print(ct)
             input()
             
         ct += 1
 
         nss = set()
-        for x, y in ss:
+        for x, y, vx, vy in ss:
             tx = (x + 1 * vx) % H
             ty = (y + 1 * vy) % W
-            nss.add((tx, ty))
+            nss.add((tx, ty, vx, vy))
         ss = nss
 
         # a = H // 2 - tx
