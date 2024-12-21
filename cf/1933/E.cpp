@@ -58,77 +58,70 @@ namespace output {
 
 using namespace output;
 
-vector<int> primes;
+ll tot(ll x, ll u) {
+	return u * x - (x * (x - 1) / 2);
+}
 
-int solve() {
-	int aa, bb, ll;
-	cin >> aa >> bb >> ll;
-	// dbg(aa, bb, ll);
-	vector<int> a, b, l;
-    // for (auto x : primes) {
-	// 	int c = 0;
-	// 	while (aa % x == 0) {
-	// 		aa /= x;
-	// 		c++;
-	// 	}
-	// 	a.push_back(c);
-	// 	c = 0;
-	// 	while (bb % x == 0) {
-	// 		bb /= x;
-	// 		c++;
-	// 	}
-	// 	b.push_back(c);
-	// 	c = 0;
-	// 	while (ll % x == 0) {
-	// 		ll /= x;
-	// 		c++;
-	// 	}
-	// 	l.push_back(c);
-	// }
-	// dbg(a, b, l);
-	set<int> s;
-	for (int i = 0;i < 100000;i++) {
-		int left = ll;
-		// dbg(ll, bb);
-		for (int j = 0;j < 100000;j++) {
-			s.insert(left);
-			if (left % aa) {
-				break;
-			}
-			left /= aa;
-		}
-		if (ll % bb) break;
-		ll /= bb;
-		// int cur = 1;
-		// int amt = (int)1e9;
-		// for (int j = 0;j < primes.size();j++) {
-		// 	int t = l[j] - i * a[j];
-		// 	if (t < 0) {
-		// 		cur = -1;
-		// 		break;
-		// 	}
-		// 	if (b[j]) amt = min(amt, t / b[j]);
-		// }
-		// if (cur == -1) break;
-		// ret += (amt + 1);
-		// dbg(i, amt);
+void solve() {
+    int n;
+	cin >> n;
+	vll a(n), pf(n+1);
+	for (int i = 0;i < n;i++) {
+		cin >> a[i];
 	}
-	return s.size();
+	pf[0] = 0;
+	for (int i = 0;i < n;i++) {
+		pf[i+1] = pf[i] + a[i];
+	}
+	int q;
+	cin >> q;
+	vi ret;
+	for (int i = 0;i < q;i++) {
+		int l;
+		ll u;
+		cin >> l >> u;
+		l--;
+		int a = l, b = n-1;
+		// dbg(i, a, b);
+		ll best = (ll)-1e18;
+		int bi = 0;
+		while (a <= b) {
+			int mi = a + (b - a) / 2;
+			// dbg(mi);
+			ll x = pf[mi+1] - pf[l];
+			if (x == u) {
+				bi = mi;
+				break;
+			} else if (x < u) {
+				if (tot(x, u) > best) {
+					best = tot(x, u);
+					bi = mi;
+				} else if (tot(x, u) == best) {
+					bi = min(bi, mi);
+				}
+				a = mi + 1;
+			} else {
+				if (tot(x, u) > best) {
+					best = tot(x, u);
+					bi = mi;
+				} else if (tot(x, u) == best) {
+					bi = min(bi, mi);
+				}
+				b = mi - 1;
+			}
+		}
+		ret.push_back(bi + 1);
+	}
+	for (auto x : ret) {
+		cout << x << " ";
+	}
+	cout << endl;
 }
 
 int main() {
     cin.tie(0)->sync_with_stdio(false);
     int t;
     cin >> t;
-
-	for (int i = 2;i <= 100;i++) {
-		int p = 1;
-		for (auto x : primes) {
-			if (i % x == 0) p = 0;
-		}
-		if (p) primes.push_back(i);
-	}
-
-    while (t--) cout << solve() << endl;
+    while (t--) solve();
     return 0;
 }
