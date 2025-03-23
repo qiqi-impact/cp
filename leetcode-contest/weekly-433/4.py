@@ -38,50 +38,33 @@ class DisjointSetUnion:
 
 class Solution:
     def minMaxSubarraySum(self, nums: List[int], k: int) -> int:
+        ret = 0
+        n = len(nums)
+        def g(l):
+            nonlocal ret, n
+            dsu = DisjointSetUnion(n)
+            ok = set()
+            for x, i in l:
+                ok.add(i)
+                for j in [i-1, i+1]:
+                    if 0 <= j < len(nums) and j in ok:
+                        dsu.union(i, j)
+                a, b = dsu.set_bounds(i)
+                aa, bb = i - a, b - i
+                f = min(k, aa + bb + 1)
+                r = (f) * (f + 1) // 2
+                if aa < f - 1:
+                    q = f - 1 - aa
+                    r -= q * (q + 1) // 2
+                if bb < f - 1:
+                    q = f - 1 - bb
+                    r -= q * (q + 1) // 2
+                ret += r * x
+
         l = [(x, i) for (i, x) in enumerate(nums)]
         l.sort()
-        n = len(nums)
-        dsu = DisjointSetUnion(n)
-        ok = set()
-        ret = 0
-        for x, i in l:
-            ok.add(i)
-            for j in [i-1, i+1]:
-                if 0 <= j < len(nums) and j in ok:
-                    dsu.union(i, j)
-            a, b = dsu.set_bounds(i)
-            # print(a, b, x, i)
-            aa, bb = i - a, b - i
-            f = min(k, aa + bb + 1)
-            r = (f) * (f + 1) // 2
-            if aa < f - 1:
-                q = f - 1 - aa
-                r -= q * (q + 1) // 2
-            if bb < f - 1:
-                q = f - 1 - bb
-                r -= q * (q + 1) // 2
-            # print(aa, bb, r)
-            ret += r * x
-            # ret %= MOD
+        g(l)
         l.sort(reverse=True)
-        dsu = DisjointSetUnion(n)
-        ok = set()
-        for x, i in l:
-            ok.add(i)
-            for j in [i-1, i+1]:
-                if 0 <= j < len(nums) and j in ok:
-                    dsu.union(i, j)
-            a, b = dsu.set_bounds(i)
-            aa, bb = i - a, b - i
-            f = min(k, aa + bb + 1)
-            r = (f) * (f + 1) // 2
-            if aa < f - 1:
-                q = f - 1 - aa
-                r -= q * (q + 1) // 2
-            if bb < f - 1:
-                q = f - 1 - bb
-                r -= q * (q + 1) // 2
-            ret += r * x
-            # ret %= MOD
+        g(l)
         return ret
         

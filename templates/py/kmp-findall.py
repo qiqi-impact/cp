@@ -51,4 +51,5 @@ tc = [
     'abacaba',
 ]
 for t in tc:
+    print(t, LPS(t))
     print(KMPSearch('aa', t))
