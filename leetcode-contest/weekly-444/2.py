@@ -13,7 +13,7 @@ class Router:
             self.ds[d] = set()
             self.dest[d] = deque()
         self.ds[d].add((t, s))
-        self.dest[d].append((t, s))
+        self.dest[d].append(t)
         self.p.append([s, d, t])
         if len(self.p) > self.m:
             ret = self.p.popleft()
@@ -34,7 +34,7 @@ class Router:
     def getCount(self, d: int, s: int, e: int) -> int:
         if d not in self.dest:
             return 0
-        a, b = bisect.bisect_left(self.dest[d], (s, -inf)), bisect.bisect_right(self.dest[d], (e, inf))
+        a, b = bisect.bisect_left(self.dest[d], s), bisect.bisect_right(self.dest[d], e)
         return b - a
 
 
