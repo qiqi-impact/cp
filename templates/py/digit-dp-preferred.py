@@ -1,4 +1,4 @@
-A = [[int(x) for x in str(r)], [int(x) for x in str(l-1)]]
+A = [[int(x) for x in str(l-1)], [int(x) for x in str(r)]]
 
 @cache
 def dp(idx, lr, lim, st):
@@ -17,7 +17,7 @@ ans = 0
 for idx in range(2):
     ln = len(A[idx])
     for nd in range(1, ln + 1):
-        ans += (-1 ** idx) * dp(nd-1, 0, nd == ln, 1)
+        ans += (1 if idx else -1) * dp(nd - 1, idx, nd == ln, 1)
 
 dp.cache_clear()
 
