@@ -35,12 +35,12 @@ class Solution:
             if a == b:
                 ret.append(0)
                 continue
-            l, r = 1, n + 1
+            l, r = 1, n
             while l < r:
                 mi = (l + r) // 2
                 if can(mi, a, b):
                     r = mi
                 else:
                     l = mi + 1
-            ret.append(l if l <= n else -1)
+            ret.append(l if l <= n - 1 else -1)
         return ret
