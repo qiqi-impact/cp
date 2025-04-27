@@ -1,17 +1,17 @@
 class Solution:
     def countCoveredBuildings(self, n: int, buildings: List[List[int]]) -> int:
-        xc = defaultdict(list)
-        yc = defaultdict(list)
+        xc = {}
+        yc = {}
 
         for x, y in buildings:
-            xc[x].append(y)
-            yc[y].append(x)
-
-        for k in xc:
-            xc[k].sort()
-
-        for k in yc:
-            yc[k].sort()
+            if x not in xc:
+                xc[x] = [y, y]
+            if y not in yc:
+                yc[y] = [x, x]
+            xc[x][0] = min(xc[x][0], y)
+            xc[x][1] = max(xc[x][1], y)
+            yc[y][0] = min(yc[y][0], x)
+            yc[y][1] = max(yc[y][1], x)
         
         ret = 0
         for x, y in buildings:
