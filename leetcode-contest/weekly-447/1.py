@@ -15,9 +15,7 @@ class Solution:
         
         ret = 0
         for x, y in buildings:
-            xi = bisect.bisect_left(xc[x], y)
-            yi = bisect.bisect_left(yc[y], x)
-            if 1 <= xi < len(xc[x]) - 1 and 1 <= yi < len(yc[y]) - 1:
+            if xc[x][0] != y and xc[x][-1] != y and yc[y][0] != x and yc[y][-1] != x:
                 ret += 1
             
         return ret
