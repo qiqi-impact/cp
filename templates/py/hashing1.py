@@ -18,3 +18,6 @@ class Hashing:
 
     def get_hashes(self, length):
         return [(self.f_hash[i + length] - self.f_pow[length] * self.f_hash[i]) % self.mod for i in range(self._len - length + 1)]
+
+def convert_string(s):
+    return [ord(c)-97 for c in s]
