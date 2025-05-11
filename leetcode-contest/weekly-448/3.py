@@ -6,16 +6,13 @@ def addmult(amt, loop, start):
     for i in range((amt - 1) // 2):
         ret += cur * (cur + 2)
         cur += 2
-    # print(ret, amt, cur, start)
     cur = start + 1
     for i in range((amt - 2) // 2):
         ret += cur * (cur + 2)
         cur += 2
-    # print(ret)
     ret += (start + amt - 1) * (start + amt - 2)
     if loop:
         ret += start * (start + 1)
-    # print(amt, loop, start, ret)
     return ret
 
 class Solution:
@@ -30,7 +27,7 @@ class Solution:
         sz = []
         def dfs(idx):
             nonlocal ct
-            if len(g[idx]) == 1:
+            if len(g[idx]) <= 1:
                 hasleaf[ct] = 1
             sz[ct] += 1
             for o in g[idx]:
@@ -44,10 +41,9 @@ class Solution:
                 cc[i] = ct
                 dfs(i)
                 ct += 1
-        q = sorted(list(zip(hasleaf, sz)), key=lambda x:(x[1] != 1, -x[0], x[1]))
+        q = sorted(list(zip(hasleaf, sz)), key=lambda x:(-x[0], x[1]))
         st = 1
         ret = 0
-        # print(q)
         for b, s in q:
             ret += addmult(s, not b, st)
             st += s
