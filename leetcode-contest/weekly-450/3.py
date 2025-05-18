@@ -20,27 +20,25 @@ class Solution:
         q = deque([(0, R-1, C-1)])
 
         def tele_expand(c, x, y):
-            if ord('A') <= ord(m[x][y]) <= ord('Z'):
+            if m[x][y] in tele:
                 for (i, j) in tele[m[x][y]]:
-                    if (i, j) != (x, y) and (i, j) not in dist:
+                    if (i, j) != (x, y) and dist.get((i, j), inf) > c:
                         dist[(i, j)] = c
-                        q.append((c, i, j))
-                    if (i, j) == (0, 0):
-                        return dist[(i, j)]
-        r = tele_expand(0, R-1, C-1)
-        if r is not None:
-            return r
+                        q.appendleft((c, i, j))
+                del tele[m[x][y]]
 
         while q:
             c, x, y = q.popleft()
+            if (x, y) == (0, 0):
+                return c
+            if c != dist[(x, y)]:
+                continue
+            r = tele_expand(c, x, y)
             for dx, dy in pairwise([1,0,-1,0,1]):
                 nx, ny = x+dx, y+dy
-                if 0 <= nx < R and 0 <= ny < C and m[nx][ny] != '#' and (nx, ny) not in dist:
+                if 0 <= nx < R and 0 <= ny < C and m[nx][ny] != '#' and dist.get((nx, ny), inf) > c + 1:
                     dist[(nx, ny)] = c + 1
-                    if (nx, ny) == (0, 0):
-                        return dist[(nx, ny)]
                     q.append((c+1, nx, ny))
-                    r = tele_expand(c+1, nx, ny)
                     if r is not None:
                         return r
         return -1
