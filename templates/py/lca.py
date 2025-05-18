@@ -1,22 +1,23 @@
 MX = 32
 
 g = [[] for _ in range(n)]
-for x, y in edges:
-    w -= 1
-    g[x].append(y)
-    g[y].append(x)
+for x, y, w in edges:
+    g[x].append((y, w))
+    g[y].append((x, w))
 
 depth = [0] * n
+weight_depth = [0] * n
+p = [[0 for _ in range(n)]]
 
-def dfs(x, q, dp):
+def dfs(x, q, dp, wdp):
     p[0][x] = q
     depth[x] = dp
+    weight_depth[x] = wdp
     for ch, w in g[x]:
         if ch != q:
-            dfs(ch, x, dp+1)
-dfs(0, 0, 0)
+            dfs(ch, x, dp+1, wdp + w)
+dfs(0, 0, 0, 0)
 
-p = [[0 for _ in range(n)]]
 for _ in range(MX):
     pp = [p[-1][p[-1][i]] for i in range(n)]
     p.append(pp)
@@ -33,3 +34,6 @@ def lca(x, y):
         if p[i][x] != p[i][y]:
             x, y = p[i][x], p[i][y]
     return p[0][x]
+
+def lca_path_cost(x, y):
+    return weight_depth[x] + weight_depth[y] - 2 * weight_depth[lca(x, y)]
