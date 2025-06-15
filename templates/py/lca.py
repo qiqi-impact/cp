@@ -1,4 +1,4 @@
-MX = 32
+MX = 17 # 10**5
 
 g = [[] for _ in range(n)]
 for x, y, w in edges:
@@ -35,5 +35,12 @@ def lca(x, y):
             x, y = p[i][x], p[i][y]
     return p[0][x]
 
-def lca_path_cost(x, y):
+def get_anc(x, amt):
+    cur = x
+    for i in range(MX-1, -1, -1):
+        if amt & 1 << i:
+            cur = p[i][cur]
+    return cur
+
+def cost(x, y):
     return weight_depth[x] + weight_depth[y] - 2 * weight_depth[lca(x, y)]
