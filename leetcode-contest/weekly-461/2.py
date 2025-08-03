@@ -4,7 +4,7 @@ class Solution:
         ret = 0
         ct = True
         for i in range(1, n):
-            if ct >= 1 and weight[i] < weight[i-1]:
+            if ct and weight[i] < weight[i-1]:
                 ret += 1
                 ct = False
             else:
