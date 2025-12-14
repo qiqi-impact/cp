@@ -44,9 +44,30 @@ class FenwickTree:
                 k -= self.bit[idx]
         return idx + 1
 
-l = [1,3,4,2,4,10]
-t = FenwickTree(l)
-t.set(0, -1)
-for i in range(7):
-    print(i, t.query(i))
-print(t.findkth(13))
+class Solution:
+    def minDeletions(self, s: str, queries: List[List[int]]) -> List[int]:
+        v = [1]
+        for i in range(1, len(s)):
+            v.append(int(s[i] != s[i-1]))
+        qq = [c for c in s]
+        
+        t = FenwickTree(v)
+        ret = []
+        for q in queries:
+            if q[0] == 1:
+                idx = q[1]
+                if idx > 0:
+                    if qq[idx] == qq[idx-1]:
+                        t.set(idx, 1)
+                    else:
+                        t.set(idx, 0)
+                if idx < len(s) - 1:
+                    if qq[idx] == qq[idx+1]:
+                        t.set(idx+1, 1)
+                    else:
+                        t.set(idx+1, 0)
+                qq[idx] = 'B' if qq[idx] == 'A' else 'A'
+            else:
+                ss = t.query(1 + q[2]) - t.query(q[1])
+                ret.append(q[2] - q[1] + 1 - ss - int(q[1] != 0 and qq[q[1]] == qq[q[1] - 1]))
+        return ret
